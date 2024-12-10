@@ -1,103 +1,85 @@
 package io.github.videogame;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+
+//Lo scopo di questa classe è gestire la finestra della sessione di gioco
+
 
 public class MainGameScreen implements Screen {
 
-    //Variabili e Costanti
-    public static final float SPEED = 150;
-    public static final float SHIP_ANIMATION_SPEED = 0.5f;
-    public static final int SHIP_WIDTH_PIXEL =40;
-    public static final int SHIP_HEIGHT_PIXEL =80;
-    public static final int SHIP_WIDTH = SHIP_WIDTH_PIXEL*3;
-    public static final int SHIP_HEIGHT = SHIP_HEIGHT_PIXEL*3;
 
-    Animation<TextureRegion>[] rolls; //Contiene le animazioni della navicella
-    float [] positions;
-    float x, y; //Coordinate della navicella sullo schermo
-    SpaceGame game; //Riferimento alla classe principale del gioco
-    int roll; //Identifica l'animazione attuale
-    float stateTime;
+    private SpaceGame game;
+    private Entity Player;
+    private MovementController movementController;
+    private SpriteBatch batch;
+
+
 
 
     // Costruttore
     public MainGameScreen(SpaceGame game) {
-        this.game = game; // Assegna il riferimento al gioco
-        y=15;
-        x = (float) SpaceGame.WIDTH /2 - (float) SHIP_WIDTH /2;
-
-        roll = 2;
-        rolls = new Animation[5];
-
-//        rolls =  new Animation[5];
-        positions = new float[5];
-
-        TextureRegion[][] rollSpriteSheet = TextureRegion.split(new Texture("orc1_walk_full.png"), SHIP_WIDTH_PIXEL, SHIP_HEIGHT_PIXEL);
-
-        rolls[roll] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[0]);
+        this.game = game;
+        this.batch = game.batch;
+        this.Player = new Entity("Orco_walk.png");  // Inizializza l'entità con la sprite sheet
+        this.movementController = new MovementController(40, 15);
     }
+
+
+
 
     @Override
-    public void show() {
+    public void show() {}
 
-    }
 
     @Override
     public void render(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP))
-        //    y = y + 4;
-            y += SPEED * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN))
-        //    y = y - 4;
-            y -= SPEED * Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT))
-        //    x = x - 4;
-            x -= SPEED * Gdx.graphics.getDeltaTime();
+        movementController.updatePosition(delta);  // Aggiorna la posizione in base all'input
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-        //    x = x + 4;
-            x += SPEED * Gdx.graphics.getDeltaTime();
+        // Ottieni la direzione corrente
+        int currentDirection = movementController.getCurrentDirection();
 
-        stateTime += delta;
-        Gdx.gl.glClearColor(1,0,0,1); //Ripulisco lo schermo
+        // Verifica se il personaggio è in movimento
+        boolean isMoving = movementController.isPlayerMoving();
+
+        // Ottieni il fotogramma attuale in base alla direzione e allo stato di movimento
+        TextureRegion currentFrame = Player.getCurrentFrame(currentDirection, isMoving, delta);
+
+        // Pulisci lo schermo
+        Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        game.batch.begin();
 
- //       game.batch.draw(rolls[roll].getKeyFrame(stateTime, true), x, y, SHIP_WIDTH, SHIP_HEIGHT);
-
-        game.batch.end();
-
+        // Disegna il personaggio
+        batch.begin();
+        batch.draw(currentFrame, movementController.getX(), movementController.getY());
+        batch.end();
     }
+
+
+
+
 
     @Override
-    public void resize(int i, int i1) {
-
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
-
+        if (Player != null) {
+            Player.dispose();  // Libera le risorse dell'entità
+        }
     }
 }

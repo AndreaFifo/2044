@@ -35,8 +35,8 @@ public class Lwjgl3Launcher {
       //Consente di ridimensionare la finestra
       configuration.setResizable(true);
 
-        //configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
-
+       // configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+       // configuration.setResizable(true);
 
         //// You can change these files; they are in lwjgl3/src/main/resources/ .
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
