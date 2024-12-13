@@ -2,7 +2,7 @@ package io.github.videogame.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import io.github.videogame.SpaceGame;
+import io.github.videogame.Gioco;
 
 
 /** Launches the desktop (LWJGL3) application. */
@@ -13,7 +13,7 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new SpaceGame(), getDefaultConfiguration());
+        return new Lwjgl3Application(new Gioco(), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
@@ -31,7 +31,7 @@ public class Lwjgl3Launcher {
 
 
       //Consente l'apertura di deafult della finestra
-      configuration.setWindowedMode(SpaceGame.WIDTH, SpaceGame.HEIGHT);
+      configuration.setWindowedMode(Gioco.WIDTH, Gioco.HEIGHT);
       //Consente di ridimensionare la finestra
       configuration.setResizable(true);
 

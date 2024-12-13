@@ -9,40 +9,40 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 //Lo scopo di questa classe è gestire la finestra della sessione di gioco
 
-
 public class MainGameScreen implements Screen {
 
 
-    private SpaceGame game;
-    private Entity Player;
+    private Gioco game;
+    private Player Player;
+    private int stateDirection;
     private MovementController movementController;
     private SpriteBatch batch;
 
 
 
-
     // Costruttore
-    public MainGameScreen(SpaceGame game) {
+    public MainGameScreen(Gioco game) {
         this.game = game;
-        this.batch = game.batch;
-        this.Player = new Entity("Orco_walk.png");  // Inizializza l'entità con la sprite sheet
-        this.movementController = new MovementController(40, 15);
+        this.show();
     }
 
 
-
-
     @Override
-    public void show() {}
+    public void show() {
+        this.batch = game.batch;
+        this.stateDirection=0;
+        this.Player = Player.getInstance("Orco_walk.png");  // Inizializza l'entità con la sprite sheet
+        this.movementController = new MovementController(400, 105, stateDirection);
+    }
 
 
     @Override
     public void render(float delta) {
 
-        movementController.updatePosition(delta);  // Aggiorna la posizione in base all'input
+        movementController.changeStateDirection(delta);  // Aggiorna la posizione in base all'input
 
         // Ottieni la direzione corrente
-        int currentDirection = movementController.getCurrentDirection();
+        int currentDirection = movementController.getStateDirection();
 
         // Verifica se il personaggio è in movimento
         boolean isMoving = movementController.isPlayerMoving();

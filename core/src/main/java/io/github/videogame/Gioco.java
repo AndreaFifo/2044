@@ -4,10 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
-//Classe principale del gioco
+//Classe principale del gioco, estende GAME classe che gestisce il ciclo di vita del gioco
 
-
-public class SpaceGame extends Game {
+public class Gioco extends Game {
 
     //Imposta la grandezza della finestra di apertura
     public static final int WIDTH = 1920;
