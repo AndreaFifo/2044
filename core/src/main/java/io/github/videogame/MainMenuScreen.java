@@ -63,7 +63,6 @@ public class MainMenuScreen implements Screen {
         menuMusic.setLooping(true); // La musica riparte automaticamente una volta finita
         menuMusic.setVolume(0.5f);  // Imposta il volume (da 0.0 a 1.0)
         menuMusic.play();           // Inizia a riprodurre la musica
-        System.out.println("mososo");
     }
 
     //Viene chiamato ad ogni frame per aggiornare la schermata di gioco
