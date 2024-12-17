@@ -1,19 +1,19 @@
-package io.github.videogame;
+package io.github.videogame.view.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import io.github.videogame.model.Gioco;
+import io.github.videogame.controller.MovementController;
 
 
 //Lo scopo di questa classe è gestire la finestra della sessione di gioco
 
 public class MainGameScreen implements Screen {
-
-
     private Gioco game;
-    private Player Player;
+    private io.github.videogame.model.Player Player;
     private int stateDirection;
     private MovementController movementController;
     private SpriteBatch batch;
@@ -29,7 +29,7 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void show() {
-        this.batch = game.batch;
+        this.batch = game.getBatch();
         this.stateDirection=0;
         this.Player = Player.getInstance("Orco_walk.png");  // Inizializza l'entità con la sprite sheet
         this.movementController = new MovementController(400, 105, stateDirection);

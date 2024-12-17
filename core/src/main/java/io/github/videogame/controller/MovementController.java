@@ -1,4 +1,4 @@
-package io.github.videogame;
+package io.github.videogame.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
