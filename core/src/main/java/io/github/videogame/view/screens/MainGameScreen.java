@@ -18,8 +18,6 @@ public class MainGameScreen implements Screen {
     private MovementController movementController;
     private SpriteBatch batch;
 
-
-
     // Costruttore
     public MainGameScreen(Gioco game) {
         this.game = game;
@@ -31,7 +29,7 @@ public class MainGameScreen implements Screen {
     public void show() {
         this.batch = game.getBatch();
         this.stateDirection=0;
-        this.Player = Player.getInstance("Orco_walk.png");  // Inizializza l'entità con la sprite sheet
+        this.Player = Player.getInstance("player/player-spritesheet.png");  // Inizializza l'entità con la sprite sheet
         this.movementController = new MovementController(400, 105, stateDirection);
     }
 
@@ -59,10 +57,6 @@ public class MainGameScreen implements Screen {
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
         batch.end();
     }
-
-
-
-
 
     @Override
     public void resize(int width, int height) {}

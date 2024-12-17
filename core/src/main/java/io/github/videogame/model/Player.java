@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 // Classe che crea il Giocatore
 public class Player {
-
     private static Player instance;
     private Texture spriteSheetPlayer;
     private Animation<TextureRegion>[] walkAnimationsPlayer;
@@ -16,7 +15,7 @@ public class Player {
     private Player(String spriteSheetPath) {
         this.spriteSheetPlayer = new Texture(spriteSheetPath);
         this.stateTime = 0f;
-        TextureRegion[][] regions = TextureRegion.split(spriteSheetPlayer, 64, 64);
+        TextureRegion[][] regions = TextureRegion.split(spriteSheetPlayer, 16, 32);
         walkAnimationsPlayer = new Animation[4];
         for (int i = 0; i < 4; i++) {
             walkAnimationsPlayer[i] = new Animation<>(0.1f, regions[i]);

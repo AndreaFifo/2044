@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.JsonValue;
 public final class Utility {
     public static final AssetManager assetManager = new AssetManager();
 
-    private static InternalFileHandleResolver filePathResolver = new InternalFileHandleResolver();
+    private static final InternalFileHandleResolver filePathResolver = new InternalFileHandleResolver();
 
     //questo metodo serve per rimuovere gli assets dalla memoria quando non sono più necessari.
     // Viene usato per gestire meglio la memoria
