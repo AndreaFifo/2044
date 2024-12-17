@@ -43,7 +43,6 @@ public class MainMenuScreen implements Screen {
     //Costruttore
     public MainMenuScreen(Gioco game){
         this.game = game;
-        this.show();
     }
 
     //Viene chiamato quando screen è attivato per la prima volta, viene utilizzato per inizializzare risorse, impostare stati ecc...
@@ -145,9 +144,7 @@ public class MainMenuScreen implements Screen {
     //Viene chiamato quando il gioco riprende dopo essere stato messo in pausa (pausa quando clicchi settings?)
     @Override
     public void resume() {
-        if (!menuMusic.isPlaying()) {
-            menuMusic.play(); // Rilancia la musica solo se non è già in riproduzione
-        }
+        menuMusic.play();
     }
 
     //Viene chiamato quando lo screen sta per essere nascoto o cambiato
