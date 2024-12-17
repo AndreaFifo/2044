@@ -11,7 +11,10 @@
       "menu/exit_button_inactive.png",
       "menu/exit_button_active.png",
       "menu/text-2044.png",
-      "menu/bg-menu.png"
+      "menu/bg-menu.png",
+      "menu/slider.png",
+      "menu/barra.png",
+      "menu/knob.png"
     ],
     "musics": [
       "menu/main_menu_music_dbd.mp3"

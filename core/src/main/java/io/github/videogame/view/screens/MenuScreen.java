@@ -9,14 +9,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.videogame.model.Gioco;
 import io.github.videogame.model.Utility;
 import io.github.videogame.controller.MenuController;
+
+import java.util.Arrays;
 
 public class MenuScreen implements Screen {
     private final Gioco game;
@@ -44,6 +46,7 @@ public class MenuScreen implements Screen {
     private Button load;
     private Button settings;
     private Button exit;
+    private Slider slider;
 
     public MenuScreen(Gioco game) {
         this.game = game;
@@ -57,6 +60,7 @@ public class MenuScreen implements Screen {
         loadMenuAssets();
 
         menuMusic.setLooping(true);
+        menuMusic.setVolume(0.5f);
         menuMusic.play();
 
         Gdx.input.setInputProcessor(stage);
@@ -143,6 +147,7 @@ public class MenuScreen implements Screen {
     }
 
     private void loadMenuAssets(){
+        //Rifare con atlas o skin.json
         Utility.loadAssetsFromJSON("assets.json", "menu");
         this.playButtonInactive = Utility.getAsset("menu/play_button_inactive.png", Texture.class); //Mettere button play
         this.playButtonActive = Utility.getAsset("menu/play_button_active.png", Texture.class);
