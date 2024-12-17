@@ -1,7 +1,8 @@
-package io.github.videogame;
+package io.github.videogame.model;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.videogame.view.screens.MenuScreen;
 
 
 //Classe principale del gioco, estende GAME classe che gestisce il ciclo di vita del gioco
@@ -12,8 +13,10 @@ public class Gioco extends Game {
     public static final int WIDTH = 1920;
     public static final int HEIGHT = 1080;
 
+
+
     //Oggetto SpriteBatch che disegna le texture su schermo
-    SpriteBatch batch;
+    private SpriteBatch batch;
 
 
     //Metodo chiamato all'avvio del gioco
@@ -24,7 +27,7 @@ public class Gioco extends Game {
         batch = new SpriteBatch();
 
         //Creo un'istanza del menu principale e l'attivo con setScreen
-        this.setScreen(new MainMenuScreen(this));
+        this.setScreen(new MenuScreen(this));
     }
 
 
@@ -33,6 +36,10 @@ public class Gioco extends Game {
     public void render() {
         //Chiamo la funzione render della classe padre per il ciclo di vita del gioco
         super.render();
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
     }
 
 }
