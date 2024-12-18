@@ -65,6 +65,7 @@ public class MovementController {
     }
 
     // Getter per le coordinate
+    //in teoria dovrebbero essere nel player queste cose
     public float getX() {
         return x;
     }
