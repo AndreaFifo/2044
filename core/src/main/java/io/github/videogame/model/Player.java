@@ -10,6 +10,7 @@ public class Player {
     private Texture spriteSheetPlayer;
     private Animation<TextureRegion>[] walkAnimationsPlayer;
     private float stateTime;
+    private Inventory inventory;
 
     // Costruttore privato per impedire l'istanziazione diretta
     private Player(String spriteSheetPath) {
@@ -20,6 +21,8 @@ public class Player {
         for (int i = 0; i < 4; i++) {
             walkAnimationsPlayer[i] = new Animation<>(0.1f, regions[i]);
         }
+        this.inventory = inventory;
+
     }
     // Metodo statico per ottenere l'istanza del Singleton
     public static Player getInstance(String spriteSheetPath) {
@@ -53,4 +56,9 @@ public class Player {
             spriteSheetPlayer.dispose();
         }
     }
+
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
 }
