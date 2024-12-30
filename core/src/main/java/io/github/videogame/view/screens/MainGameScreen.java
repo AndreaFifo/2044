@@ -24,7 +24,7 @@ public class MainGameScreen implements Screen {
     private MagneticKey magneticKey;
     private FlashDrive chiavettaUSB;
     private DialogManager dialogoUSB;
-    private Inventory inventory;
+
 
     // Costruttore
     public MainGameScreen(Gioco game) {
@@ -37,7 +37,6 @@ public class MainGameScreen implements Screen {
         this.batch = game.getBatch();
         this.stateDirection=0;
         this.player = Player.getInstance("player/player-spritesheet.png");  // Inizializza l'entità con la sprite sheet
-        this.inventory = Inventory.getInventoryInstance();
         this.movementController = new MovementController(400, 105, stateDirection);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960, 540);
@@ -72,9 +71,9 @@ public class MainGameScreen implements Screen {
 
         // Disegna il personaggio
         batch.begin();
-        inventory.drawInventory(batch);
+        player.getInventory().drawInventory(batch);
         drawObjects();
-        batch.draw(Utility.getAsset("menu/bg-menu.png", Texture.class), 0, 0, 1920, 1080);
+        // batch.draw(Utility.getAsset("menu/bg-menu.png", Texture.class), 0, 0, 1920, 1080);
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
         batch.end();
     }

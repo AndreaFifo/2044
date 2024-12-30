@@ -21,7 +21,7 @@ public class Player {
         for (int i = 0; i < 4; i++) {
             walkAnimationsPlayer[i] = new Animation<>(0.1f, regions[i]);
         }
-        this.inventory = inventory;
+        this.inventory = Inventory.getInventoryInstance();
 
     }
     // Metodo statico per ottenere l'istanza del Singleton

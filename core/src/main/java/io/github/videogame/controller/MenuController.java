@@ -8,6 +8,7 @@ import io.github.videogame.model.Gioco;
 import io.github.videogame.view.screens.MainGameScreen;
 import io.github.videogame.model.Utility;
 import io.github.videogame.view.screens.MenuScreen;
+import io.github.videogame.view.screens.VideoIntroScreen;
 
 public class MenuController {
     private final Gioco game;
@@ -27,7 +28,7 @@ public class MenuController {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 buttonClickSound.play();
-                game.setScreen(new MainGameScreen(game));
+                game.setScreen(new VideoIntroScreen(game));
             }
         });
 
