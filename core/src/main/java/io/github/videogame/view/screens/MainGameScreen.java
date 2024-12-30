@@ -1,6 +1,7 @@
 package io.github.videogame.view.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,10 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import io.github.videogame.model.Gioco;
+import io.github.videogame.model.*;
 import io.github.videogame.controller.MovementController;
-import io.github.videogame.model.Player;
-import io.github.videogame.model.Utility;
 
 
 //Lo scopo di questa classe è gestire la finestra della sessione di gioco
@@ -23,10 +22,16 @@ public class MainGameScreen implements Screen {
     private MovementController movementController;
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private MagneticKey magneticKey;
+    private FlashDrive chiavettaUSB;
+    private DialogManager dialogoUSB;
+
 
     // Costruttore
-    public MainGameScreen(Gioco game) {
+    public MainGameScreen(Gioco game)
+    {
         this.game = game;
+        this.show();
     }
 
 
@@ -38,11 +43,35 @@ public class MainGameScreen implements Screen {
         this.movementController = new MovementController(400, 105, stateDirection);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960, 540);
+        this.dialogoUSB = new DialogManager();
+        this.magneticKey = new MagneticKey(420, 100, movementController, player,this);
+        this.chiavettaUSB = new FlashDrive(500, 500, movementController, player,this);
+    }
+
+    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
+    public void renderStaticState(SpriteBatch batch) {
+        TextureRegion currentFrame = player.getCurrentFrame(//si utilizza per determinare quale frame della sprite sheet del personaggio diseganre
+            movementController.getStateDirection(),
+            movementController.isPlayerMoving(),
+            0
+        );
+
+
+        batch.draw(currentFrame, movementController.getX(), movementController.getY());
     }
 
 
     @Override
     public void render(float delta) {
+
+        //modifica
+        // Controlla se il tasto ESCAPE è stato premuto
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new MenuPausa(game, this)); // Mostra il menu pausa
+            return;
+        }
+        //
+
 
         movementController.changeStateDirection(delta);  // Aggiorna la posizione in base all'input
 
@@ -66,10 +95,28 @@ public class MainGameScreen implements Screen {
 
         // Disegna il personaggio
         batch.begin();
-        batch.draw(Utility.getAsset("menu/bg-menu.png", Texture.class), 0, 0, 1920, 1080);
+        player.getInventory().drawInventory(batch,movementController);
+        drawObjects();
+        // batch.draw(Utility.getAsset("menu/bg-menu.png", Texture.class), 0, 0, 1920, 1080);
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
         batch.end();
     }
+
+
+    //Disegna gli oggetti, SOLO SE IL LORO STATO TAKEN è FALSO
+    private void drawObjects() {
+        if (!magneticKey.isTaken()) {
+            batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
+            magneticKey.pickUp();
+        }
+
+        if (!chiavettaUSB.isTaken()) {
+            batch.draw(chiavettaUSB.getTexture(), chiavettaUSB.getX(), chiavettaUSB.getY(), 16, 16);
+            chiavettaUSB.pickUp();
+
+        }
+    }
+
 
     @Override
     public void resize(int width, int height) {}

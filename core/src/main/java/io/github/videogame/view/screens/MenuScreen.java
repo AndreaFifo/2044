@@ -99,7 +99,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        this.dispose();
+        /*this.dispose();*/
     }
 
     @Override
@@ -168,6 +168,16 @@ public class MenuScreen implements Screen {
         load = createButton(loadButtonInactive, loadButtonActive);
         settings = createButton(settingsButtonInactive, settingsButtonActive);
         exit = createButton(exitButtonInactive, exitButtonActive);
+
+
+        play.addListener(new ChangeListener() {
+            //metodo utilizzato per fermare la musica del menù principale quando si clicca play
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                menuMusic.stop(); // Ferma la musica del menu principale
+                game.setScreen(new MainGameScreen(game)); // Passa alla schermata di gioco
+            }
+        });
 
         table.setPosition((float) -Gdx.graphics.getWidth() / 4, 0);
         table.setFillParent(true);
