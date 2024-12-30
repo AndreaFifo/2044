@@ -1,6 +1,7 @@
 package io.github.videogame.view.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -54,6 +55,16 @@ public class VideoIntroScreen implements Screen {
             batch.draw(frame, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         batch.end();
+
+        //per poter saltare il video quando viene cliccato play
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched()) {
+            goToMainGameScreen();
+        }
+    }
+
+    private void goToMainGameScreen() {
+        videoPlayer.stop(); // Interrompe il video se è ancora in riproduzione
+        game.setScreen(new MainGameScreen(game)); // Passa alla schermata principale
     }
 
     @Override

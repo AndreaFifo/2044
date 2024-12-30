@@ -1,6 +1,7 @@
 package io.github.videogame.view.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,8 +28,10 @@ public class MainGameScreen implements Screen {
 
 
     // Costruttore
-    public MainGameScreen(Gioco game) {
+    public MainGameScreen(Gioco game)
+    {
         this.game = game;
+        this.show();
     }
 
 
@@ -45,9 +48,30 @@ public class MainGameScreen implements Screen {
         this.chiavettaUSB = new FlashDrive(500, 500, movementController, player,this);
     }
 
+    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
+    public void renderStaticState(SpriteBatch batch) {
+        TextureRegion currentFrame = player.getCurrentFrame(//si utilizza per determinare quale frame della sprite sheet del personaggio diseganre
+            movementController.getStateDirection(),
+            movementController.isPlayerMoving(),
+            0
+        );
+
+
+        batch.draw(currentFrame, movementController.getX(), movementController.getY());
+    }
+
 
     @Override
     public void render(float delta) {
+
+        //modifica
+        // Controlla se il tasto ESCAPE è stato premuto
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new MenuPausa(game, this)); // Mostra il menu pausa
+            return;
+        }
+        //
+
 
         movementController.changeStateDirection(delta);  // Aggiorna la posizione in base all'input
 
@@ -71,7 +95,7 @@ public class MainGameScreen implements Screen {
 
         // Disegna il personaggio
         batch.begin();
-        player.getInventory().drawInventory(batch);
+        player.getInventory().drawInventory(batch,movementController);
         drawObjects();
         // batch.draw(Utility.getAsset("menu/bg-menu.png", Texture.class), 0, 0, 1920, 1080);
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
