@@ -135,5 +135,7 @@ public class MainGameScreen implements Screen {
         if (player != null) {
             player.dispose();  // Libera le risorse dell'entità
         }
+
+
     }
 }

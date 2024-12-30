@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,39 +26,34 @@ public class MenuScreen implements Screen {
     private final Batch batch;
     private final Stage stage;
     private final Table table;
-    private MenuController menuController;
+    private final MenuController menuController;
 
     private Texture background;
-    private Texture playButtonActive;
-    private Texture playButtonInactive;
-    private Texture loadButtonActive;
-    private Texture loadButtonInactive;
-    private Texture settingsButtonInactive;
-    private Texture settingsButtonActive;
-    private Texture exitButtonActive;
-    private Texture exitButtonInactive;
     private Texture gameTitle;
 
     private Music menuMusic;
     private Sound buttonClickSound;
 
-    private Button.ButtonStyle buttonStyle;
     private Button play;
     private Button load;
     private Button settings;
     private Button exit;
-    private Slider slider;
+
+    private Skin skin;
 
     public MenuScreen(Gioco game) {
         this.game = game;
-        this.batch = new SpriteBatch();
+        this.batch = game.getBatch();
         this.stage = new Stage();
         this.table = new Table();
+        this.menuController = new MenuController(this.game, this);
+
+        setupUI();
     }
 
     @Override
     public void show() {
-        loadMenuAssets();
+        batch.setProjectionMatrix(stage.getCamera().combined);
 
         menuMusic.setLooping(true);
         menuMusic.setVolume(0.5f);
@@ -65,8 +61,8 @@ public class MenuScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        setupUI();
-        this.menuController = new MenuController(this.game, this);
+
+        menuController.setup();
     }
 
     @Override
@@ -84,7 +80,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -99,35 +95,17 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        /*this.dispose();*/
+        menuMusic.stop();
     }
 
     @Override
     public void dispose() {
-        playButtonInactive.dispose();
-        playButtonActive.dispose();
-        loadButtonInactive.dispose();
-        loadButtonActive.dispose();
-        settingsButtonInactive.dispose();
-        settingsButtonActive.dispose();
-        exitButtonInactive.dispose();
-        exitButtonActive.dispose();
         gameTitle.dispose();
         background.dispose();
         buttonClickSound.dispose();
         menuMusic.stop();
         menuMusic.dispose();
         stage.dispose();
-        batch.dispose();
-    }
-
-    public Button createButton(Texture inactive, Texture active){
-        buttonStyle = new Button.ButtonStyle();
-        buttonStyle.up = new TextureRegionDrawable(new TextureRegion(inactive));
-        buttonStyle.over = new TextureRegionDrawable(new TextureRegion(active));
-        buttonStyle.down = new TextureRegionDrawable(new TextureRegion(active));
-
-        return new Button(buttonStyle);
     }
 
     public Button getPlayBtn() {
@@ -146,38 +124,27 @@ public class MenuScreen implements Screen {
         return exit;
     }
 
+    public Music getMusic(){
+        return menuMusic;
+    }
+
     private void loadMenuAssets(){
-        //Rifare con atlas o skin.json
         Utility.loadAssetsFromJSON("assets.json", "menu");
-        this.playButtonInactive = Utility.getAsset("menu/play_button_inactive.png", Texture.class); //Mettere button play
-        this.playButtonActive = Utility.getAsset("menu/play_button_active.png", Texture.class);
-        this.loadButtonInactive = Utility.getAsset("menu/load_button_inactive.png", Texture.class);
-        this.loadButtonActive = Utility.getAsset("menu/load_button_active.png", Texture.class);
-        this.settingsButtonInactive = Utility.getAsset("menu/settings_button_inactive.png", Texture.class);
-        this.settingsButtonActive = Utility.getAsset("menu/settings_button_active.png", Texture.class);
-        this.exitButtonInactive = Utility.getAsset("menu/exit_button_inactive.png", Texture.class);
-        this.exitButtonActive = Utility.getAsset("menu/exit_button_active.png", Texture.class);
+
+        this.skin = Utility.getAsset("menu/ui-skin.json", Skin.class);
         this.gameTitle = Utility.getAsset("menu/text-2044.png", Texture.class);
         this.background = Utility.getAsset("menu/bg-menu.png", Texture.class);
-        this.menuMusic = Utility.getAsset("menu/main_menu_music_dbd.mp3", Music.class);
+        this.menuMusic = Utility.getAsset("menu/main-menu-music.mp3", Music.class);
         this.buttonClickSound = Utility.getAsset("menu/button-click.mp3", Sound.class);
     }
 
     private void setupUI(){
-        play = createButton(playButtonInactive, playButtonActive);
-        load = createButton(loadButtonInactive, loadButtonActive);
-        settings = createButton(settingsButtonInactive, settingsButtonActive);
-        exit = createButton(exitButtonInactive, exitButtonActive);
+        loadMenuAssets();
 
-
-        play.addListener(new ChangeListener() {
-            //metodo utilizzato per fermare la musica del menù principale quando si clicca play
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                menuMusic.stop(); // Ferma la musica del menu principale
-                game.setScreen(new MainGameScreen(game)); // Passa alla schermata di gioco
-            }
-        });
+        this.play = new Button(skin, "play");
+        this.load = new Button(skin, "load");
+        this.settings = new Button(skin, "settings");
+        this.exit = new Button(skin, "exit");
 
         table.setPosition((float) -Gdx.graphics.getWidth() / 4, 0);
         table.setFillParent(true);

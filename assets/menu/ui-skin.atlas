@@ -1,0 +1,149 @@
+
+ui-skin.png
+size: 1024, 1024
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+Devil Children GBC English Patch Font
+  rotate: false
+  xy: 1, 939
+  size: 505, 31
+  orig: 505, 31
+  offset: 0, 0
+  index: -1
+Devil Children GBC English Patch Font(1)
+  rotate: false
+  xy: 1, 906
+  size: 503, 31
+  orig: 503, 31
+  offset: 0, 0
+  index: -1
+checkbox-act
+  rotate: false
+  xy: 894, 956
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+checkbox-not-act
+  rotate: false
+  xy: 773, 858
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+exit_button_active
+  rotate: false
+  xy: 1, 808
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+exit_button_inactive
+  rotate: false
+  xy: 387, 482
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+knob-bf
+  rotate: false
+  xy: 387, 895
+  size: 9, 9
+  split: 0, 0, 0, 0
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
+load_button_active
+  rotate: false
+  xy: 1, 710
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+load_button_inactive
+  rotate: false
+  xy: 1, 612
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+main-menu
+  rotate: false
+  xy: 1, 514
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+main-menu-active
+  rotate: false
+  xy: 1, 416
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+play_button_active
+  rotate: false
+  xy: 1, 318
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+play_button_inactive
+  rotate: false
+  xy: 1, 220
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+resume
+  rotate: false
+  xy: 1, 122
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+resume-active
+  rotate: false
+  xy: 1, 24
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+save
+  rotate: false
+  xy: 508, 874
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+save-active
+  rotate: false
+  xy: 387, 776
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+settings_button_active
+  rotate: false
+  xy: 387, 678
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+settings_button_inactive
+  rotate: false
+  xy: 387, 580
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+slider
+  rotate: false
+  xy: 1, 1
+  size: 111, 21
+  split: 7, 7, 6, 7
+  pad: 0, 0, 0, 0
+  orig: 111, 21
+  offset: 0, 0
+  index: -1
