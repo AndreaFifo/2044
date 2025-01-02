@@ -33,6 +33,7 @@ public class MainGameScreen implements Screen {
 
     String mapFile = "Mappe/mappa-prova.tmx";
 
+
     // Costruttore
     public MainGameScreen(Gioco game)
     {
@@ -117,6 +118,7 @@ public class MainGameScreen implements Screen {
         drawObjects();
         drawElevatorMenu();
         // batch.draw(Utility.getAsset("menu/bg-menu.png", Texture.class), 0, 0, 1920, 1080);
+
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
         batch.end();
     }

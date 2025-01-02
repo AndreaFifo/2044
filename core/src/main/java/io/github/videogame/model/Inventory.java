@@ -55,7 +55,13 @@ public class Inventory {
         }
     }
 
-    // Metodo per disegnare l'inventario alla pressione del tasto 'I'
+
+    //CAMBIARE LA POSIZIONE DI DISEGNO
+
+
+
+// Metodo per disegnare l'inventario relativo al MovementController
+
     public void drawInventory(Batch batch, MovementController movementController) {
         if (Gdx.input.isKeyPressed(Input.Keys.I)) {
             // Posizione relativa al MovementController
@@ -76,6 +82,8 @@ public class Inventory {
             }
         }
     }
+
+
 
 
 }

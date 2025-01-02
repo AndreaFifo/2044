@@ -51,6 +51,9 @@ public class Item {
                     this.emitSound();
                     //Aggiungi l'oggetto all'inventario
                     player.getInventory().addItemToInventory(this);
+
+                    //System.out.println(player.getInventory().getInventoryAsString());
+
                     //Disegna il dialogo della raccolta dell'oggetto
                     this.getDialogManager().draw();
 
