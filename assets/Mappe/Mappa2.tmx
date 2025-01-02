@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="4">
+ <tileset firstgid="1" source="tileset.tsx"/>
+ <layer id="1" name="Livello tile 1" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1TcOgwAQRNHlqhyXHEw4B8km868AFEZoileOVppi1nXMXPkbz8x8BAgRIUaCFBlyfFCgRIXa7t1tyLfo0GPAFz+MmDBjwYoNO+wBnYmIvJ1+g4icpd2Qqw6/6obT
+  </data>
+ </layer>
+ <objectgroup id="2" name="wall">
+  <object id="1" x="114" y="252" width="244" height="36"/>
+  <object id="2" x="111" y="399" width="241" height="34"/>
+ </objectgroup>
+ <objectgroup id="3" name="elevator">
+  <object id="3" x="228" y="55" width="57" height="34">
+   <properties>
+    <property name="targets" value="mappa-prova.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
