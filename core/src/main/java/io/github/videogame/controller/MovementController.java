@@ -2,70 +2,88 @@ package io.github.videogame.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
-
-//Questa classe gestisce i movimenti del gioco
+import com.badlogic.gdx.math.Rectangle;
+import java.util.List;
 
 public class MovementController {
-
     private static final float SPEED = 150;
     private float x, y;
     private float velocityX, velocityY;
-    //Stato di direzione (0 = giù, 1 = sinistra, 2 = destra, 3 = su)
-    private int StateDirection;
+    private int stateDirection;
+    private boolean isMoving;
 
-
-    // Costruttore:
-    public MovementController(float SpawnAscissa, float SpawnOrdinata, int stateDirection) {
-        this.x = SpawnAscissa;
-        this.y = SpawnOrdinata;
+    public MovementController(float spawnAscissa, float spawnOrdinata) {
+        this.x = spawnAscissa;
+        this.y = spawnOrdinata;
         this.velocityX = 0f;
         this.velocityY = 0f;
-        this.StateDirection = setStateDirection(0); // Direzione iniziale (giù)
+        this.stateDirection = setStateDirection(0);
+        this.isMoving = false;
     }
 
-    public int setStateDirection(int stateDirection){
-        return this.StateDirection = stateDirection;
+    public int setStateDirection(int stateDirection) {
+        return this.stateDirection = stateDirection;
     }
 
-    // Aggiorna il movimento
-    public void changeStateDirection(float deltaTime) {
-
-        // Ripristina la velocità per ogni frame
+    public void changeStateDirection(float deltaTime, List<Rectangle> wallRectangles) {
         velocityX = 0f;
         velocityY = 0f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            velocityY = SPEED;  // Movimento positivo sull'asse Y (su)
-            StateDirection = setStateDirection(1); // Su
+            velocityY = SPEED;
+            stateDirection = setStateDirection(1);
         }
-        // Movimento giù
         if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            velocityY = -SPEED; // Movimento negativo sull'asse Y (giù)
-            StateDirection = setStateDirection(0); // Giù
+            velocityY = -SPEED;
+            stateDirection = setStateDirection(0);
         }
-        // Movimento sinistra
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            velocityX = -SPEED; // Movimento negativo sull'asse X (sinistra)
-            StateDirection = setStateDirection(2); // Sinistra
+            velocityX = -SPEED;
+            stateDirection = setStateDirection(2);
         }
-        // Movimento destra
         if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            velocityX = SPEED;  // Movimento positivo sull'asse X (destra)
-            StateDirection = setStateDirection(3); // Destra
+            velocityX = SPEED;
+            stateDirection = setStateDirection(3);
         }
 
-        // Aggiornamento della posizione attuale della texture del personaggio
-        x += velocityX * deltaTime;
-        y += velocityY * deltaTime;
+        // Calcola la nuova posizione
+        float newX = x + velocityX * deltaTime;
+        float newY = y + velocityY * deltaTime;
+
+        // Verifica collisioni e aggiorna la posizione
+        boolean xMoved = isColliding(newX, y, wallRectangles);
+        boolean yMoved = isColliding(x, newY, wallRectangles);
+
+        if (xMoved) x = newX;
+        if (yMoved) y = newY;
+
+        // Aggiorna lo stato di movimento
+        isMoving = velocityX != 0 || velocityY != 0;
     }
 
-    public boolean isPlayerMoving(){
-        return (getVelocityX() != 0 || getVelocityY() != 0);
+     private boolean isColliding(float x, float y, List<Rectangle> wallRectangles) {
+        Rectangle playerRect = new Rectangle(x, y, 16, 32); // Dimensioni del giocatore
+        for (Rectangle wall : wallRectangles) {
+            if (playerRect.overlaps(wall)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean isColliding2(float x, float y, List<Rectangle> elevatorRectangles) {
+        Rectangle playerRect = new Rectangle(x, y, 16, 32); // Dimensioni del giocatore
+        for (Rectangle elevator : elevatorRectangles) {
+            if (playerRect.overlaps(elevator)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    // Getter per le coordinate
-    //in teoria dovrebbero essere nel player queste cose
+    public boolean isPlayerMoving() {
+        return isMoving;
+    }
+
     public float getX() {
         return x;
     }
@@ -74,19 +92,15 @@ public class MovementController {
         return y;
     }
 
-    // Getter per la direzione corrente
     public int getStateDirection() {
-        return StateDirection;
+        return stateDirection;
     }
 
-    // Getter per la velocità orizzontale
     public float getVelocityX() {
         return velocityX;
     }
 
-    // Getter per la velocità verticale
     public float getVelocityY() {
         return velocityY;
     }
-
 }
