@@ -3,6 +3,7 @@ package io.github.videogame.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import io.github.videogame.controller.MovementController;
 
 import java.util.ArrayList;
 
@@ -54,20 +55,35 @@ public class Inventory {
         }
     }
 
+
+    //CAMBIARE LA POSIZIONE DI DISEGNO
+
+
+
     // Metodo per disegnare l'inventario alla pressione del tasto 'I'
-    public void drawInventory(Batch batch) {
+// Metodo per disegnare l'inventario relativo al MovementController
+    public void drawInventory(Batch batch, MovementController movementController) {
         if (Gdx.input.isKeyPressed(Input.Keys.I)) {
-            // Disegna gli oggetti dell'inventario in una griglia
-            int x = 20; // Posizione in x, vicino al bordo sinistro
-            int y = Gdx.graphics.getHeight() - 80; // Posizione iniziale in y
-            int spacing = 30; // Spazio tra gli oggetti
+            // Posizione relativa al MovementController
+            float baseX = movementController.getX(); // Usa la posizione X del controller
+            float baseY = movementController.getY(); // Usa la posizione Y del controller
+            int offsetX = -480; // Offset per spostare l'inventario rispetto al controller
+            int offsetY = 240; // Offset verticale
 
-            for (int i = 0; i < itemList.size(); i++)
-                batch.draw(itemList.get(i).getTexture(), x + (i % 5) * spacing, y - (i / 5) * spacing, 32, 32);
+            // Spaziatura tra gli oggetti
+            int spacing = 30;
 
-
+            // Disegna gli oggetti in una griglia
+            for (int i = 0; i < itemList.size(); i++) {
+                batch.draw(itemList.get(i).getTexture(),
+                    baseX + offsetX + (i % 5) * spacing, // Colonna
+                    baseY + offsetY - (i / 5) * spacing, // Riga
+                    16, 16); // Dimensione degli oggetti
+            }
         }
     }
+
+
 
 
 }
