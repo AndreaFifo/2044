@@ -46,7 +46,7 @@ public class MainGameScreen implements Screen {
     public void show() {
         this.batch = game.getBatch();
         this.stateDirection=0;
-        this.player = Player.getInstance("player/player-spritesheet.png");  // Inizializza l'entità con la sprite sheet
+        this.player = Player.getInstance("player/capo-polizia.png");  // Inizializza l'entità con la sprite sheet
         this.movementController = new MovementController(400, 105);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960, 540);
