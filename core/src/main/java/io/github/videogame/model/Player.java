@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 // Classe che crea il Giocatore
 public class Player {
-    private static Player instance;
+    private static volatile Player instance;
     private Texture spriteSheetPlayer;
     private Animation<TextureRegion>[] walkAnimationsPlayer;
     private float stateTime;
@@ -26,13 +26,12 @@ public class Player {
     }
     // Metodo statico per ottenere l'istanza del Singleton
     public static Player getInstance(String spriteSheetPath) {
-        if (instance == null) {
-            synchronized (Player.class) {
-                if (instance == null) {
-                    instance = new Player(spriteSheetPath);
-                }
+        synchronized (Player.class) {
+            if (instance == null) {
+                instance = new Player(spriteSheetPath);
             }
         }
+
         return instance;
     }
 

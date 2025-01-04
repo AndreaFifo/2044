@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
 public final class Utility {
-    public static final AssetManager assetManager = new AssetManager();
+    public static AssetManager assetManager = new AssetManager();
 
     private static final InternalFileHandleResolver filePathResolver = new InternalFileHandleResolver();
 

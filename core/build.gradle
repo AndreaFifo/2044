@@ -13,6 +13,7 @@ dependencies {
 
 
   implementation "com.badlogicgames.gdx-video:gdx-video:1.3.2-SNAPSHOT"
+  implementation 'com.github.raeleus.TenPatch:tenpatch:5.2.3'
 
 
   if(enableGraalNative == 'true') {

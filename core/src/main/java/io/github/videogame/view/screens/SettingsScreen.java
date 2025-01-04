@@ -12,6 +12,7 @@ import io.github.videogame.model.Utility;
 
 public class SettingsScreen implements Screen {
     private Gioco game;
+    private Screen prevScreen;
     private SpriteBatch batch;
     private Stage stage;
     private Table table;
@@ -35,10 +36,10 @@ public class SettingsScreen implements Screen {
 
     public SettingsScreen(Gioco game, Screen prevScreen) {
         this.game = game;
+        this.prevScreen = prevScreen;
         this.batch = game.getBatch();
         this.stage = new Stage();
         this.table = new Table();
-        this.settingsController = new SettingsController(this.game, this, prevScreen);
     }
 
     @Override
@@ -47,6 +48,8 @@ public class SettingsScreen implements Screen {
 
         this.skin = Utility.getAsset("menu/ui-skin.json", Skin.class);
         setupUI();
+
+        this.settingsController = new SettingsController(this.game, this, prevScreen);
 
         settingsController.setup();
     }

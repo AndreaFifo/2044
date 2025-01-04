@@ -142,8 +142,8 @@ slider
   rotate: false
   xy: 1, 1
   size: 111, 21
-  split: 7, 7, 6, 7
-  pad: 0, 0, 0, 0
+  split: 0, 0, 0, 0
+  pad: 8, 8, 7, 7
   orig: 111, 21
   offset: 0, 0
   index: -1
