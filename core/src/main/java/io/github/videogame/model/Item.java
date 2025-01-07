@@ -42,33 +42,39 @@ public class Item {
         this.mainGameScreen = mainGameScreen;
     }
 
+    private boolean isDrawing = true;
+
     // Metodo per raccogliere l'oggetto e aggiungerlo all'inventario
     public void pickUp() {
+        if (canBePickedUp()) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                this.taken = true;
+                this.emitSound();
+                // Aggiungi l'oggetto all'inventario
+                player.getInventory().addItemToInventory(this);
 
-            if (canBePickedUp()) {
-                if (Gdx.input.isKeyPressed(Input.Keys.F)) {
-                    this.taken = true;
-                    this.emitSound();
-                    //Aggiungi l'oggetto all'inventario
-                    player.getInventory().addItemToInventory(this);
-
-                    //System.out.println(player.getInventory().getInventoryAsString());
-
-                    //Disegna il dialogo della raccolta dell'oggetto
-                    this.getDialogManager().draw();
-
-                }
+                // Reimposta il flag per abilitare il dialogo per questo oggetto
+                this.isDrawing = true;
             }
+        }
     }
 
+    public void drawDialogue() {
+        if (this.isTaken() && isDrawing) {
+            this.getDialogManager().draw();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            this.isDrawing = false; // Nasconde il dialogo per questo oggetto
+        }
+    }
 
     //Controlla se l'oggetto può essere raccolto in base alla posizione del giocatore.
     private boolean canBePickedUp() {
         return !taken &&
-            movementController.getX() <= x + 100 &&
-            movementController.getX() >= x - 100 &&
-            movementController.getY() <= y + 100 &&
-            movementController.getY() >= y - 100;
+            movementController.getX() <= x + 30 &&
+            movementController.getX() >= x - 30 &&
+            movementController.getY() <= y + 30 &&
+            movementController.getY() >= y - 30;
     }
 
     // Metodo per emettere il suono di raccolta

@@ -17,7 +17,7 @@ public class DialogManager {
 
         // Carica il font e crea uno stile per il testo
         BitmapFont font = new BitmapFont(Gdx.files.internal("Font/font.fnt")); // Assicurati di avere un file di font
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLUE);
 
         // Crea il Label per il dialogo
         dialogLabel = new Label("", labelStyle);
@@ -37,10 +37,14 @@ public class DialogManager {
     }
 
     public void draw() {
-        //Aggiorna lo stato degli attori
+        // Aggiorna lo stato degli attori
         stage.act();
-        //Disegna gli attori
+        // Disegna gli attori
         stage.draw();
+    }
+
+    public void hide() {
+        dialogLabel.setText(""); // Svuota il testo per nascondere il dialogo
     }
 
     public Stage getStage() {

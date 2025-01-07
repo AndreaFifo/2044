@@ -6,8 +6,6 @@ import io.github.videogame.view.screens.MainGameScreen;
 public class FlashDrive extends Item {
 
 
-    private DialogManager dialogManager;
-
     public FlashDrive(float x, float y, MovementController movementController, Player player, MainGameScreen mainGameScreen) {
         super(x, y, movementController, player,mainGameScreen);
         this.setTexture("Oggetti/FlashDrive2.png");
@@ -16,4 +14,9 @@ public class FlashDrive extends Item {
         this.setDescription("A flash drive, probably contains important algorithms");
         this.getDialogManager().setDialog(getDescription());
     }
+
+
+
+
+
 }

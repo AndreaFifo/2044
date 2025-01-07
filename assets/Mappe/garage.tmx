@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="48" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="9">
+ <tileset firstgid="1" source="Little_Bits_Office_Floors.tsx"/>
+ <tileset firstgid="34" source="tileset.tsx"/>
+ <tileset firstgid="834" source="kitchen16_tan.tsx"/>
+ <tileset firstgid="1602" source="New Piskel (4).tsx"/>
+ <tileset firstgid="1611" source="player-spritesheet.tsx"/>
+ <tileset firstgid="1675" source="police car.tsx"/>
+ <tileset firstgid="1711" source="New Piskel.tsx"/>
+ <layer id="1" name="Livello tile 1" width="48" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztw8EJAAAMA6F7Zf+Ru0dRcNVUVVX1+QMF5xaB
+  </data>
+ </layer>
+ <layer id="2" name="Livello tile 2" width="48" height="20">
+  <data encoding="base64" compression="zlib">
+   eJyrZWBgsGEcmrgO6PalQJzCODTxMkjYJzAMUWDNyLBgKLvfZtT9AwpG3T+wYNT9AwtG3T+wYNT9AwtG3T+wYDi433qIu7+UYeD7UeTiMoaB70NRigEy3VXS
+  </data>
+ </layer>
+ <layer id="3" name="Livello tile 3" width="48" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt1tENQFAMheFT1wJmYpD7zgRYwGU6I9iACVRSG6imSf/kPPd7LKBXS0BHigeU69k+/OCfE/LJoxq54elf/DbxY0v+7E/hty38toXftvDbFn7bXv/q1D+Jvzj1j+JfnPp3dh+8i1c5/J8ju26x4y84
+  </data>
+ </layer>
+ <layer id="4" name="Livello tile 4" width="48" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt0jsOQGAQhdGpZmHej9IG7ImGhoaGBZCwN1cvFOSPSe5JbjfFV4zIvUVFVn04+rEN7bvhfnIrN/4rhcF+D80+FhhsP4XojrDYaH+C7hTLLvprlbLFemzEZsx54AsVehuswwZsMtZPRERE3zsAtx8QkA==
+  </data>
+ </layer>
+ <objectgroup id="5" name="wall">
+  <object id="1" x="2.5" y="33" width="71.5" height="14.5"/>
+  <object id="2" x="39.5" y="274" width="35.5" height="14.5"/>
+  <object id="3" x="36" y="48" width="24.5" height="229"/>
+  <object id="4" x="2.66667" y="0.666667" width="764" height="18"/>
+  <object id="5" x="750.667" y="18" width="16" height="302.667"/>
+  <object id="6" x="2" y="286" width="764.667" height="34.6667"/>
+  <object id="7" x="130" y="124.667" width="68" height="30"/>
+ </objectgroup>
+ <objectgroup id="6" name="elevator">
+  <object id="8" x="358" y="8.66667" width="50" height="60.6667">
+   <properties>
+    <property name="targets" value="sopra.tmx"/>
+    <property name="targets2" value="ingresso.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
