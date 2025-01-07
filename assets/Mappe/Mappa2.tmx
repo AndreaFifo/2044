@@ -13,6 +13,8 @@
  <objectgroup id="3" name="elevator">
   <object id="3" x="228" y="55" width="57" height="34">
    <properties>
+    <property name="targetX" value="400"/>
+    <property name="targetY" value="105"/>
     <property name="targets" value="mappa-prova.tmx"/>
    </properties>
   </object>

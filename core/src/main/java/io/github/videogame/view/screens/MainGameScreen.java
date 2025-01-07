@@ -15,6 +15,7 @@ import io.github.videogame.model.*;
 import io.github.videogame.controller.MovementController;
 
 import java.util.List;
+import java.util.Objects;
 
 
 //Lo scopo di questa classe è gestire la finestra della sessione di gioco
@@ -28,10 +29,13 @@ public class MainGameScreen implements Screen {
     private OrthographicCamera camera;
     private MagneticKey magneticKey;
     private FlashDrive chiavettaUSB;
-    private DialogManager dialogoUSB;
     private MapManager mapManager;
-
-    String mapFile = "Mappe/mappa-prova.tmx";
+    public float movementControllerStateX=200,movementControllerStateY=426;
+    String mapFile = "Mappe/sopra.tmx";
+    private NpcKiller NpcKiller;
+    private NpcInnocent NpcInnocent;
+    private NpcChiefOfPolicie NpcChiefOfPolicie;
+    private NpcDeadBody NpcDeadBody;
 
 
     // Costruttore
@@ -47,13 +51,21 @@ public class MainGameScreen implements Screen {
         this.batch = game.getBatch();
         this.stateDirection=0;
         this.player = Player.getInstance("player/player-spritesheet.png");  // Inizializza l'entità con la sprite sheet
-        this.movementController = new MovementController(400, 105);
+        if (movementController == null) {
+            this.movementController = new MovementController(400, 105); // Posizione di spawn
+        } else {
+            this.movementController = new MovementController(movementControllerStateX, movementControllerStateY);
+        }
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960, 540);
         this.mapManager = new MapManager(mapFile,camera);
-        this.dialogoUSB = new DialogManager();
         this.magneticKey = new MagneticKey(420, 100, movementController, player,this);
         this.chiavettaUSB = new FlashDrive(500, 500, movementController, player,this);
+
+        this.NpcKiller = new NpcKiller(610,90, movementController);
+        this.NpcInnocent = new NpcInnocent(610, 130, movementController);
+        this.NpcChiefOfPolicie = new NpcChiefOfPolicie(710,100,movementController);
+        this.NpcDeadBody = new NpcDeadBody(150,200,movementController);
     }
 
     //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
@@ -72,24 +84,26 @@ public class MainGameScreen implements Screen {
             if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
                 movementController.getX(), movementController.getY(), List.of(elevator))) {
                 String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
-                game.setScreen(new ElevatorMenu(game, this, targetMap));
+                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
+                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
                 break;
             }
         }
     }
-
-
+    public void savePlayerState() {
+        movementControllerStateX = movementController.getX();
+        movementControllerStateY = movementController.getY();
+    }
     @Override
     public void render(float delta) {
 
         //modifica
         // Controlla se il tasto ESCAPE è stato premuto
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            savePlayerState();
             game.setScreen(new MenuPausa(game, this)); // Mostra il menu pausa
             return;
         }
-        //
-
 
         movementController.changeStateDirection(delta, mapManager.getWallRectangles());// Aggiorna la posizione in base all'input
 
@@ -103,7 +117,7 @@ public class MainGameScreen implements Screen {
         TextureRegion currentFrame = player.getCurrentFrame(currentDirection, isMoving, delta);
 
         // Pulisci lo schermo
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.position.set(movementController.getX(), movementController.getY(), 0f);
@@ -117,11 +131,36 @@ public class MainGameScreen implements Screen {
         player.getInventory().drawInventory(batch,movementController);
         drawObjects();
         drawElevatorMenu();
+        drawNpc();
         // batch.draw(Utility.getAsset("menu/bg-menu.png", Texture.class), 0, 0, 1920, 1080);
-
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
         batch.end();
+
+        magneticKey.pickUp();
+        chiavettaUSB.pickUp();
+
+        //Dialoghi
+        NpcKiller.drawDialogue();
+        NpcInnocent.drawDialogue();
+        NpcChiefOfPolicie.drawDialogue();
+        NpcDeadBody.drawDialogue();
+
+        magneticKey.drawDialogue();
+        chiavettaUSB.drawDialogue();
+
+
+
+
     }
+
+
+    public void drawNpc(){
+        batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 32,32);
+        batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 32, 32);
+        batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 32,32);
+        batch.draw(NpcDeadBody.getTexture(),NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_x(),32,32);
+    }
+
 
 
     //Disegna gli oggetti, SOLO SE IL LORO STATO TAKEN è FALSO
@@ -168,7 +207,17 @@ public class MainGameScreen implements Screen {
         mapFile = mapFilePath;
         System.out.println(mapFile);
         this.mapManager = new MapManager( mapFilePath, camera); // Carica la nuova mappa
-        //movementController = new MovementController(400, 105); // Reimposta il giocatore
+        if(Objects.equals(mapFile, "Mappe/sopra.tmx")){
+            movementControllerStateX = 200;
+            movementControllerStateY = 426;
+        } else if (Objects.equals(mapFile,"Mappe/ingresso.tmx")) {
+            movementControllerStateX = 835;
+            movementControllerStateY = 520;
+        } else if (Objects.equals(mapFile,"Mappe/garage.tmx")) {
+            movementControllerStateX = 379;
+            movementControllerStateY = 270;
+        }
+        movementController = new MovementController(movementControllerStateX,movementControllerStateY); // Reimposta il giocatore
         camera.position.set(400, 105, 0); // Reimposta la posizione della telecamera
         camera.update();
         System.out.println("Mappa aggiornata a: " + mapFilePath);

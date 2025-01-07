@@ -18,6 +18,8 @@ public class MapManager {
     private List<Rectangle> wallRectangles;
     private List<Rectangle> elevatorRectangles;
     private Map<Rectangle, String> elevatorTargetMaps;
+    private Map<Rectangle, String> elevatorTargetMap2;
+
 
 
     public MapManager(String mapFilePath, OrthographicCamera camera) {
@@ -26,6 +28,7 @@ public class MapManager {
         this.camera = camera;
         elevatorRectangles = new ArrayList<>();
         elevatorTargetMaps = new HashMap<>();
+        elevatorTargetMap2 = new HashMap<>();
 
         // Carica gli oggetti "wall" dall'Object Layer
         wallRectangles = new ArrayList<>();
@@ -42,6 +45,8 @@ public class MapManager {
                 elevatorRectangles.add(rect);
                 String targetMap = (String) object.getProperties().get("targets");
                 elevatorTargetMaps.put(rect, targetMap);
+                String targetMap2 = (String) object.getProperties().get("targets2");
+                elevatorTargetMap2.put(rect, targetMap2);
             }
         }
     }
@@ -62,6 +67,10 @@ public class MapManager {
     public Map<Rectangle, String> getElevatorTargetMaps() {
         return elevatorTargetMaps;
     }
+    public Map<Rectangle, String> getElevatorTargetMap2() {
+        return elevatorTargetMap2;
+    }
+
     public void dispose() {
         if (map != null) {
             map.dispose();
@@ -70,5 +79,4 @@ public class MapManager {
             renderer.dispose();
         }
     }
-
 }

@@ -12,6 +12,14 @@ public class MovementController {
     private int stateDirection;
     private boolean isMoving;
 
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
     public MovementController(float spawnAscissa, float spawnOrdinata) {
         this.x = spawnAscissa;
         this.y = spawnOrdinata;
