@@ -56,13 +56,13 @@ public class VideoIntroScreen implements Screen {
 
         batch.end();
 
-        //per poter saltare il video quando viene cliccato play
+        // Controllo dell'input per skippare il video
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched()) {
-            goToMainGameScreen();
+            goToMainScreen();
         }
     }
 
-    private void goToMainGameScreen() {
+    private void goToMainScreen() {
         videoPlayer.stop(); // Interrompe il video se è ancora in riproduzione
         game.setScreen(new MainGameScreen(game)); // Passa alla schermata principale
     }

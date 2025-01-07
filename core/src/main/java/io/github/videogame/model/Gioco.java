@@ -23,7 +23,6 @@ public class Gioco extends Game {
     public void create(){
         //Creo l'oggetto batch per disegnare le texture
         batch = new SpriteBatch();
-
         //Creo un'istanza del menu principale e l'attivo con setScreen
         this.setScreen(new MenuScreen(this));
     }

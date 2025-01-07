@@ -5,21 +5,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import io.github.videogame.controller.AudioController;
 import io.github.videogame.model.Gioco;
 import io.github.videogame.model.Utility;
 import io.github.videogame.controller.MenuController;
-
-import java.util.Arrays;
 
 public class MenuScreen implements Screen {
     private final Gioco game;
@@ -27,6 +20,7 @@ public class MenuScreen implements Screen {
     private final Stage stage;
     private final Table table;
     private final MenuController menuController;
+    private AudioController audioController;
 
     private Texture background;
     private Texture gameTitle;
@@ -47,6 +41,7 @@ public class MenuScreen implements Screen {
         this.stage = new Stage();
         this.table = new Table();
         this.menuController = new MenuController(this.game, this);
+        this.audioController = AudioController.getInstance();
 
         setupUI();
     }
@@ -55,12 +50,7 @@ public class MenuScreen implements Screen {
     public void show() {
         batch.setProjectionMatrix(stage.getCamera().combined);
 
-        menuMusic.setLooping(true);
-        menuMusic.setVolume(0.5f);
-        menuMusic.play();
-
         Gdx.input.setInputProcessor(stage);
-
 
         menuController.setup();
     }
@@ -95,7 +85,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        menuMusic.stop();
+        System.out.println(game.getScreen());
     }
 
     @Override
@@ -136,10 +126,16 @@ public class MenuScreen implements Screen {
         this.background = Utility.getAsset("menu/bg-menu.png", Texture.class);
         this.menuMusic = Utility.getAsset("menu/main-menu-music.mp3", Music.class);
         this.buttonClickSound = Utility.getAsset("menu/button-click.mp3", Sound.class);
+
+        audioController.addNewMusic("menu/main-menu-music.mp3", this.menuMusic);
+        audioController.setMusicVolume(audioController.getMusicsVolume());
     }
 
     private void setupUI(){
         loadMenuAssets();
+
+        menuMusic.setLooping(true);
+        menuMusic.play();
 
         this.play = new Button(skin, "play");
         this.load = new Button(skin, "load");
