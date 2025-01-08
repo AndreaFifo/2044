@@ -202,11 +202,6 @@ public class MainGameScreen implements Screen {
         //Disegno le task
         taskView.draw();
 
-        task.draw();
-
-        if(NpcDeadBody.getDialogIndex() == 4)
-            taskModel.setNextTask();
-
      //   System.out.println(movementController.getX() + "    " + movementController.getY());
 
     }
@@ -371,33 +366,4 @@ public class MainGameScreen implements Screen {
         return false;
     }
 */
-
-
-
-    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
-    public void renderStaticState(SpriteBatch batch) {
-        TextureRegion currentFrame = player.getCurrentFrame(//si utilizza per determinare quale frame della sprite sheet del personaggio diseganre
-            movementController.getStateDirection(),
-            movementController.isPlayerMoving(),
-            0
-        );
-
-
-        batch.draw(currentFrame, movementController.getX(), movementController.getY());
-    }
-    private void drawElevatorMenu() {
-        for (Rectangle elevator : mapManager.getElevatorRectangles()) {
-            if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
-                movementController.getX(), movementController.getY(), List.of(elevator))) {
-                String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
-                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
-                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
-                break;
-            }
-        }
-    }
-    public void savePlayerState() {
-        movementControllerStateX = movementController.getX();
-        movementControllerStateY = movementController.getY();
-    }
 }

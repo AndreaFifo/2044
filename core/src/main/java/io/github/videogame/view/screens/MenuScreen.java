@@ -49,6 +49,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        menuMusic.play();
         batch.setProjectionMatrix(stage.getCamera().combined);
 
         Gdx.input.setInputProcessor(stage);
@@ -84,7 +85,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        System.out.println(game.getScreen());
     }
 
     @Override
