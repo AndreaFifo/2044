@@ -12,7 +12,7 @@ public class Settings {
 
     final Preferences preferences = Gdx.app.getPreferences("game_settings");
 
-    public Settings() {
+    private Settings() {
         this.audioController = AudioController.getInstance();
 
         initalSettings();

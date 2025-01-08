@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.model.*;
 import io.github.videogame.controller.MovementController;
 import io.github.videogame.view.TaskView;
@@ -23,6 +24,7 @@ public class MainGameScreen implements Screen {
     private Player player;
     private int stateDirection;
     private MovementController movementController;
+    private ScreenManager screenManager;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private MagneticKey magneticKey;
@@ -55,6 +57,7 @@ public class MainGameScreen implements Screen {
     {
         this.game = game;
         this.show();
+        this.screenManager = ScreenManager.getInstance();
     }
 
 
@@ -98,8 +101,49 @@ public class MainGameScreen implements Screen {
         NpcInnocent.addObserver(taskView);
         NpcDeadBody.addObserver(taskView);
         NpcAurora.addObserver(taskView);
+    }
 
+    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
+    public void renderStaticState(SpriteBatch batch) {
+        // Pulisci il batch solo all'inizio
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
 
+        // 1. Rendi lo stato della mappa
+        mapManager.render();
+
+        // 2. Disegna il personaggio
+        TextureRegion currentFrame = player.getCurrentFrame(
+            movementController.getStateDirection(),
+            movementController.isPlayerMoving(),
+            0
+        );
+        batch.draw(currentFrame, movementController.getX(), movementController.getY());
+
+        // 3. Disegna gli oggetti
+        drawObjects();
+
+        // 4. Disegna gli NPC
+        drawNpc();
+
+        // Aggiungi altri oggetti o elementi che desideri renderizzare
+
+        batch.end();
+    }
+    private void drawElevatorMenu() {
+        for (Rectangle elevator : mapManager.getElevatorRectangles()) {
+            if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
+                movementController.getX(), movementController.getY(), List.of(elevator))) {
+                String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
+                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
+                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
+                break;
+            }
+        }
+    }
+    public void savePlayerState() {
+        movementControllerStateX = movementController.getX();
+        movementControllerStateY = movementController.getY();
     }
 
     @Override
@@ -108,7 +152,7 @@ public class MainGameScreen implements Screen {
         // Controlla se il tasto ESCAPE è stato premuto
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             savePlayerState();
-            game.setScreen(new MenuPausa(game, this)); // Mostra il menu pausa
+            screenManager.showScreen(ScreenManager.ScreenType.PAUSE); // Mostra il menu pausa
             return;
         }
 
@@ -158,8 +202,10 @@ public class MainGameScreen implements Screen {
         //Disegno le task
         taskView.draw();
 
+        task.draw();
 
-
+        if(NpcDeadBody.getDialogIndex() == 4)
+            taskModel.setNextTask();
 
      //   System.out.println(movementController.getX() + "    " + movementController.getY());
 
