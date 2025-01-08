@@ -21,27 +21,23 @@ public class NpcChiefOfPolicie extends NpcCreator{
     //Inizializza il dialogo del killer
     @Override
     public String[] InitDialog(String[] dialogue) {
-        //Discussione iniziale post-chiamata polizia
+
+        //ATTO I: PRIMO INCONTRO CON IL CAPO DELLA POLIZIA
         dialogue[0] = "Capo della Polizia: Sono stato informato della situazione. Puoi spiegarmi cosa è successo?";
         dialogue[1] = "Joseph Forest: Ho trovato un corpo... È lì, non so cosa sia successo.";
         dialogue[2] = "Capo della Polizia: Hai toccato qualcosa? Hai visto qualcuno sospetto nei paraggi?";
         dialogue[3] = "Joseph Forest: No, non ho toccato niente. Non ho visto nessuno, era già così quando sono arrivato.";
         dialogue[4] = "Capo della Polizia: Bene, hai fatto la cosa giusta chiamandomi. Ora lascia fare a noi.";
         dialogue[5] = "Capo della Polizia: Resta nei paraggi, potremmo avere bisogno di farti qualche domanda.";
-
-        //Richiesta di volere aiutare nelle indagi
         dialogue[6] = "Joseph Forest: Voglio aiutarvi a risolvere il caso, Caleb oltre che essere mio collega era anche un mio amico";
         dialogue[7] = "Capo della Polizia: Non farla cosi facile, potresti essere tu il killer....";
         dialogue[8] = "Capo della Polizia: Dove ti trovavi questa notte? Quando Caleb è stato ucciso? ";
-        // Discussione sull'alibi
         dialogue[9] = "Joseph Forest: Ieri sera ero in ufficio e stavo lavorando con Caleb, ho timbrato l'uscita verso le 18:30";
         dialogue[10] = "Capo della Polizia: E dopo mezzanotte? Cosa hai fatto?";
         dialogue[11] = "Joseph Forest: Sono tornato al mio appartamento. Il portiere del condominio può confermare che mi ha visto arrivare intorno alla 00:30. Inoltre, il sistema di sicurezza del palazzo registra quando ho usato la tessera magnetica per entrare.";
         dialogue[12] = "Capo della Polizia: Bene, queste sono prove verificabili. Ma come fai a sapere che l'omicidio è avvenuto dopo mezzanotte?";
         dialogue[13] = "Joseph Forest: Caleb mi ha inviato un messaggio alle 01:15, con un indizio su una chiave di decifrazione. L'omicidio deve essere avvenuto subito dopo, perché altrimenti avrebbe risposto alla mia chiamata delle 01:30.";
         dialogue[14] = "Capo della Polizia: Interessante. Questo alibi regge. Ma questo significa che il killer è qualcuno del team.";
-
-        // Dichiarazione della volontà di scoprire la verità
         dialogue[15] = "Joseph Forest: Esatto. Siamo solo in quattro a lavorare qui, e Caleb stava lavorando su qualcosa di enorme, qualcosa che poteva cambiare il corso della guerra. Chiunque l'abbia ucciso voleva impedirgli di completare il suo lavoro e rubare il codice su cui stava lavorando.";
         dialogue[16] = "Capo della Polizia: Non posso negare che ci sia del senso in quello che dici. Ma ascolta, Forest, queste sono indagini ufficiali. Non posso lasciarti agire da solo.";
         dialogue[17] = "Joseph Forest: Capisco, agente. Ma Caleb era il mio migliore amico, e non posso restare con le mani in mano. Voglio scoprire chi è la talpa e recuperare quel codice. Lo devo a lui.";
@@ -49,6 +45,20 @@ public class NpcChiefOfPolicie extends NpcCreator{
         dialogue[19] = "Joseph Forest: Lo farò, ma non posso promettere di stare fermo. Caleb meritava giustizia, e non mi fermerò finché non la otterrò.";
         dialogue[20] = "Capo della Polizia: Buona fortuna, Forest. Ne avrai bisogno.";
 
+        //ATTO II: SCOPERTA DELL'INDIZIO -> Joseph comunica all'agente di aver scoperto il movente dell'omicidio
+        dialogue[21] = "Joseph:\nAgente ho scoperto qualcosa che puo risolvere l'omicidio";
+        dialogue[22] = "Capo della Polizia:\n mi dica dott.Forest";
+        dialogue[23] = "Joseph:\n Il movente dell'omicidio è la scoperta dall'algoritmo in grado di decifrare i messaggi segreti russi";
+        dialogue[24] = "Capo della Polizia:\n Dunque supponi che il killer sia in qualche modo sia una spia nemica?";
+        dialogue[25] = "Joseph:\n E difficile da ammettere ma probabilmente uno dei miei stimati colleghi è in realtà un traditore";
+        dialogue[26] = "Capo della polizia:\n Grazie per l'informazione, vedrò di seguire questa eventuale pista nelle mie indagini";
+
+        //ATTO III: CONFESSIONE DEL KILLER -> Joseph comunica di aver scoperto chi è il colpevole
+        dialogue[27] = "Joseph:\n Agente come ha potuto sentire, il dott.Pierce non è chi vuol fare credere";
+        dialogue[28] = "Capo della polizia:\nOttimo lavoro dott.Forest...";
+        dialogue[29] = "Capo della polizia:\nOra mi ceda le prove raccolte";
+        dialogue[30] = "Joseph:\n Un attimo, devo fare prima una cosa con la chiavetta";
+        dialogue[31] = "Capo della polizia:\nD accordo, ma faccia presto";
 
         return dialogue;
     }
