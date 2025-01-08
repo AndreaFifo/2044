@@ -7,9 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.model.*;
@@ -31,17 +28,29 @@ public class MainGameScreen implements Screen {
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private MagneticKey magneticKey;
-    private FlashDrive chiavettaUSB;
+    private FlashDriveInnocent flashDriveInnocent;
+    private FlashDriveKiller flashDriveKiller;
+    private JosephPhone josephPhone;
     private MapManager mapManager;
     public float movementControllerStateX=200,movementControllerStateY=426;
     String mapFile = "Mappe/sopra.tmx";
+
+    //NPC
     private NpcKiller NpcKiller;
     private NpcInnocent NpcInnocent;
     private NpcChiefOfPolicie NpcChiefOfPolicie;
     private NpcDeadBody NpcDeadBody;
+    private io.github.videogame.model.NpcAurora NpcAurora;
 
-    private TaskView task;
-    private TaskModel taskModel;
+    //Salvataggio degli indici di dialogo per gli NPC
+    private int indicePolice;
+    private int indiceKiller;
+    private int indiceDead;
+    private int indiceInnocent;
+    private int indiceAurora;
+
+    //Task
+    private TaskView taskView;
 
     // Costruttore
     public MainGameScreen(Gioco game)
@@ -65,16 +74,33 @@ public class MainGameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960, 540);
         this.mapManager = new MapManager(mapFile,camera);
-        this.magneticKey = new MagneticKey(420, 100, movementController, player,this);
-        this.chiavettaUSB = new FlashDrive(500, 500, movementController, player,this);
+        this.magneticKey = new MagneticKey(88, 480, movementController, player,this);
+        this.flashDriveInnocent = new FlashDriveInnocent(420, 305, movementController, player,this);
+        this.flashDriveKiller = new FlashDriveKiller(1430,715, movementController, player,this);
+        this.josephPhone = new JosephPhone(366,605, movementController, player, this);
 
         this.NpcKiller = new NpcKiller(610,90, movementController);
         this.NpcInnocent = new NpcInnocent(610, 130, movementController);
         this.NpcChiefOfPolicie = new NpcChiefOfPolicie(710,100,movementController);
         this.NpcDeadBody = new NpcDeadBody(150,200,movementController);
+        this.NpcAurora = new NpcAurora(168,158,movementController);
 
-        task = new TaskView();
-        taskModel = TaskModel.getInstance();
+        //Setto gli indici correttamente (li salva anche se cambia schermata)
+        this.NpcChiefOfPolicie.setDialogIndex(indicePolice);
+        this.NpcKiller.setDialogIndex(indiceKiller);
+        this.NpcInnocent.setDialogIndex(indiceInnocent);
+        this.NpcDeadBody.setDialogIndex(indiceDead);
+        this.NpcAurora.setDialogIndex(indiceAurora);
+
+        //TASK
+        this.taskView = new TaskView();
+
+        //Aggiunta osservatore
+        NpcChiefOfPolicie.addObserver(taskView);
+        NpcKiller.addObserver(taskView);
+        NpcInnocent.addObserver(taskView);
+        NpcDeadBody.addObserver(taskView);
+        NpcAurora.addObserver(taskView);
     }
 
     //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
@@ -119,10 +145,10 @@ public class MainGameScreen implements Screen {
         movementControllerStateX = movementController.getX();
         movementControllerStateY = movementController.getY();
     }
+
     @Override
     public void render(float delta) {
 
-        //modifica
         // Controlla se il tasto ESCAPE è stato premuto
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             savePlayerState();
@@ -154,38 +180,79 @@ public class MainGameScreen implements Screen {
         // Disegna il personaggio
         batch.begin();
         player.getInventory().drawInventory(batch,movementController);
+        //Disegna gli oggetti, li inserisce nell'inventario ed altro
         drawObjects();
         drawElevatorMenu();
         drawNpc();
-        // batch.draw(Utility.getAsset("menu/bg-menu.png", Texture.class), 0, 0, 1920, 1080);
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
         batch.end();
 
-        magneticKey.pickUp();
-        chiavettaUSB.pickUp();
+        if(NpcDeadBody.getDialogIndex() == 4){
+            NpcDeadBody.notifyObservers();
+            NpcDeadBody.setDialogIndex(5);
+        }
 
-        //Dialoghi
-        NpcKiller.drawDialogue();
-        NpcInnocent.drawDialogue();
-        NpcChiefOfPolicie.drawDialogue();
-        NpcDeadBody.drawDialogue();
 
-        magneticKey.drawDialogue();
-        chiavettaUSB.drawDialogue();
+
+
+        //I due metodo gestiranno il dialogo del NPC
+        drawNpcDialogue();
+        setIndexNpc();
+
+        //Disegno le task
+        taskView.draw();
 
         task.draw();
 
         if(NpcDeadBody.getDialogIndex() == 4)
             taskModel.setNextTask();
 
+     //   System.out.println(movementController.getX() + "    " + movementController.getY());
+
+    }
+
+    public void setIndexNpc(){
+        //Salvataggio degli indici dei dialoghi degli NPC
+        if(indicePolice <= NpcChiefOfPolicie.getDialogIndex()){
+            indicePolice = NpcChiefOfPolicie.getDialogIndex();
+        }
+        if(indiceDead <= NpcDeadBody.getDialogIndex()){
+            indiceDead = NpcDeadBody.getDialogIndex();
+        }
+        if(indiceInnocent <= NpcInnocent.getDialogIndex()){
+            indiceInnocent = NpcInnocent.getDialogIndex();
+        }
+        if(indiceKiller <= NpcKiller.getDialogIndex()){
+            indiceKiller = NpcKiller.getDialogIndex();
+        }
+        if(indiceAurora <= NpcAurora.getDialogIndex()){
+            indiceAurora = NpcAurora.getDialogIndex();
+        }
+    }
+
+
+    public void drawNpcDialogue(){
+        //Disegna dialoghi degli NPC piano terra
+        if(Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
+            NpcKiller.drawDialogue();
+            NpcInnocent.drawDialogue();
+            NpcChiefOfPolicie.drawDialogue();
+        }
+        //Disegna dialoghi degli NPC primo piano
+        if(Objects.equals(mapFile, "Mappe/sopra.tmx")) {
+            NpcDeadBody.drawDialogue();
+            NpcAurora.drawDialogue();
+        }
     }
 
 
     public void drawNpc(){
-        batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 32,32);
-        batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 32, 32);
-        batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 32,32);
-        batch.draw(NpcDeadBody.getTexture(),NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(),32,32);
+        if(Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
+            batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 32, 32);
+            batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 32, 32);
+            batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 32, 32);
+        }
+        if(Objects.equals(mapFile,"Mappe/sopra.tmx")){batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);}
     }
 
 
@@ -193,14 +260,43 @@ public class MainGameScreen implements Screen {
     //Disegna gli oggetti, SOLO SE IL LORO STATO TAKEN è FALSO
     private void drawObjects() {
         if (!magneticKey.isTaken()) {
-            batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
+            if(Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
+                String inventario = player.getInventory().getInventoryAsString();
+                if(!inventario.contains("Magnetic Key")) {
+                    batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
+                }
+            }
             magneticKey.pickUp();
         }
 
-        if (!chiavettaUSB.isTaken()) {
-            batch.draw(chiavettaUSB.getTexture(), chiavettaUSB.getX(), chiavettaUSB.getY(), 16, 16);
-            chiavettaUSB.pickUp();
+        if (!flashDriveKiller.isTaken()) {
+            if (Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
+                String inventario = player.getInventory().getInventoryAsString();
+                if (!inventario.contains("FlashDriveKiller")) {
+                    batch.draw(flashDriveKiller.getTexture(), flashDriveKiller.getX(), flashDriveKiller.getY(), 6, 6);
+                }
+            }
+            flashDriveKiller.pickUp();
+        }
 
+        if (!flashDriveInnocent.isTaken()) {
+            if (Objects.equals(mapFile, "Mappe/sopra.tmx")) {
+                String inventario = player.getInventory().getInventoryAsString();
+                if (!inventario.contains("FlashDriveInnocente")) {
+                    batch.draw(flashDriveInnocent.getTexture(), flashDriveInnocent.getX(), flashDriveInnocent.getY(), 6, 6);
+                }
+            }
+            flashDriveInnocent.pickUp();
+        }
+
+        if (!josephPhone.isTaken()) {
+            if (Objects.equals(mapFile, "Mappe/sopra.tmx")) {
+                String inventario = player.getInventory().getInventoryAsString();
+                if (!inventario.contains("JosephPhone")) {
+                    batch.draw(josephPhone.getTexture(), josephPhone.getX(), josephPhone.getY(), 6, 6);
+                }
+            }
+            josephPhone.pickUp();
         }
     }
 
@@ -275,4 +371,33 @@ public class MainGameScreen implements Screen {
         return false;
     }
 */
+
+
+
+    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
+    public void renderStaticState(SpriteBatch batch) {
+        TextureRegion currentFrame = player.getCurrentFrame(//si utilizza per determinare quale frame della sprite sheet del personaggio diseganre
+            movementController.getStateDirection(),
+            movementController.isPlayerMoving(),
+            0
+        );
+
+
+        batch.draw(currentFrame, movementController.getX(), movementController.getY());
+    }
+    private void drawElevatorMenu() {
+        for (Rectangle elevator : mapManager.getElevatorRectangles()) {
+            if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
+                movementController.getX(), movementController.getY(), List.of(elevator))) {
+                String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
+                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
+                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
+                break;
+            }
+        }
+    }
+    public void savePlayerState() {
+        movementControllerStateX = movementController.getX();
+        movementControllerStateY = movementController.getY();
+    }
 }

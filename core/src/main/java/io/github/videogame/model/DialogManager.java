@@ -52,6 +52,14 @@ public class DialogManager {
         dialogLabel.setText(text);
     }
 
+    public void setDialog(String[] dialogues) {
+        StringBuilder dialogText = new StringBuilder();
+        for (String line : dialogues) {
+            dialogText.append(line).append("\n"); // Aggiungi ogni linea con un salto di riga
+        }
+        dialogLabel.setText(dialogText.toString()); // Imposta il testo completo
+    }
+
     public void draw() {
         // Aggiorna lo stato degli attori
         stage.act();

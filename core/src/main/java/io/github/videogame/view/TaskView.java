@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import io.github.videogame.model.Observer;
 import io.github.videogame.model.Task;
 import io.github.videogame.model.TaskModel;
 
 import java.util.Map;
 
-public class TaskView{
+public class TaskView implements Observer {
     private Stage stage;
     private Table table;
     private TaskModel taskModel;
@@ -45,8 +46,14 @@ public class TaskView{
     public void dispose() {
         stage.dispose();
     }
-
+    /*
     public void setNextTask(){
+        taskModel.setNextTask();
+        updateTasks();
+    }*/
+
+    @Override
+    public void update() {
         taskModel.setNextTask();
         updateTasks();
     }

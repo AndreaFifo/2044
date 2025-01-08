@@ -7,6 +7,7 @@ import io.github.videogame.controller.MovementController;
 
 public class NpcInnocent extends NpcCreator{
 
+
     public NpcInnocent(float spawn_x, float spawn_y, MovementController movementControllerPlayer){
         super(spawn_x, spawn_y, movementControllerPlayer);
         //Setto il nome del Npc

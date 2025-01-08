@@ -3,12 +3,16 @@ package io.github.videogame.model;
 import com.badlogic.gdx.graphics.Texture;
 import io.github.videogame.controller.MovementController;
 
-public abstract class NpcCreator {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class NpcCreator implements Observable{
 
     private String NpcName;
     private Texture texture;
     private String[] dialogue;
     private int dialogIndex;
+    private List<Observer> observers = new ArrayList<>();
 
     public DialogManager getDialogManager() {
         return dialogManager;
@@ -82,6 +86,23 @@ public abstract class NpcCreator {
 
     public MovementController getMovementControllerPlayer() {
         return movementControllerPlayer;
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update();
+        }
     }
 
 }
