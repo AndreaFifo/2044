@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.controller.SettingsController;
 import io.github.videogame.model.Gioco;
 import io.github.videogame.model.Utility;
 
 public class SettingsScreen implements Screen {
     private Gioco game;
-    private Screen prevScreen;
     private SpriteBatch batch;
     private Stage stage;
     private Table table;
@@ -21,7 +21,6 @@ public class SettingsScreen implements Screen {
     private Label videoLabel;
     private Label audioLabel;
     private Label vSyncLabel;
-    private Label fpsLabel;
     private Label musicLabel;
     private Label soundLabel;
 
@@ -34,24 +33,22 @@ public class SettingsScreen implements Screen {
 
     private Skin skin;
 
-    public SettingsScreen(Gioco game, Screen prevScreen) {
+    public SettingsScreen(Gioco game) {
         this.game = game;
-        this.prevScreen = prevScreen;
         this.batch = game.getBatch();
         this.stage = new Stage();
         this.table = new Table();
+        this.skin = Utility.getAsset("menu/ui-skin.json", Skin.class);
+
+        setupUI();
+        this.settingsController = new SettingsController(this.game, this);
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        this.skin = Utility.getAsset("menu/ui-skin.json", Skin.class);
-        setupUI();
-
-        this.settingsController = new SettingsController(this.game, this, prevScreen);
-
-        settingsController.setup();
+        settingsController.setupValues();
     }
 
     private void setupUI() {

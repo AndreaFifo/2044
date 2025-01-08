@@ -11,8 +11,10 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.model.*;
 import io.github.videogame.controller.MovementController;
+import io.github.videogame.view.TaskView;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +27,7 @@ public class MainGameScreen implements Screen {
     private Player player;
     private int stateDirection;
     private MovementController movementController;
+    private ScreenManager screenManager;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private MagneticKey magneticKey;
@@ -37,12 +40,15 @@ public class MainGameScreen implements Screen {
     private NpcChiefOfPolicie NpcChiefOfPolicie;
     private NpcDeadBody NpcDeadBody;
 
+    private TaskView task;
+    private TaskModel taskModel;
 
     // Costruttore
     public MainGameScreen(Gioco game)
     {
         this.game = game;
         this.show();
+        this.screenManager = ScreenManager.getInstance();
     }
 
 
@@ -66,18 +72,37 @@ public class MainGameScreen implements Screen {
         this.NpcInnocent = new NpcInnocent(610, 130, movementController);
         this.NpcChiefOfPolicie = new NpcChiefOfPolicie(710,100,movementController);
         this.NpcDeadBody = new NpcDeadBody(150,200,movementController);
+
+        task = new TaskView();
+        taskModel = TaskModel.getInstance();
     }
 
     //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
     public void renderStaticState(SpriteBatch batch) {
-        TextureRegion currentFrame = player.getCurrentFrame(//si utilizza per determinare quale frame della sprite sheet del personaggio diseganre
+        // Pulisci il batch solo all'inizio
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+
+        // 1. Rendi lo stato della mappa
+        mapManager.render();
+
+        // 2. Disegna il personaggio
+        TextureRegion currentFrame = player.getCurrentFrame(
             movementController.getStateDirection(),
             movementController.isPlayerMoving(),
             0
         );
-
-
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
+
+        // 3. Disegna gli oggetti
+        drawObjects();
+
+        // 4. Disegna gli NPC
+        drawNpc();
+
+        // Aggiungi altri oggetti o elementi che desideri renderizzare
+
+        batch.end();
     }
     private void drawElevatorMenu() {
         for (Rectangle elevator : mapManager.getElevatorRectangles()) {
@@ -101,7 +126,7 @@ public class MainGameScreen implements Screen {
         // Controlla se il tasto ESCAPE è stato premuto
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             savePlayerState();
-            game.setScreen(new MenuPausa(game, this)); // Mostra il menu pausa
+            screenManager.showScreen(ScreenManager.ScreenType.PAUSE); // Mostra il menu pausa
             return;
         }
 
@@ -148,8 +173,10 @@ public class MainGameScreen implements Screen {
         magneticKey.drawDialogue();
         chiavettaUSB.drawDialogue();
 
+        task.draw();
 
-
+        if(NpcDeadBody.getDialogIndex() == 4)
+            taskModel.setNextTask();
 
     }
 
@@ -158,7 +185,7 @@ public class MainGameScreen implements Screen {
         batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 32,32);
         batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 32, 32);
         batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 32,32);
-        batch.draw(NpcDeadBody.getTexture(),NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_x(),32,32);
+        batch.draw(NpcDeadBody.getTexture(),NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(),32,32);
     }
 
 

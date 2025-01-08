@@ -16,8 +16,9 @@ import io.github.videogame.view.screens.SettingsScreen;
 
 public class SettingsController {
     private final Gioco game;
+    private SettingsScreen settingsScreen;
     private final Settings settings;
-    private Screen prevScreen;
+    private ScreenManager screenManager;
     private Sound sound;
 
     private MySlider musicSlider;
@@ -25,22 +26,29 @@ public class SettingsController {
     private CheckBox vSyncCheckBox;
     private TextButton backButton;
 
-    public SettingsController(Gioco game, SettingsScreen view, Screen prevScreen) {
+    public SettingsController(Gioco game, SettingsScreen settingsScreen) {
         this.game = game;
-        this.prevScreen = prevScreen;
+        this.settingsScreen = settingsScreen;
+        this.screenManager = ScreenManager.getInstance();
 
-        this.musicSlider = view.getMusicSlider();
-        this.soundSlider = view.getSoundSlider();
-        this.vSyncCheckBox = view.getvSyncCheckBox();
-        this.backButton = view.getBackButton();
+        this.musicSlider = settingsScreen.getMusicSlider();
+        this.soundSlider = settingsScreen.getSoundSlider();
+        this.vSyncCheckBox = settingsScreen.getvSyncCheckBox();
+        this.backButton = settingsScreen.getBackButton();
 
         this.settings = Settings.getInstance();
+        this.sound = Utility.getAsset("menu/button-click.mp3", Sound.class);
     }
 
-    public void setup() {
-        this.sound = Utility.getAsset("menu/button-click.mp3", Sound.class);
-
+    public void setupValues() {
         musicSlider.setValue(settings.getMusicVolume());
+        soundSlider.setValue(settings.getSoundVolume());
+        vSyncCheckBox.setChecked(settings.isvSync());
+
+        setSettingsListeners();
+    }
+
+    private void setSettingsListeners(){
         musicSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -48,7 +56,6 @@ public class SettingsController {
             }
         });
 
-        soundSlider.setValue(settings.getSoundVolume());
         soundSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -56,7 +63,6 @@ public class SettingsController {
             }
         });
 
-        vSyncCheckBox.setChecked(settings.isvSync());
         vSyncCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -68,9 +74,8 @@ public class SettingsController {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(prevScreen);
+                ScreenManager.getInstance().returnToPreviousScreen();
             }
         });
-
     }
 }

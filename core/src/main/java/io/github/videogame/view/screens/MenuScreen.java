@@ -44,6 +44,7 @@ public class MenuScreen implements Screen {
         this.audioController = AudioController.getInstance();
 
         setupUI();
+        menuController.setup();
     }
 
     @Override
@@ -51,8 +52,6 @@ public class MenuScreen implements Screen {
         batch.setProjectionMatrix(stage.getCamera().combined);
 
         Gdx.input.setInputProcessor(stage);
-
-        menuController.setup();
     }
 
     @Override
@@ -146,11 +145,11 @@ public class MenuScreen implements Screen {
         table.setFillParent(true);
         table.add(new Image(gameTitle)).padBottom(60).size((float) (gameTitle.getWidth() * 1.30), (float) (gameTitle.getHeight() * 1.3));
         table.row();
-        table.add(play).padBottom(10);
+        table.add(play).padBottom(20);
         table.row();
-        table.add(load).padBottom(10);
+        table.add(load).padBottom(20);
         table.row();
-        table.add(settings).padBottom(10);
+        table.add(settings).padBottom(20);
         table.row();
         table.add(exit);
         table.row();

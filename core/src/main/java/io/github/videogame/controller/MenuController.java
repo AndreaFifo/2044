@@ -15,12 +15,14 @@ import io.github.videogame.view.screens.VideoIntroScreen;
 public class MenuController {
     private final Gioco game;
     private final MenuScreen view;
+    private ScreenManager screenManager;
     private AudioController audioController;
     private Sound buttonClickSound;
 
     public MenuController(Gioco game, MenuScreen view) {
         this.game = game;
         this.view = view;
+        this.screenManager = ScreenManager.getInstance();
 
         this.audioController = AudioController.getInstance();
     }
@@ -35,6 +37,7 @@ public class MenuController {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 buttonClickSound.play(audioController.getSoundsVolume());
+                audioController.getMusic("menu/main-menu-music.mp3").stop();
 
                 if(isFirstGame) {
                     preferences.putBoolean("first_game", false);
@@ -43,7 +46,7 @@ public class MenuController {
                     return;
                 }
 
-                game.setScreen(new MainGameScreen(game));
+                screenManager.showScreen(ScreenManager.ScreenType.GAME);
             }
         });
 
@@ -58,14 +61,13 @@ public class MenuController {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 buttonClickSound.play(audioController.getSoundsVolume());
-                game.setScreen(new SettingsScreen(game, view));
+                screenManager.showScreen(ScreenManager.ScreenType.SETTINGS);
             }
         });
 
         view.getExitBtn().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println(event.toString());
                 Gdx.app.exit();
             }
         });
