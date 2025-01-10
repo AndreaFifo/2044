@@ -29,6 +29,16 @@ public class Inventory {
         return instance;
     }
 
+
+    public ArrayList<String> getIteminventary()
+    {
+        ArrayList<String> elementi=new ArrayList<String>();
+        for (Item item : Inventory.getInventoryInstance().getItemList()) {
+            elementi.add(item.getName());
+        }
+        return elementi;
+    }
+
     // Restituisce la lista degli oggetti nell'inventario
     public ArrayList<Item> getItemList() {
         return itemList;
