@@ -5,55 +5,55 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import io.github.videogame.controller.MovementController;
 
-public class NpcAurora extends NpcCreator {
+    public class NpcAurora extends NpcCreator {
 
-    //Ulteriori dialoghi
-    private String[] dialogueAct2;
-    private String[] dialogueAct3;
-    private String[] dialogueAct4;
+        //Ulteriori dialoghi
+        private String[] dialogueAct2;
+        private String[] dialogueAct3;
+        private String[] dialogueAct4;
 
-    public int getDialogIndexAct2() {
-        return dialogIndexAct2;
-    }
+        public int getDialogIndexAct2() {
+            return dialogIndexAct2;
+        }
 
-    public void setDialogIndexAct2(int dialogIndexAct2) {
-        this.dialogIndexAct2 = dialogIndexAct2;
-    }
+        public void setDialogIndexAct2(int dialogIndexAct2) {
+            this.dialogIndexAct2 = dialogIndexAct2;
+        }
 
-    private int dialogIndexAct2 =0;
+        private int dialogIndexAct2 =0;
 
-    public void setDialogIndexAct3(int dialogIndexAct3) {
-        this.dialogIndexAct3 = dialogIndexAct3;
-    }
+        public void setDialogIndexAct3(int dialogIndexAct3) {
+            this.dialogIndexAct3 = dialogIndexAct3;
+        }
 
-    public int getDialogIndexAct3() {
-        return dialogIndexAct3;
-    }
+        public int getDialogIndexAct3() {
+            return dialogIndexAct3;
+        }
 
-    private int dialogIndexAct3 =0;
+        private int dialogIndexAct3 =0;
 
-    public void setDialogIndexAct4(int dialogIndexAct4) {
-        this.dialogIndexAct4 = dialogIndexAct4;
-    }
+        public void setDialogIndexAct4(int dialogIndexAct4) {
+            this.dialogIndexAct4 = dialogIndexAct4;
+        }
 
-    public int getDialogIndexAct4() {
-        return dialogIndexAct4;
-    }
+        public int getDialogIndexAct4() {
+            return dialogIndexAct4;
+        }
 
-    private int dialogIndexAct4 =0;
+        private int dialogIndexAct4 =0;
 
-    public NpcAurora(float spawn_x, float spawn_y, MovementController movementControllerPlayer) {
-        super(spawn_x, spawn_y, movementControllerPlayer);
-        // Setto il nome del Npc
-        this.setNpcName("Aurora");
-        // Setto la texture del Npc
-        this.setTexture(new Texture("Oggetti/nobackground.png"));
-        // Setto i dialoghi del Npc
-        this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
-        this.dialogueAct2 = InitDialogAct2(new String[30]); // ATTO II
-        this.dialogueAct3 = InitDialogAct3(new String[30]); // ATTO III
-        this.dialogueAct4 = InitDialogAct4(new String[30]); // ATTO IV
-    }
+        public NpcAurora(float spawn_x, float spawn_y, MovementController movementControllerPlayer) {
+            super(spawn_x, spawn_y, movementControllerPlayer);
+            // Setto il nome del Npc
+            this.setNpcName("Aurora");
+            // Setto la texture del Npc
+            this.setTexture(new Texture("Oggetti/nobackground.png"));
+            // Setto i dialoghi del Npc
+            this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
+            this.dialogueAct2 = InitDialogAct2(new String[30]); // ATTO II
+            this.dialogueAct3 = InitDialogAct3(new String[30]); // ATTO III
+            this.dialogueAct4 = InitDialogAct4(new String[30]); // ATTO IV
+        }
 
     public String[] InitDialogAct1(String[] dialogue) {
         dialogue[0] = "Aurora:\nCiao sono Aurora, l'intelligenza artificiale che assiste il dott. Caleb nelle sue ricerche, come posso esserle utile dott. Forest?";

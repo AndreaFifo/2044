@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.videogame.controller.NpcAnastasia;
 import io.github.videogame.model.*;
 import io.github.videogame.controller.MovementController;
 import io.github.videogame.view.TaskView;
@@ -25,13 +26,19 @@ public class MainGameScreen implements Screen {
     private MovementController movementController;
     private SpriteBatch batch;
     private OrthographicCamera camera;
+
+    private MapManager mapManager;
+    public float movementControllerStateX=200,movementControllerStateY=426;
+    String mapFile = "Mappe/sopra.tmx";
+
+
+    //OGGETTI
     private MagneticKey magneticKey;
     private FlashDriveInnocent flashDriveInnocent;
     private FlashDriveKiller flashDriveKiller;
     private JosephPhone josephPhone;
-    private MapManager mapManager;
-    public float movementControllerStateX=200,movementControllerStateY=426;
-    String mapFile = "Mappe/sopra.tmx";
+    private PiercePhoto piercePhoto;
+
 
     //FLAG PER SETTARE L'ORDINE DI ALCUNI DIALOGHI
     private boolean a=true;
@@ -47,6 +54,7 @@ public class MainGameScreen implements Screen {
     private NpcChiefOfPolicie NpcChiefOfPolicie;
     private NpcDeadBody NpcDeadBody;
     private io.github.videogame.model.NpcAurora NpcAurora;
+    private NpcAnastasia NpcAnastasia;
     NpcPoliceOfficer originalOfficer = new NpcPoliceOfficer(1400, 700, movementController);
     NpcPoliceOfficer clonedOfficer0 = originalOfficer.clone(1500, 700); // Nuovo punto di spawn (300, 400)
     NpcPoliceOfficer clonedOfficer1 = originalOfficer.clone(1600, 700);
@@ -59,6 +67,7 @@ public class MainGameScreen implements Screen {
     private int indiceDead;
     private int indiceInnocent;
     private int indiceAurora;
+    private int indiceAnastasia;
 
     //Task
     private TaskView taskView;
@@ -88,12 +97,15 @@ public class MainGameScreen implements Screen {
         this.flashDriveInnocent = new FlashDriveInnocent(420, 305, movementController, player,this);
         this.flashDriveKiller = new FlashDriveKiller(1430,715, movementController, player,this);
         this.josephPhone = new JosephPhone(366,605, movementController, player, this);
+        this.piercePhoto = new PiercePhoto(366,550,movementController,player,this);
+
 
         this.NpcKiller = new NpcKiller(610,90, movementController);
         this.NpcInnocent = new NpcInnocent(610, 130, movementController);
         this.NpcChiefOfPolicie = new NpcChiefOfPolicie(710,100,movementController);
         this.NpcDeadBody = new NpcDeadBody(150,200,movementController);
         this.NpcAurora = new NpcAurora(168,158,movementController);
+        this.NpcAnastasia = new NpcAnastasia(1469,734,movementController);
         this.originalOfficer = new NpcPoliceOfficer(1400, 700, movementController);
         this.clonedOfficer0 = originalOfficer.clone(1500, 700); // Nuovo punto di spawn (300, 400)
         this.clonedOfficer1 = originalOfficer.clone(1600, 700);
@@ -106,6 +118,7 @@ public class MainGameScreen implements Screen {
         this.NpcInnocent.setDialogIndexAct1(indiceInnocent);
         this.NpcDeadBody.setDialogIndexAct1(indiceDead);
         this.NpcAurora.setDialogIndexAct1(indiceAurora);
+        this.NpcAnastasia.setDialogIndexAct1(indiceAnastasia);
 
 
         //TASK
@@ -124,17 +137,22 @@ public class MainGameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        // Controlla se il tasto ESCAPE è stato premuto
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        // LA SEGUENTE PARTE GESTISCE IL VIDEO INIZIALE, IL VIDEO FINALE ED IL VIDEO DEL FINALE ALTERNATIVO
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { //Video introduttivo
             savePlayerState();
-            game.setScreen(new MenuPausa(game, this)); // Mostra il menu pausa
+            game.setScreen(new MenuPausa(game, this));
             return;
         }
 
         if(NpcAurora.getDialogIndexAct4() > 5){
-            game.setScreen(new VideoOutroScreen(game));
-
+            game.setScreen(new VideoOutroScreen(game)); //Video finale 1
         }
+
+        /*
+        if(atto 1 di anastasia finisce){
+            fai partire il video del finale alternativo //Video finale 2
+        }
+        */
 
 
 
@@ -170,7 +188,7 @@ public class MainGameScreen implements Screen {
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
         batch.end();
 
-        /*AGGIORNAMENTO TASK IN FUNZIONE DEI DIALOGHI
+        //AGGIORNAMENTO TASK IN FUNZIONE DEI DIALOGHI
         if(NpcDeadBody.getDialogIndexAct1() == 4){
             NpcDeadBody.notifyObservers(); //AGGIORNA LA TASK
             NpcDeadBody.setDialogIndexAct1(5);
@@ -243,7 +261,7 @@ public class MainGameScreen implements Screen {
 
         if(NpcChiefOfPolicie.getDialogIndexAct3() > 4){
             statoAtto4Aurora = true;
-        }*/
+        }
 
 
 
@@ -254,13 +272,17 @@ public class MainGameScreen implements Screen {
         drawNpcDialogue();
         setIndexNpc();
 
+        drawObjectsDialogue();
+
+
+
         //Disegno le task
         taskView.draw();
 
 
 
 
-     //   System.out.println(movementController.getX() + "    " + movementController.getY());
+      System.out.println(movementController.getX() + "    " + movementController.getY());
 
     }
 
@@ -314,6 +336,8 @@ public class MainGameScreen implements Screen {
 
           NpcKiller.drawDialogueAct1();
           NpcChiefOfPolicie.drawDialogueAct1();
+
+          NpcAnastasia.drawDialogueAct1();//DA SINCRONIZZARE CON L'ATTO FINALE DEL POLIZIOTTO
 
           if(NpcAurora.getDialogIndexAct1() > 15) {
                 NpcChiefOfPolicie.drawDialogueAct2();
@@ -419,8 +443,26 @@ public class MainGameScreen implements Screen {
             }
             josephPhone.pickUp();
         }
+
+        if (!piercePhoto.isTaken()) {
+            if (Objects.equals(mapFile, "Mappe/sopra.tmx")) {
+                String inventario = player.getInventory().getInventoryAsString();
+                if (!inventario.contains("PiercePhoto")) {
+                    batch.draw(piercePhoto.getTexture(), piercePhoto.getX(), piercePhoto.getY(), 6, 6);
+                }
+            }
+            piercePhoto.pickUp();
+        }
     }
 
+
+    private void drawObjectsDialogue(){
+        flashDriveInnocent.drawDialogue();
+        flashDriveKiller.drawDialogue();
+        josephPhone.drawDialogue();
+        piercePhoto.drawDialogue();
+        magneticKey.drawDialogue();
+    }
 
     @Override
     public void resize(int width, int height) {}
