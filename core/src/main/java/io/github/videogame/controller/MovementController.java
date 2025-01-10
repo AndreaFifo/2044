@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import java.util.List;
 
 public class MovementController {
-    private static final float SPEED = 150;
+    private static final float SPEED = 300;
     private float x, y;
     private float velocityX, velocityY;
     private int stateDirection;

@@ -7,20 +7,41 @@ import io.github.videogame.controller.MovementController;
 
 public class NpcChiefOfPolicie extends NpcCreator{
 
+    private String[] dialogueAct2;
+    private String[] dialogueAct3;
+
+    public int getDialogIndexAct2() {
+        return dialogIndexAct2;
+    }
+
+    public void setDialogIndexAct2(int dialogIndexAct2) {
+        this.dialogIndexAct2 = dialogIndexAct2;
+    }
+
+    private int dialogIndexAct2 =0;
+
+    public int getDialogIndexAct3() {
+        return dialogIndexAct3;
+    }
+
+    private int dialogIndexAct3 =0;
+
     public NpcChiefOfPolicie(float spawn_x, float spawn_y, MovementController movementControllerPlayer){
         super(spawn_x, spawn_y, movementControllerPlayer);
         //Setto il nome del Npc
         this.setNpcName("Nome_Capo_Polizia");
         //Setto la texture del Npc
-        this.setTexture(new Texture("NPC/PoliceOfficer.png"));
-        //Setto il dialogo del Npc
-        this.setDialogue(InitDialog(this.getDialogue()));
+        this.setTexture(new Texture("NPC/capo-polizia.png"));
+        //Setto il primo dialogo con l'agente
+        this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
+        this.dialogueAct2 = InitDialogAct2(new String[30]); // ATTO II
+        this.dialogueAct3 = InitDialogAct3(new String[30]); // ATTO III
     }
 
 
     //Inizializza il dialogo del killer
     @Override
-    public String[] InitDialog(String[] dialogue) {
+    public String[] InitDialogAct1(String[] dialogue) {
 
         //ATTO I: PRIMO INCONTRO CON IL CAPO DELLA POLIZIA
         dialogue[0] = "Capo della Polizia: Sono stato informato della situazione. Puoi spiegarmi cosa è successo?";
@@ -44,42 +65,90 @@ public class NpcChiefOfPolicie extends NpcCreator{
         dialogue[18] = "Capo della Polizia: Se trovi qualcosa, vieni subito da me. Non agire senza avvisarmi, capito?";
         dialogue[19] = "Joseph Forest: Lo farò, ma non posso promettere di stare fermo. Caleb meritava giustizia, e non mi fermerò finché non la otterrò.";
         dialogue[20] = "Capo della Polizia: Buona fortuna, Forest. Ne avrai bisogno.";
+        dialogue[21] = "";
 
+        return dialogue;
+    }
+
+    public String[] InitDialogAct2(String[] dialogue){
         //ATTO II: SCOPERTA DELL'INDIZIO -> Joseph comunica all'agente di aver scoperto il movente dell'omicidio
-        dialogue[21] = "Joseph:\nAgente ho scoperto qualcosa che puo risolvere l'omicidio";
-        dialogue[22] = "Capo della Polizia:\n mi dica dott.Forest";
-        dialogue[23] = "Joseph:\n Il movente dell'omicidio è la scoperta dall'algoritmo in grado di decifrare i messaggi segreti russi";
-        dialogue[24] = "Capo della Polizia:\n Dunque supponi che il killer sia in qualche modo sia una spia nemica?";
-        dialogue[25] = "Joseph:\n E difficile da ammettere ma probabilmente uno dei miei stimati colleghi è in realtà un traditore";
-        dialogue[26] = "Capo della polizia:\n Grazie per l'informazione, vedrò di seguire questa eventuale pista nelle mie indagini";
-
-        //ATTO III: CONFESSIONE DEL KILLER -> Joseph comunica di aver scoperto chi è il colpevole
-        dialogue[27] = "Joseph:\n Agente come ha potuto sentire, il dott.Pierce non è chi vuol fare credere";
-        dialogue[28] = "Capo della polizia:\nOttimo lavoro dott.Forest...";
-        dialogue[29] = "Capo della polizia:\nOra mi ceda le prove raccolte";
-        dialogue[30] = "Joseph:\n Un attimo, devo fare prima una cosa con la chiavetta";
-        dialogue[31] = "Capo della polizia:\nD accordo, ma faccia presto";
+        dialogue[0] = "Joseph:\nAgente ho scoperto qualcosa che puo risolvere l'omicidio";
+        dialogue[1] = "Capo della Polizia:\n mi dica dott.Forest";
+        dialogue[2] = "Joseph:\n Il movente dell'omicidio è la scoperta dall'algoritmo in grado di decifrare i messaggi segreti russi";
+        dialogue[3] = "Capo della Polizia:\n Dunque supponi che il killer sia in qualche modo sia una spia nemica?";
+        dialogue[4] = "Joseph:\n E difficile da ammettere ma probabilmente uno dei miei stimati colleghi è in realtà un traditore";
+        dialogue[5] = "Capo della polizia:\n Grazie per l'informazione, vedrò di seguire questa eventuale pista nelle mie indagini";
+        dialogue[6] = "";
 
         return dialogue;
     }
 
 
+    public String[] InitDialogAct3(String[] dialogue){
+        //ATTO III: CONFESSIONE DEL KILLER -> Joseph comunica di aver scoperto chi è il colpevole
+        dialogue[0] = "Joseph:\n Agente come ha potuto sentire, il dott.Pierce non è chi vuol fare credere";
+        dialogue[1] = "Capo della polizia:\nOttimo lavoro dott.Forest...";
+        dialogue[2] = "Capo della polizia:\nOra mi ceda le prove raccolte";
+        dialogue[3] = "Joseph:\n Un attimo, devo fare prima una cosa con la chiavetta";
+        dialogue[4] = "Capo della polizia:\nD accordo, ma faccia presto";
+        dialogue[5] = "";
+
+        return dialogue;
+    }
+
+
+
     //Conseguenza dell'interazione, cambio di stato del dialogo
     @Override
-    public void drawDialogue() {
+    public void drawDialogueAct1() {
         if (canBeInteracted()) {
             this.getDialogManager().draw();
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if (this.getDialogIndex() < this.getDialogue().length) {
-                    this.getDialogManager().setDialog(this.getDialogue()[this.getDialogIndex()]); // Mostra la linea corrente
-                    this.setDialogIndex(this.getDialogIndex() + 1);
+                if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
+                    this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
+                    this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
                 } else {
                     this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
-                    this.setDialogIndex(0); // Resetta il dialogo
+                    this.setDialogIndexAct1(0); // Resetta il dialogo
                 }
             }
         }
     }
+
+    //Disegna il secondo atto
+    public void drawDialogueAct2() {
+        if (canBeInteracted()) {
+            this.getDialogManager().draw();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                if ( this.dialogIndexAct2 < this.dialogueAct2.length) {
+                    this.getDialogManager().setDialog(this.dialogueAct2[dialogIndexAct2]); // Mostra la linea corrente
+                    this.dialogIndexAct2 = dialogIndexAct2+1;
+                } else {
+                    this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
+                    this.dialogIndexAct2 = 0; // Resetta il dialogo
+                }
+            }
+        }
+    }
+
+    public void drawDialogueAct3() {
+        if (canBeInteracted()) {
+            this.getDialogManager().draw();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                if ( this.dialogIndexAct3 < this.dialogueAct3.length) {
+                    this.getDialogManager().setDialog(this.dialogueAct3[dialogIndexAct3]); // Mostra la linea corrente
+                    this.dialogIndexAct3 = dialogIndexAct3+1;
+                } else {
+                    this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
+                    this.dialogIndexAct3 = 0; // Resetta il dialogo
+                }
+            }
+        }
+    }
+
+
+
+
 
     //Controllare se il player può interagire
     @Override

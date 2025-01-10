@@ -7,19 +7,32 @@ import io.github.videogame.controller.MovementController;
 
 public class NpcKiller extends NpcCreator {
 
+    private String[] dialogueAct2;
+
+    public int getDialogIndexAct2() {
+        return dialogIndexAct2;
+    }
+
+    public void setDialogIndexAct2(int dialogIndexAct2) {
+        this.dialogIndexAct2 = dialogIndexAct2;
+    }
+
+    private int dialogIndexAct2 =0;
+
     public NpcKiller(float spawn_x, float spawn_y, MovementController movementControllerPlayer) {
         super(spawn_x, spawn_y, movementControllerPlayer);
         // Setto il nome del Npc
         this.setNpcName("Nome_Killer");
         // Setto la texture del Npc
-        this.setTexture(new Texture("NPC/killer.png"));
+        this.setTexture(new Texture("NPC/ryan.png"));
         // Setto il dialogo del Npc
-        this.setDialogue(InitDialog(this.getDialogue()));
+        this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
+        this.dialogueAct2 = InitDialogAct2(new String[30]); // ATTO II
     }
 
     // Inizializza il dialogo del killer
     @Override
-    public String[] InitDialog(String[] dialogue) {
+    public String[] InitDialogAct1(String[] dialogue) {
         dialogue[0] = "Joseph:\nRyan, posso parlarti un momento?";
         dialogue[1] = "Ryan:\nCerto, Joseph. Di cosa si tratta?";
         dialogue[2] = "Joseph:\nSto indagando sull'omicidio di Caleb e vorrei sapere dove ti trovavi e cosa stavi facendo la notte in cui è successo.";
@@ -33,23 +46,49 @@ public class NpcKiller extends NpcCreator {
         dialogue[10] = "Ryan:\n E nel mio ufficio, ma a cosa ti dovrebbe servire...? ";
         dialogue[11] = "Joseph:\n Devo solo controllare una cosa, non ti preoccupare non cancello nulla";
         dialogue[12] = "Ryan:\n Buona fortuna allora";
+        dialogue[13] = "";
 
         return dialogue;
+    }
+
+    private String[] InitDialogAct2(String[] dialogue){
+        dialogue[0] = "Si sono stato io";
+        dialogue[1] = "Come hai potuto farlo....";
+        dialogue[2] = "........";
+        dialogue[3] = "...";
+        return  dialogue;
     }
 
 
     // Conseguenza dell'interazione, cambio di stato del dialogo
     @Override
-    public void drawDialogue() {
+    public void drawDialogueAct1() {
         if (canBeInteracted()) {
                 this.getDialogManager().draw();
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if (this.getDialogIndex() < this.getDialogue().length) {
-                    this.getDialogManager().setDialog(this.getDialogue()[this.getDialogIndex()]); // Mostra la linea corrente
-                    this.setDialogIndex(this.getDialogIndex() + 1);
+                if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
+                    this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
+                    this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
                 } else {
                     this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
-                    this.setDialogIndex(0); // Resetta il dialogo
+                    this.setDialogIndexAct1(0); // Resetta il dialogo
+                }
+            }
+        }
+    }
+
+
+    //Disegna il secondo atto
+    public void drawDialogueAct2() {
+        if (canBeInteracted()) {
+            this.getDialogManager().draw();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                if ( this.dialogIndexAct2 < this.dialogueAct2.length) {
+                    this.getDialogManager().setDialog(this.dialogueAct2[dialogIndexAct2]); // Mostra la linea corrente
+                    this.dialogIndexAct2 = dialogIndexAct2+1;
+                } else {
+                    this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
+                    this.dialogIndexAct2 = 0; // Resetta il dialogo
                 }
             }
         }

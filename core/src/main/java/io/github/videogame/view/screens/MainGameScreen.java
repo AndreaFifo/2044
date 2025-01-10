@@ -33,12 +33,25 @@ public class MainGameScreen implements Screen {
     public float movementControllerStateX=200,movementControllerStateY=426;
     String mapFile = "Mappe/sopra.tmx";
 
+    //FLAG PER SETTARE L'ORDINE DI ALCUNI DIALOGHI
+    private boolean a=true;
+    private boolean b=true;
+    private boolean c=true;
+    private boolean d=true;
+    private boolean statoAtto3Aurora = false;
+    private boolean statoAtto4Aurora = false;
+
     //NPC
     private NpcKiller NpcKiller;
     private NpcInnocent NpcInnocent;
     private NpcChiefOfPolicie NpcChiefOfPolicie;
     private NpcDeadBody NpcDeadBody;
     private io.github.videogame.model.NpcAurora NpcAurora;
+    NpcPoliceOfficer originalOfficer = new NpcPoliceOfficer(1400, 700, movementController);
+    NpcPoliceOfficer clonedOfficer0 = originalOfficer.clone(1500, 700); // Nuovo punto di spawn (300, 400)
+    NpcPoliceOfficer clonedOfficer1 = originalOfficer.clone(1600, 700);
+    NpcPoliceOfficer clonedOfficer2 = originalOfficer.clone(1700, 700);
+    NpcPoliceOfficer clonedOfficer3 = originalOfficer.clone(1800, 700);
 
     //Salvataggio degli indici di dialogo per gli NPC
     private int indicePolice;
@@ -81,13 +94,19 @@ public class MainGameScreen implements Screen {
         this.NpcChiefOfPolicie = new NpcChiefOfPolicie(710,100,movementController);
         this.NpcDeadBody = new NpcDeadBody(150,200,movementController);
         this.NpcAurora = new NpcAurora(168,158,movementController);
+        this.originalOfficer = new NpcPoliceOfficer(1400, 700, movementController);
+        this.clonedOfficer0 = originalOfficer.clone(1500, 700); // Nuovo punto di spawn (300, 400)
+        this.clonedOfficer1 = originalOfficer.clone(1600, 700);
+        this.clonedOfficer2 = originalOfficer.clone(1700, 700);
+        this.clonedOfficer3 = originalOfficer.clone(1800, 700);
 
         //Setto gli indici correttamente (li salva anche se cambia schermata)
-        this.NpcChiefOfPolicie.setDialogIndex(indicePolice);
-        this.NpcKiller.setDialogIndex(indiceKiller);
-        this.NpcInnocent.setDialogIndex(indiceInnocent);
-        this.NpcDeadBody.setDialogIndex(indiceDead);
-        this.NpcAurora.setDialogIndex(indiceAurora);
+        this.NpcChiefOfPolicie.setDialogIndexAct1(indicePolice);
+        this.NpcKiller.setDialogIndexAct1(indiceKiller);
+        this.NpcInnocent.setDialogIndexAct1(indiceInnocent);
+        this.NpcDeadBody.setDialogIndexAct1(indiceDead);
+        this.NpcAurora.setDialogIndexAct1(indiceAurora);
+
 
         //TASK
         this.taskView = new TaskView();
@@ -111,6 +130,14 @@ public class MainGameScreen implements Screen {
             game.setScreen(new MenuPausa(game, this)); // Mostra il menu pausa
             return;
         }
+
+        if(NpcAurora.getDialogIndexAct4() > 5){
+            game.setScreen(new VideoOutroScreen(game));
+
+        }
+
+
+
 
         movementController.changeStateDirection(delta, mapManager.getWallRectangles());// Aggiorna la posizione in base all'input
 
@@ -143,12 +170,84 @@ public class MainGameScreen implements Screen {
         batch.draw(currentFrame, movementController.getX(), movementController.getY());
         batch.end();
 
-        if(NpcDeadBody.getDialogIndex() == 4){
+        /*AGGIORNAMENTO TASK IN FUNZIONE DEI DIALOGHI
+        if(NpcDeadBody.getDialogIndexAct1() == 4){
+            NpcDeadBody.notifyObservers(); //AGGIORNA LA TASK
+            NpcDeadBody.setDialogIndexAct1(5);
+        }
+
+        if(josephPhone.isTaken() & a){
             NpcDeadBody.notifyObservers();
-            NpcDeadBody.setDialogIndex(5);
+            a=false;
+        }
+
+        if(NpcChiefOfPolicie.getDialogIndexAct1() == 20){
+            NpcChiefOfPolicie.notifyObservers();
+            NpcChiefOfPolicie.setDialogIndexAct1(21);
+        }
+
+        if(NpcAurora.getDialogIndexAct1() == 15){
+            NpcAurora.notifyObservers();
+            NpcAurora.setDialogIndexAct1(16);
+        }
+
+        if(NpcChiefOfPolicie.getDialogIndexAct2() == 5){
+            NpcChiefOfPolicie.notifyObservers();
+            NpcChiefOfPolicie.setDialogIndexAct2(6);
+        }
+
+        if(NpcInnocent.getDialogIndexAct1() == 15) {
+            NpcInnocent.notifyObservers();
+            NpcInnocent.setDialogIndexAct1(16);
+        }
+
+        if(magneticKey.isTaken() & b){
+            NpcInnocent.notifyObservers();
+            b=false;
+        }
+
+        if(flashDriveInnocent.isTaken() & c){
+            NpcInnocent.notifyObservers();
+            c=false;
+        }
+
+        if(NpcAurora.getDialogIndexAct2() == 8){
+            NpcAurora.notifyObservers();
+            NpcAurora.setDialogIndexAct2(9);
+        }
+
+        if(NpcKiller.getDialogIndexAct1() == 12){
+            NpcAurora.notifyObservers();
+            NpcKiller.setDialogIndexAct1(13);
         }
 
 
+        if(flashDriveKiller.isTaken() & d){
+            NpcKiller.notifyObservers();
+            d=false;
+        }
+
+        if(NpcAurora.getDialogIndexAct3() == 6){
+            NpcAurora.notifyObservers();
+            NpcAurora.setDialogIndexAct3(7);
+        }
+
+        if(NpcKiller.getDialogIndexAct2() == 2){
+            NpcKiller.notifyObservers();
+            NpcKiller.setDialogIndexAct2(3);
+        }
+
+        if(NpcAurora.getDialogIndexAct3() > 5){
+            statoAtto3Aurora = true;
+        }
+
+        if(NpcChiefOfPolicie.getDialogIndexAct3() > 4){
+            statoAtto4Aurora = true;
+        }*/
+
+
+
+        System.out.println(NpcAurora.getDialogIndexAct3() > 5);
 
 
         //I due metodo gestiranno il dialogo del NPC
@@ -165,48 +264,116 @@ public class MainGameScreen implements Screen {
 
     }
 
-    public void setIndexNpc(){
-        //Salvataggio degli indici dei dialoghi degli NPC
-        if(indicePolice <= NpcChiefOfPolicie.getDialogIndex()){
-            indicePolice = NpcChiefOfPolicie.getDialogIndex();
+    public void setIndexNpc() {
+        // Salvataggio degli indici dei dialoghi degli NPC per Atto 1
+        if (indicePolice <= NpcChiefOfPolicie.getDialogIndexAct1()) {
+            indicePolice = NpcChiefOfPolicie.getDialogIndexAct1();
         }
-        if(indiceDead <= NpcDeadBody.getDialogIndex()){
-            indiceDead = NpcDeadBody.getDialogIndex();
+        if (indiceDead <= NpcDeadBody.getDialogIndexAct1()) {
+            indiceDead = NpcDeadBody.getDialogIndexAct1();
         }
-        if(indiceInnocent <= NpcInnocent.getDialogIndex()){
-            indiceInnocent = NpcInnocent.getDialogIndex();
+        if (indiceInnocent <= NpcInnocent.getDialogIndexAct1()) {
+            indiceInnocent = NpcInnocent.getDialogIndexAct1();
         }
-        if(indiceKiller <= NpcKiller.getDialogIndex()){
-            indiceKiller = NpcKiller.getDialogIndex();
+        if (indiceKiller <= NpcKiller.getDialogIndexAct1()) {
+            indiceKiller = NpcKiller.getDialogIndexAct1();
         }
-        if(indiceAurora <= NpcAurora.getDialogIndex()){
-            indiceAurora = NpcAurora.getDialogIndex();
+        if (indiceAurora <= NpcAurora.getDialogIndexAct1()) {
+            indiceAurora = NpcAurora.getDialogIndexAct1();
         }
+
+        // Salvataggio degli indici dei dialoghi degli NPC per Atto 2
+        if (indicePolice <= NpcChiefOfPolicie.getDialogIndexAct2()) {
+            indicePolice = NpcChiefOfPolicie.getDialogIndexAct2();
+        }
+
+        if (indiceKiller <= NpcKiller.getDialogIndexAct2()) {
+            indiceKiller = NpcKiller.getDialogIndexAct2();
+        }
+        if (indiceAurora <= NpcAurora.getDialogIndexAct2()) {
+            indiceAurora = NpcAurora.getDialogIndexAct2();
+        }
+
+        // Salvataggio degli indici dei dialoghi degli NPC per Atto 3
+        if (indiceAurora <= NpcAurora.getDialogIndexAct3()) {
+            indiceAurora = NpcAurora.getDialogIndexAct3();
+        }
+
     }
 
 
+    //DA LA POSSIBILITA DI DISEGNARE I DIALOGHI SULLA BASE DI ALTRI DIALOGHI PRECEDENTI
     public void drawNpcDialogue(){
         //Disegna dialoghi degli NPC piano terra
         if(Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
-            NpcKiller.drawDialogue();
-            NpcInnocent.drawDialogue();
-            NpcChiefOfPolicie.drawDialogue();
+          originalOfficer.drawDialogueAct1(); //TOGLIERE SOTTO COMMENTO PORTA AL CRASH DEL GIOCO QUANDO SI VA AL PIANO TERRA
+          clonedOfficer0.drawDialogueAct1();
+          clonedOfficer3.drawDialogueAct1();
+          clonedOfficer1.drawDialogueAct1();
+          clonedOfficer2.drawDialogueAct1();
+
+          NpcKiller.drawDialogueAct1();
+          NpcChiefOfPolicie.drawDialogueAct1();
+
+          if(NpcAurora.getDialogIndexAct1() > 15) {
+                NpcChiefOfPolicie.drawDialogueAct2();
+            }
+
+          if(NpcChiefOfPolicie.getDialogIndexAct2() > 5){
+                NpcInnocent.drawDialogueAct1();
+          }
+
+          if(statoAtto3Aurora){
+              NpcKiller.drawDialogueAct2();
+          }
+
+          if(NpcKiller.getDialogIndexAct2() > 2){
+              NpcChiefOfPolicie.drawDialogueAct3();
+          }
+
+
         }
         //Disegna dialoghi degli NPC primo piano
         if(Objects.equals(mapFile, "Mappe/sopra.tmx")) {
-            NpcDeadBody.drawDialogue();
-            NpcAurora.drawDialogue();
+            NpcDeadBody.drawDialogueAct1();
+
+            NpcAurora.drawDialogueAct1();
+
+            if(player.getInventory().getInventoryAsString().contains("FlashDriveInnocente")){
+                NpcAurora.drawDialogueAct2();
+            }
+
+            if(player.getInventory().getInventoryAsString().contains("FlashDriveKiller")){
+                NpcAurora.drawDialogueAct3();
+            }
+
+            if(statoAtto4Aurora){
+                NpcAurora.drawDialogueAct4();
+            }
+
         }
     }
+
+
+
+
+
+
 
 
     public void drawNpc(){
         if(Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
-            batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 32, 32);
-            batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 32, 32);
-            batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 32, 32);
+            batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 16, 36);
+            batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 16, 36);
+            batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 16, 36);
+            batch.draw(originalOfficer.getTexture(), originalOfficer.getSpawn_x(), originalOfficer.getSpawn_y(), 16,36);
+            batch.draw(clonedOfficer0.getTexture(), clonedOfficer0.getSpawn_x(), originalOfficer.getSpawn_y(), 16,36);
+            batch.draw(clonedOfficer1.getTexture(), clonedOfficer1.getSpawn_x(), originalOfficer.getSpawn_y(), 16,36);
+            batch.draw(clonedOfficer2.getTexture(), clonedOfficer2.getSpawn_x(), originalOfficer.getSpawn_y(), 16,36);
+            batch.draw(clonedOfficer3.getTexture(), clonedOfficer3.getSpawn_x(), originalOfficer.getSpawn_y(), 16,36);
+
         }
-        if(Objects.equals(mapFile,"Mappe/sopra.tmx")){batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);}
+        if(Objects.equals(mapFile,"Mappe/sopra.tmx")){batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 16, 16);}
     }
 
 
@@ -299,33 +466,6 @@ public class MainGameScreen implements Screen {
         camera.update();
         System.out.println("Mappa aggiornata a: " + mapFilePath);
     }
-    /*private boolean isCollisionWithMapLayer(Rectangle boundingBox) {
-        //Ottengo il layer delle collisioni
-        MapLayer mapCollisionLayer = mapManager.getCollisionLayer();
-
-        //se non esiste restituisco falso
-        if(mapCollisionLayer == null)
-            return false;
-
-        Rectangle rectangle = null;
-
-        //Per ogni oggetto presente nel collision layer itero
-        for(MapObject object : mapCollisionLayer.getObjects()) {
-            //controllando se esso è un'instanza di RectangleMapObject
-            if(object instanceof RectangleMapObject) {
-                //se lo è lo assegno a rectangle effettuando un casting
-                rectangle = ((RectangleMapObject) object).getRectangle();
-
-                //se il player overlappa il rettangolo allo restituisco true.
-                if(boundingBox.overlaps(rectangle)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-*/
-
 
 
     //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
