@@ -1,0 +1,112 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "atrio-mensa.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/Interiors_free_16x16.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/Little_Bits_Office_Floors.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/ingresso.tmx": {
+            "scale": 3,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 804.8333333333333,
+                "y": 520.3333333333333
+            }
+        },
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/kitchen16_tan.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/pc-scrivanie.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/player-spritesheet.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/tileset.tsx": {
+            "scaleInDock": 1
+        },
+        "atrio-mensa.tmx": {
+            "expandedObjectLayers": [
+                39
+            ],
+            "scale": 2,
+            "selectedLayer": 22,
+            "viewCenter": {
+                "x": 608.25,
+                "y": 325
+            }
+        },
+        "tileset-mensa.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
+        },
+        "tileset-principale.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "tilest-componenti-ufficio.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "uffici.tmx": {
+            "expandedGroupLayers": [
+                20,
+                48,
+                33,
+                67,
+                5,
+                7
+            ],
+            "expandedObjectLayers": [
+                61,
+                63,
+                66,
+                59,
+                64,
+                65
+            ],
+            "scale": 2,
+            "selectedLayer": 57,
+            "viewCenter": {
+                "x": 565.25,
+                "y": 325.5
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/grazi/Desktop/Mappa",
+    "map.height": 40,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 55,
+    "openFiles": [
+        "tileset-principale.tsx",
+        "tileset-mensa.tsx",
+        "tilest-componenti-ufficio.tsx",
+        "uffici.tmx",
+        "atrio-mensa.tmx",
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/ingresso.tmx"
+    ],
+    "project": "primo piano.tiled-project",
+    "recentFiles": [
+        "tileset-principale.tsx",
+        "tileset-mensa.tsx",
+        "tilest-componenti-ufficio.tsx",
+        "uffici.tmx",
+        "C:/Users/grazi/Desktop/2044/assets/Mappe/ingresso.tmx",
+        "atrio-mensa.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

@@ -71,10 +71,10 @@ public class Item {
     //Controlla se l'oggetto può essere raccolto in base alla posizione del giocatore.
     private boolean canBePickedUp() {
         return !taken &&
-            movementController.getX() <= x + 30 &&
-            movementController.getX() >= x - 30 &&
-            movementController.getY() <= y + 30 &&
-            movementController.getY() >= y - 30;
+            player.getX() <= x + 30 &&
+            player.getX() >= x - 30 &&
+            player.getY() <= y + 30 &&
+            player.getY() >= y - 30;
     }
 
     // Metodo per emettere il suono di raccolta

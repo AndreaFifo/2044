@@ -7,14 +7,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
+import io.github.videogame.controller.CollisionDebugger;
+import io.github.videogame.controller.MapManager;
 import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.model.*;
 import io.github.videogame.controller.MovementController;
+import io.github.videogame.view.ElevatorDecisionBox;
+import io.github.videogame.view.PlayerView;
 import io.github.videogame.view.TaskView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 
@@ -23,6 +25,7 @@ import java.util.Objects;
 public class MainGameScreen implements Screen {
     private Gioco game;
     private Player player;
+    private PlayerView playerView;
     private int stateDirection;
     private MovementController movementController;
     private ScreenManager screenManager;
@@ -33,8 +36,8 @@ public class MainGameScreen implements Screen {
     private FlashDriveKiller flashDriveKiller;
     private JosephPhone josephPhone;
     private MapManager mapManager;
-    public static float movementControllerStateX=200,movementControllerStateY=426;
-    String mapFile = "Mappe/sopra.tmx";
+    public static float movementControllerStateX=350, movementControllerStateY=526;
+    String mapFile = "Mappa-prova/uffici.tmx";
 
     //NPC
     private NpcKiller NpcKiller;
@@ -42,6 +45,8 @@ public class MainGameScreen implements Screen {
     private NpcChiefOfPolicie NpcChiefOfPolicie;
     private NpcDeadBody NpcDeadBody;
     private io.github.videogame.model.NpcAurora NpcAurora;
+    private CollisionDebugger collisionDebugger;
+    private ElevatorDecisionBox elevatorDecisionBox;
 
     //Salvataggio degli indici di dialogo per gli NPC
     private int indicePolice;
@@ -57,20 +62,27 @@ public class MainGameScreen implements Screen {
     private TaskView taskView;
 
     // Costruttore
-    public MainGameScreen(Gioco game)
-    {
+    public MainGameScreen(Gioco game) {
         this.game = game;
-        this.show();
+
+        this.player = Player.getInstance();
+        player.setSpawn(movementControllerStateX, movementControllerStateY);
+        this.movementController = MovementController.getInstance();
+
+        this.playerView = new PlayerView(player, movementController);
+
         this.screenManager = ScreenManager.getInstance();
+        this.camera = new OrthographicCamera();
+        collisionDebugger = new CollisionDebugger();
+        this.elevatorDecisionBox = new ElevatorDecisionBox();
     }
 
     //creazione del memento
-    public Gamestate createMemento()
-    {
-        if(f_map==false)
-            return new Gamestate(movementControllerStateX, movementControllerStateY, mapFile, player.getInventory().getIteminventary());
+    public Gamestate createMemento() {
+        if(!f_map)
+            return new Gamestate(movementControllerStateX, movementControllerStateY, mapFile, player.getInventory().getIteminventary(), TaskModel.getInstance().getIdCurrentTask());
         else
-            return new Gamestate(movementControllerStateX, movementControllerStateY, m, player.getInventory().getIteminventary());
+            return new Gamestate(movementControllerStateX, movementControllerStateY, m, player.getInventory().getIteminventary(), TaskModel.getInstance().getIdCurrentTask());
 
     }
 
@@ -81,6 +93,8 @@ public class MainGameScreen implements Screen {
         m = memento.getCurrentMap();
         ArrayList<String> inventario=player.getInventory().getIteminventary();
         inventario= new ArrayList<>(memento.getIteminventary());
+        System.out.println(memento.getIdCurrentTask());
+        TaskModel.getInstance().init(memento.getIdCurrentTask());
 
     }
 
@@ -93,53 +107,39 @@ public class MainGameScreen implements Screen {
         // Carica gli oggetti nell'inventario in base ai nomi
         for (String itemName : inventario) {
             if (itemName.equals("Magnetic Key")) {
-                System.out.println("preso salvataggio carta mangetica");
                 inventory.addItemToInventory(new MagneticKey(420, 100, movementController, player, this));
             } else if (itemName.equals("FlashDriveInnocente")) {
-
                 inventory.addItemToInventory(new FlashDriveInnocent(500, 500, movementController, player, this));
+            } else if (itemName.equals("JosephPhone")) {
+                inventory.addItemToInventory(new JosephPhone(420, 100, movementController, player, this));
             }
             // Aggiungi altre condizioni per altri oggetti se necessario
         }
     }
 
-
-
-
-
-    //
-
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(elevatorDecisionBox.getStage());
         this.batch = game.getBatch();
         this.stateDirection=0;
-        this.player = Player.getInstance("player/player-spritesheet.png");  // Inizializza l'entità con la sprite sheet
-        if (movementController == null) {
-            this.movementController = new MovementController(400, 105); // Posizione di spawn
-        } else {
-            this.movementController = new MovementController(movementControllerStateX, movementControllerStateY);
-        }
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 960, 540);
 
         if(f_map==false)//mappa di default, prima giocata
         {
             m=mapFile;
-            this.mapManager = new MapManager(m,camera);
+            this.mapManager = new MapManager();
             f_map=true;
         }
         else if(f_map==true)//mappa attuale(dove è possibile fare spostamenti tra varie mappe)
         {
 
-            this.mapManager = new MapManager(m,camera);
+            this.mapManager = new MapManager();
         }
 
-
         //this.mapManager = new MapManager(mapFile,camera);
-        this.magneticKey = new MagneticKey(88, 480, movementController, player,this);
+        this.magneticKey = new MagneticKey(350, 526, movementController, player,this);
         this.flashDriveInnocent = new FlashDriveInnocent(420, 305, movementController, player,this);
         this.flashDriveKiller = new FlashDriveKiller(1430,715, movementController, player,this);
-        this.josephPhone = new JosephPhone(366,605, movementController, player, this);
+        this.josephPhone = new JosephPhone(443,516, movementController, player, this);
 
         this.NpcKiller = new NpcKiller(610,90, movementController);
         this.NpcInnocent = new NpcInnocent(610, 130, movementController);
@@ -175,12 +175,13 @@ public class MainGameScreen implements Screen {
         mapManager.render();
 
         // 2. Disegna il personaggio
-        TextureRegion currentFrame = player.getCurrentFrame(
-            movementController.getStateDirection(),
-            movementController.isPlayerMoving(),
-            0
-        );
-        batch.draw(currentFrame, movementController.getX(), movementController.getY());
+//        TextureRegion currentFrame = player.getCurrentFrame(
+//            movementController.getStateDirection(),
+//            movementController.isPlayerMoving(),
+//            0
+//        );
+//        batch.draw(currentFrame, player.getX(), player.getY());
+        playerView.render(batch, 0);
 
         // 3. Disegna gli oggetti
         drawObjects();
@@ -188,28 +189,29 @@ public class MainGameScreen implements Screen {
         // 4. Disegna gli NPC
         drawNpc();
 
-        // Aggiungi altri oggetti o elementi che desideri renderizzare
 
         batch.end();
     }
-    private void drawElevatorMenu() {
-        for (Rectangle elevator : mapManager.getElevatorRectangles()) {
-            if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
-                movementController.getX(), movementController.getY(), List.of(elevator))) {
-                String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
-                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
-                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
-                break;
-            }
-        }
-    }
+//    private void drawElevatorMenu() {
+//        for (Rectangle elevator : mapManager.getElevatorRectangles()) {
+//            if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
+//                player.getX(), player.getY(), List.of(elevator))) {
+//                String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
+//                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
+//                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
+//                break;
+//            }
+//        }
+//    }
     public void savePlayerState() {
-        movementControllerStateX = movementController.getX();
-        movementControllerStateY = movementController.getY();
+        movementControllerStateX = player.getX();
+        movementControllerStateY = player.getY();
     }
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0.15f, 0.47f, 0.62f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Controlla se il tasto ESCAPE è stato premuto
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -218,35 +220,24 @@ public class MainGameScreen implements Screen {
             return;
         }
 
-        movementController.changeStateDirection(delta, mapManager.getWallRectangles());// Aggiorna la posizione in base all'input
+        movementController.changeStateDirection(delta);
 
-        // Ottieni la direzione corrente
-        int currentDirection = movementController.getStateDirection();
+        mapManager.getCamera().position.set(player.getX(), player.getY(), 0f);
+        mapManager.getCamera().update();
 
-        // Verifica se il personaggio è in movimento
-        boolean isMoving = movementController.isPlayerMoving();
-
-        // Ottieni il fotogramma attuale in base alla direzione e allo stato di movimento
-        TextureRegion currentFrame = player.getCurrentFrame(currentDirection, isMoving, delta);
-
-        // Pulisci lo schermo
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.position.set(movementController.getX(), movementController.getY(), 0f);
-        camera.update();
+        batch.begin();
 
         mapManager.render();
-        batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(mapManager.getCamera().combined);
 
-        // Disegna il personaggio
-        batch.begin();
-        player.getInventory().drawInventory(batch,movementController);
+
+        player.getInventory().drawInventory(batch);
         //Disegna gli oggetti, li inserisce nell'inventario ed altro
         drawObjects();
-        drawElevatorMenu();
+        //drawElevatorMenu();
         drawNpc();
-        batch.draw(currentFrame, movementController.getX(), movementController.getY());
+        playerView.render(batch, delta);
+        //batch.draw(currentFrame, player.getX(), player.getY());
         batch.end();
 
         if(NpcDeadBody.getDialogIndex() == 4){
@@ -254,6 +245,14 @@ public class MainGameScreen implements Screen {
             NpcDeadBody.setDialogIndex(5);
         }
 
+        if(mapManager.isNearElevators(player.getX(), player.getY()))
+            elevatorDecisionBox.show();
+        else
+            elevatorDecisionBox.hide();
+
+        elevatorDecisionBox.handleInput();
+
+        elevatorDecisionBox.render();
 
 
 
@@ -264,8 +263,12 @@ public class MainGameScreen implements Screen {
         //Disegno le task
         taskView.draw();
 
-     //   System.out.println(movementController.getX() + "    " + movementController.getY());
-
+        collisionDebugger.render(
+            mapManager.getRectangleCollisions(),
+            player.getX()+ 3.5f,
+            player.getY() + 4.f,
+            7,9f
+        );
     }
 
     public void setIndexNpc(){
@@ -347,7 +350,7 @@ public class MainGameScreen implements Screen {
         }
 
         if (!josephPhone.isTaken()) {
-            if (Objects.equals(mapFile, "Mappe/sopra.tmx")) {
+            if (Objects.equals(mapFile, "Mappa-prova/uffici.tmx")) {
                 String inventario = player.getInventory().getInventoryAsString();
                 if (!inventario.contains("JosephPhone")) {
                     batch.draw(josephPhone.getTexture(), josephPhone.getX(), josephPhone.getY(), 6, 6);
@@ -356,7 +359,6 @@ public class MainGameScreen implements Screen {
             josephPhone.pickUp();
         }
     }
-
 
     @Override
     public void resize(int width, int height) {}
@@ -394,7 +396,7 @@ public class MainGameScreen implements Screen {
 
         //mapFile = mapFilePath;
         //System.out.println(mapFile);
-        this.mapManager = new MapManager( mapFilePath, camera); // Carica la nuova mappa
+        this.mapManager = new MapManager(); // Carica la nuova mappa
         if(Objects.equals(m, "Mappe/sopra.tmx")){
             movementControllerStateX = 200;
             movementControllerStateY = 426;
@@ -405,7 +407,7 @@ public class MainGameScreen implements Screen {
             movementControllerStateX = 379;
             movementControllerStateY = 270;
         }
-        movementController = new MovementController(movementControllerStateX,movementControllerStateY); // Reimposta il giocatore
+        movementController = MovementController.getInstance(); // Reimposta il giocatore
         camera.position.set(400, 105, 0); // Reimposta la posizione della telecamera
         camera.update();
         System.out.println("Mappa aggiornata a: " + mapFilePath);
@@ -436,4 +438,8 @@ public class MainGameScreen implements Screen {
         return false;
     }
 */
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
 }

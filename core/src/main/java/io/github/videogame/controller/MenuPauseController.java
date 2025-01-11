@@ -84,6 +84,7 @@ public class MenuPauseController {
                     json.append("  \"playerX\": ").append(memento.getPlayerX()).append(",\n");
                     json.append("  \"playerY\": ").append(memento.getPlayerY()).append(",\n");
                     json.append("  \"currentMap\": \"").append(memento.getCurrentMap()).append("\",\n");
+                    json.append("  \"currentTask\": \"").append(memento.getIdCurrentTask()).append("\",\n");
                     json.append("  \"iteminventory\": \"").append(memento.getIteminventary()).append("\"\n");
                     json.append("}");
 

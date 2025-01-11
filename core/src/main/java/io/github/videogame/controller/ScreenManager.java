@@ -136,7 +136,7 @@ public class ScreenManager {
      * @param screenType Tipo di schermata da creare.
      * @return Istanza della schermata creata.
      */
-    private Screen createScreen(ScreenType screenType) {
+    public Screen createScreen(ScreenType screenType) {
         switch (screenType) {
             case MAIN_MENU:
                 return new MenuScreen(game);

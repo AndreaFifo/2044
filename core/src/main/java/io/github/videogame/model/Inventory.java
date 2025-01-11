@@ -72,11 +72,11 @@ public class Inventory {
 
 // Metodo per disegnare l'inventario relativo al MovementController
 
-    public void drawInventory(Batch batch, MovementController movementController) {
+    public void drawInventory(Batch batch) {
         if (Gdx.input.isKeyPressed(Input.Keys.I)) {
             // Posizione relativa al MovementController
-            float baseX = movementController.getX(); // Usa la posizione X del controller
-            float baseY = movementController.getY(); // Usa la posizione Y del controller
+            float baseX = Player.getInstance().getX(); // Usa la posizione X del controller
+            float baseY = Player.getInstance().getY(); // Usa la posizione Y del controller
             int offsetX = -480; // Offset per spostare l'inventario rispetto al controller
             int offsetY = 240; // Offset verticale
 
@@ -92,8 +92,4 @@ public class Inventory {
             }
         }
     }
-
-
-
-
 }

@@ -17,6 +17,9 @@ public class TaskModel {
 
     private TaskModel(){
         tasks = loadTasks();
+    }
+
+    public void init(int id){
         countTask = 1;
         currentTask = tasks.get(countTask);
     }
@@ -59,5 +62,13 @@ public class TaskModel {
 
     public Task getCurrentTask() {
         return currentTask;
+    }
+
+    public void setTask(int id){
+        currentTask = tasks.get(id);
+    }
+
+    public int getIdCurrentTask() {
+        return currentTask.id;
     }
 }

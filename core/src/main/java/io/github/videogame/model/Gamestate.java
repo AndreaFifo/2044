@@ -11,18 +11,28 @@ public class Gamestate {
     private float playerY;
     private String currentMap;
     private ArrayList<String> iteminventary;
+    private int idCurrentTask;
 
     // Costruttore per inizializzare il memento
-    public Gamestate(float playerX, float playerY, String currentMap, ArrayList<String> itemInventory) {
+    public Gamestate(float playerX, float playerY, String currentMap, ArrayList<String> itemInventory, int idCurrentTask) {
         this.playerX = playerX;
         this.playerY = playerY;
         this.currentMap = currentMap;
         // Creare una copia immutabile della lista per proteggere l'inventario
         this.iteminventary = new ArrayList<String>();
+        this.idCurrentTask = idCurrentTask;
     }
     // Getter e setter
     public float getPlayerX() {
         return playerX;
+    }
+
+    public int getIdCurrentTask() {
+        return idCurrentTask;
+    }
+
+    public void setIdCurrentTask(int idCurrentTask) {
+        this.idCurrentTask = idCurrentTask;
     }
 
     public void setPlayerX(float playerX) {

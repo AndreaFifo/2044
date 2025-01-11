@@ -91,10 +91,10 @@ public class NpcAurora extends NpcCreator{
     //Controllare se il player può interagire
     @Override
     public boolean canBeInteracted() {
-        return getMovementControllerPlayer().getX() <= this.getSpawn_x() + 30 &&
-            getMovementControllerPlayer().getX() >= this.getSpawn_x() - 30 &&
-            getMovementControllerPlayer().getY() <= this.getSpawn_y() + 30 &&
-            getMovementControllerPlayer().getY() >= this.getSpawn_y() - 30;
+        return Player.getInstance().getX() <= this.getSpawn_x() + 30 &&
+            Player.getInstance().getX() >= this.getSpawn_x() - 30 &&
+            Player.getInstance().getY() <= this.getSpawn_y() + 30 &&
+            Player.getInstance().getY() >= this.getSpawn_y() - 30;
     }
 
 

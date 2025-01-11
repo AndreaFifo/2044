@@ -1,6 +1,7 @@
 {
-  "playerX": 379.0,
-  "playerY": 270.0,
-  "currentMap": "Mappe/garage.tmx",
-  "iteminventory": "[FlashDriveInnocente]"
+  "playerX": 350.0,
+  "playerY": 526.0,
+  "currentMap": "Mappa-prova/uffici.tmx",
+  "currentTask": 4,
+  "iteminventory": "[]"
 }

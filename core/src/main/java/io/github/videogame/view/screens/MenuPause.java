@@ -23,7 +23,7 @@ public class MenuPause implements Screen {
     private SpriteBatch batch;
     private MenuPauseController controller;
 
-    private ScreenManager screenManager; // Passa solo l'istanza del gioco
+    private ScreenManager screenManager;
 
     private Button resumeButton, saveButton, settingsButton,mainmenuButton;
     private Sound clickSound;
@@ -70,7 +70,7 @@ public class MenuPause implements Screen {
         stage.act(delta);
         stage.draw();
 
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        //Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     @Override

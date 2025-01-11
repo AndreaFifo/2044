@@ -3,6 +3,7 @@ package io.github.videogame.view.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -28,8 +29,12 @@ public class SettingsScreen implements Screen {
     private MySlider musicSlider;
     private CheckBox vSyncCheckBox;
     private TextButton backButton;
+    private Texture background;
 
     private SettingsController settingsController;
+
+    private ScreenManager screenManager;
+    private ScreenManager.ScreenType previousScreen;
 
     private Skin skin;
 
@@ -38,6 +43,8 @@ public class SettingsScreen implements Screen {
         this.batch = game.getBatch();
         this.stage = new Stage();
         this.table = new Table();
+        this.screenManager = ScreenManager.getInstance();
+        this.background = Utility.getAsset("menu/bg-menu.png", Texture.class);
         this.skin = Utility.getAsset("menu/ui-skin.json", Skin.class);
 
         setupUI();
@@ -48,6 +55,7 @@ public class SettingsScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
+        previousScreen = screenManager.getPreviousScreen();
         settingsController.setupValues();
     }
 
@@ -87,7 +95,13 @@ public class SettingsScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act();
+
+            batch.begin();
+            batch.draw(background, 0, 0, 1920, 1080);
+            batch.end();
+
+
+            stage.act();
         stage.draw();
     }
 
