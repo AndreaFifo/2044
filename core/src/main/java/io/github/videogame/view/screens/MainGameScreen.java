@@ -31,8 +31,6 @@ public class MainGameScreen implements Screen {
     private OrthographicCamera camera;
 
     private MapManager mapManager;
-    public float movementControllerStateX=200,movementControllerStateY=426;
-    String mapFile = "Mappe/sopra.tmx";
 
 
     //OGGETTI
@@ -50,7 +48,6 @@ public class MainGameScreen implements Screen {
     private boolean d=true;
     private boolean statoAtto3Aurora = false;
     private boolean statoAtto4Aurora = false;
-    private MapManager mapManager;
     public static float movementControllerStateX=200,movementControllerStateY=426;
     String mapFile = "Mappe/sopra.tmx";
 
@@ -198,49 +195,6 @@ public class MainGameScreen implements Screen {
         NpcInnocent.addObserver(taskView);
         NpcDeadBody.addObserver(taskView);
         NpcAurora.addObserver(taskView);
-    }
-
-    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
-    public void renderStaticState(SpriteBatch batch) {
-        // Pulisci il batch solo all'inizio
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-
-        // 1. Rendi lo stato della mappa
-        mapManager.render();
-
-        // 2. Disegna il personaggio
-        TextureRegion currentFrame = player.getCurrentFrame(
-            movementController.getStateDirection(),
-            movementController.isPlayerMoving(),
-            0
-        );
-        batch.draw(currentFrame, movementController.getX(), movementController.getY());
-
-        // 3. Disegna gli oggetti
-        drawObjects();
-
-        // 4. Disegna gli NPC
-        drawNpc();
-
-        // Aggiungi altri oggetti o elementi che desideri renderizzare
-
-        batch.end();
-    }
-    private void drawElevatorMenu() {
-        for (Rectangle elevator : mapManager.getElevatorRectangles()) {
-            if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
-                movementController.getX(), movementController.getY(), List.of(elevator))) {
-                String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
-                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
-                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
-                break;
-            }
-        }
-    }
-    public void savePlayerState() {
-        movementControllerStateX = movementController.getX();
-        movementControllerStateY = movementController.getY();
     }
 
     @Override
