@@ -3,20 +3,20 @@ package io.github.videogame.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.google.gson.Gson;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import io.github.videogame.model.CareTaker;
-import io.github.videogame.model.Gamestate;
 import io.github.videogame.model.Gioco;
-import io.github.videogame.view.screens.MainGameScreen;
 import io.github.videogame.model.Utility;
+import io.github.videogame.view.screens.MainGameScreen;
 import io.github.videogame.view.screens.MenuScreen;
-import io.github.videogame.view.screens.SettingsScreen;
 import io.github.videogame.view.screens.VideoIntroScreen;
+import io.github.videogame.model.GameState;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 
 public class MenuController {
@@ -80,66 +80,74 @@ public class MenuController {
             }
         });
     }
-
     public void loadGameState() {
         try {
-            // Leggi il contenuto del file JSON
-            BufferedReader reader = new BufferedReader(new FileReader("saves/game_save.json"));
-            StringBuilder content = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line.trim());
-            }
-            reader.close();
+            FileHandle file = Gdx.files.internal("saves/game_save.json");
+            String jsonString = file.readString();
 
-            System.out.println(content.toString());
+            GameState gameState = new Json().fromJson(GameState.class, jsonString);
 
-            //per trovare riga inventario
-            // Trova la riga che contiene "iteminventory"
-            String inventoryLine = "";
-            String jsonContent = content.toString();
-            int startIndex = jsonContent.indexOf("\"iteminventory\":"); // Trova l'inizio della sezione "iteminventory"
-            if (startIndex != -1) {
-                // Trova la posizione dell'inizio dell'array
-                int arrayStartIndex = jsonContent.indexOf("[", startIndex);  // Trova l'inizio dell'array
-                if (arrayStartIndex != -1) {
-                    // Trova la fine dell'array
-                    int arrayEndIndex = jsonContent.indexOf("]", arrayStartIndex);
-                    if (arrayEndIndex != -1) {
-                        // Estrai l'array senza le virgolette
-                        inventoryLine = jsonContent.substring(arrayStartIndex, arrayEndIndex + 1);  // Estrarre la parte che contiene l'inventario
-                    }
-                }
-            }
-
-            // Usa Gson per deserializzare il JSON nel GameState
-            Gson gson = new Gson();
-            Gamestate gameState = gson.fromJson(content.toString(), Gamestate.class);
-            System.out.println(gameState.getIdCurrentTask());
-
-            if (gameState == null) {
-                System.out.println("Errore nel parsing del JSON. Il contenuto potrebbe non corrispondere alla struttura attesa.");
-                return;
-            }
-
-
-            // Aggiungi il Memento al Caretaker
             CareTaker.saveMemento(gameState);
 
             // Ripristina lo stato del gioco usando il Memento
             MainGameScreen mainGameScreen = (MainGameScreen) ScreenManager.getInstance().createScreen(ScreenManager.ScreenType.GAME);
             mainGameScreen.restoreState(gameState);
 
-            ArrayList<String> inventario=Gamestate.parseInventory(inventoryLine);
-            mainGameScreen.loadInventory(inventario);
-            System.out.println("Stato del gioco caricato correttamente!");
-            System.out.println("Giocatore posizionato a: (" + gameState.getPlayerX() + ", " + gameState.getPlayerY() + ")");
-            System.out.println("Mappa caricata: " + gameState.getCurrentMap());
-            System.out.println("id task: " + gameState.getIdCurrentTask());
-            System.out.println("Inventario: " + inventoryLine);
+            mainGameScreen.loadInventory(gameState.getInventory());
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Errore durante il caricamento dello stato del gioco.");
         }
     }
+
+//    public void loadGameState() {
+//        try {
+//            // Leggi il contenuto del file JSON
+//            BufferedReader reader = new BufferedReader(new FileReader("saves/game_save.json"));
+//            StringBuilder content = new StringBuilder();
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                content.append(line.trim());
+//            }
+//            reader.close();
+//
+//            System.out.println(content.toString());
+//
+//            //per trovare riga inventario
+//            // Trova la riga che contiene "iteminventory"
+//            String inventoryLine = "";
+//            String jsonContent = content.toString();
+//            int startIndex = jsonContent.indexOf("\"iteminventory\":"); // Trova l'inizio della sezione "iteminventory"
+//            if (startIndex != -1) {
+//                // Trova la posizione dell'inizio dell'array
+//                int arrayStartIndex = jsonContent.indexOf("[", startIndex);  // Trova l'inizio dell'array
+//                if (arrayStartIndex != -1) {
+//                    // Trova la fine dell'array
+//                    int arrayEndIndex = jsonContent.indexOf("]", arrayStartIndex);
+//                    if (arrayEndIndex != -1) {
+//                        // Estrai l'array senza le virgolette
+//                        inventoryLine = jsonContent.substring(arrayStartIndex, arrayEndIndex + 1);  // Estrarre la parte che contiene l'inventario
+//                    }
+//                }
+//            }
+//
+//            // Usa Gson per deserializzare il JSON nel GameState
+//            Gson gson = new Gson();
+//            Gamestate gameState = gson.fromJson(content.toString(), Gamestate.class);
+//
+//
+//            if (gameState == null) {
+//                System.out.println("Errore nel parsing del JSON. Il contenuto potrebbe non corrispondere alla struttura attesa.");
+//                return;
+//            }
+//
+//
+//            // Aggiungi il Memento al Caretaker
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Errore durante il caricamento dello stato del gioco.");
+//        }
+//    }
+
 }

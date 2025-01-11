@@ -1,15 +1,14 @@
 package io.github.videogame.model;
 
 import io.github.videogame.controller.MovementController;
-import io.github.videogame.view.screens.MainGameScreen;
 
 public class MagneticKey extends Item {
 
    /*I creatori concreti sovrascrivono il metodo di fabbrica di base,
    in modo che restituisca un tipo di prodotto diverso.*/
 
-    public MagneticKey(float x, float y, MovementController movementController, Player player, MainGameScreen mainGameScreen) {
-        super(x, y,movementController, player, mainGameScreen);
+    public MagneticKey(float x, float y) {
+        super(x, y);
         this.setTexture("Oggetti/MagneticCard.png");
         this.setPickUpSound("Oggetti/keyPickUpSound.mp3");
         this.setName("Magnetic Key");

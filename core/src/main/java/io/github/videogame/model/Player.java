@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.util.ArrayList;
+
 // Classe che crea il Giocatore
 public class Player {
     private static volatile Player instance;
@@ -23,6 +25,7 @@ public class Player {
         for (int i = 0; i < 4; i++) {
             walkAnimationsPlayer[i] = new Animation<>(0.15f, regions[i]);
         }
+
         this.inventory = Inventory.getInventoryInstance();
 
         this.x = 0;
@@ -62,6 +65,10 @@ public class Player {
 
     public Inventory getInventory() {
         return this.inventory;
+    }
+
+    public void setInventory(ArrayList<String> inventory) {
+        this.inventory.setInventory(inventory);
     }
 
     public float getX() {

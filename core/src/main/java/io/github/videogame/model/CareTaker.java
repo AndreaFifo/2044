@@ -1,17 +1,15 @@
 package io.github.videogame.model;
 
-import java.util.Stack;
-
 public class CareTaker {
-    private static Gamestate savedState;
+    private static GameState savedState;
 
     // Metodo per salvare lo stato
-    public static void saveMemento(Gamestate memento) {
+    public static void saveMemento(GameState memento) {
         savedState = memento;
     }
 
     // Metodo per recuperare lo stato salvato
-    public static Gamestate getMemento() {
+    public static GameState getMemento() {
         return savedState;
     }
 

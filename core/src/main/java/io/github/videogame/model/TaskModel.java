@@ -17,11 +17,12 @@ public class TaskModel {
 
     private TaskModel(){
         tasks = loadTasks();
+        countTask = 1;
+        currentTask = tasks.get(countTask);
     }
 
     public void init(int id){
-        countTask = 1;
-        currentTask = tasks.get(countTask);
+
     }
 
     private TreeMap<Integer, Task> loadTasks() {

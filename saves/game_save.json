@@ -1,7 +1,1 @@
-{
-  "playerX": 350.0,
-  "playerY": 526.0,
-  "currentMap": "Mappa-prova/uffici.tmx",
-  "currentTask": 4,
-  "iteminventory": "[]"
-}
+{playerX:438.60883,playerY:497.71304,currentMap:Mappa-prova/uffici.tmx,inventory:[JosephPhone],idCurrentTask:1}

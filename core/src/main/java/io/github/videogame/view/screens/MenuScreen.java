@@ -7,21 +7,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.google.gson.Gson;
 import io.github.videogame.controller.AudioController;
-import io.github.videogame.model.CareTaker;
-import io.github.videogame.model.Gamestate;
 import io.github.videogame.model.Gioco;
 import io.github.videogame.model.Utility;
 import io.github.videogame.controller.MenuController;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
 
 public class MenuScreen implements Screen {
     private final Gioco game;

@@ -3,14 +3,13 @@ package io.github.videogame.model;
 import io.github.videogame.controller.MovementController;
 import io.github.videogame.model.Item;
 import io.github.videogame.model.Player;
-import io.github.videogame.view.screens.MainGameScreen;
 
 public class JosephPhone extends Item {
 
     private String[] dialogue;
 
-    public JosephPhone(float x, float y, MovementController movementController, Player player, MainGameScreen mainGameScreen) {
-        super(x, y, movementController, player, mainGameScreen);
+    public JosephPhone(float x, float y) {
+        super(x, y);
         this.setTexture("Oggetti/JosephPhone.png");
         this.setPickUpSound("Oggetti/Phone Dial and Ring Sound.mp3");
         this.setName("JosephPhone");
