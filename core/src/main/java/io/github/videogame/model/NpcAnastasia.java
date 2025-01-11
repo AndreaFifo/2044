@@ -1,9 +1,9 @@
-package io.github.videogame.controller;
+package io.github.videogame.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import io.github.videogame.model.NpcCreator;
+import io.github.videogame.controller.MovementController;
 
 public class NpcAnastasia extends NpcCreator {
 

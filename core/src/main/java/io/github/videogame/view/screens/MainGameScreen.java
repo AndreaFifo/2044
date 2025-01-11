@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import io.github.videogame.controller.NpcAnastasia;
+import io.github.videogame.model.NpcAnastasia;
 import io.github.videogame.model.*;
 import io.github.videogame.controller.MovementController;
 import io.github.videogame.view.TaskView;
