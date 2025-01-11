@@ -10,14 +10,9 @@ public abstract class NpcCreator implements Observable{
 
     private String NpcName;
     private Texture texture;
-    private String[] dialogue;
-    private int dialogIndex;
+    private String[] dialogueAct1;
+    private int dialogIndexAct1;
     private List<Observer> observers = new ArrayList<>();
-
-    public DialogManager getDialogManager() {
-        return dialogManager;
-    }
-
     private DialogManager dialogManager;
     private final float spawn_x;
     private final float spawn_y;
@@ -27,17 +22,25 @@ public abstract class NpcCreator implements Observable{
     public NpcCreator(float spawn_x, float spawn_y, MovementController movementControllerPlayer){
         this.spawn_x = spawn_x;
         this.spawn_y = spawn_y;
-        this.dialogIndex = 0;
-        this.dialogue = new String[200];
+        this.dialogIndexAct1 = 0;
+        this.dialogueAct1 = new String[50];
         this.movementControllerPlayer = movementControllerPlayer;
         this.dialogManager = new DialogManager();
     }
 
-    public abstract void drawDialogue();
+
+
+    //Metodo abstract che dovranno implementare i singoli NPC
+    public abstract void drawDialogueAct1();
 
     public abstract boolean canBeInteracted();
 
-    public abstract String[] InitDialog(String[] dialogue);
+    public abstract String[] InitDialogAct1(String[] dialogue);
+
+
+
+
+    //Altro
 
     public void setNpcName(String npcName) {
         NpcName = npcName;
@@ -47,6 +50,9 @@ public abstract class NpcCreator implements Observable{
         this.texture = texture;
     }
 
+    public DialogManager getDialogManager() {
+        return dialogManager;
+    }
 
     public String getNpcName(){
         return NpcName;
@@ -68,20 +74,20 @@ public abstract class NpcCreator implements Observable{
         return texture;
     }
 
-    public String[] getDialogue() {
-        return dialogue;
+    public String[] getDialogueAct1() {
+        return dialogueAct1;
     }
 
-    public void setDialogue(String[] dialogue) {
-        this.dialogue = dialogue;
+    public void setDialogueAct1(String[] dialogueAct1) {
+        this.dialogueAct1 = dialogueAct1;
     }
 
-    public int getDialogIndex() {
-        return dialogIndex;
+    public int getDialogIndexAct1() {
+        return dialogIndexAct1;
     }
 
-    public void setDialogIndex(int dialogIndex) {
-        this.dialogIndex = dialogIndex;
+    public void setDialogIndexAct1(int dialogIndexAct1) {
+        this.dialogIndexAct1 = dialogIndexAct1;
     }
 
     public MovementController getMovementControllerPlayer() {

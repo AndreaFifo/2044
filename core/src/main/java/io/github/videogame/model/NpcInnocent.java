@@ -13,15 +13,15 @@ public class NpcInnocent extends NpcCreator{
         //Setto il nome del Npc
         this.setNpcName("Nome_Innocente");
         //Setto la texture del Npc
-        this.setTexture(new Texture("NPC/innocent.png"));
+        this.setTexture(new Texture("NPC/bryan.png"));
         //Setto il dialogo del Npc
-        this.setDialogue(InitDialog(this.getDialogue()));
+        this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1()));
     }
 
 
-    //Inizializza il dialogo del killer
+    //Inizializza il dialogo del iNNOCENTE
     @Override
-    public String[] InitDialog(String[] dialogue) {
+    public String[] InitDialogAct1(String[] dialogue) {
 
         dialogue[0] = "Bryan:\nEih Joseph, non posso credere a quello che sia successo......\n";
         dialogue[1]= "Joseph:\nDove ti trovavi questa notte?";
@@ -38,22 +38,23 @@ public class NpcInnocent extends NpcCreator{
         dialogue[12] = "Bryan:\nNon trovo le chiavi del mio ufficio, devo averle dimenticate nella mensa con l'arrivo degli agenti...";
         dialogue[13] = "Joseph:\nCi penso io!";
         dialogue[14] = "Bryan:\nOk....a presto dopo allora....Non mettermi nei guai....";
+        dialogue[15] = "";
 
         return dialogue;
     }
 
     //Conseguenza dell'interazione, cambio di stato del dialogo
     @Override
-    public void drawDialogue() {
+    public void drawDialogueAct1() {
         if (canBeInteracted()) {
             this.getDialogManager().draw();
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if (this.getDialogIndex() < this.getDialogue().length) {
-                    this.getDialogManager().setDialog(this.getDialogue()[this.getDialogIndex()]); // Mostra la linea corrente
-                    this.setDialogIndex(this.getDialogIndex() + 1);
+                if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
+                    this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
+                    this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
                 } else {
                     this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
-                    this.setDialogIndex(0); // Resetta il dialogo
+                    this.setDialogIndexAct1(0); // Resetta il dialogo
                 }
             }
         }

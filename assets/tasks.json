@@ -74,6 +74,26 @@
       "id": 15,
       "title": "Pubblica l'algoritmo tramite Aurora",
       "completed": false
+    },
+    {
+      "id": 16,
+      "title": "Fine",
+      "completed": false
+    },
+    {
+      "id": 17,
+      "title": "Fine",
+      "completed": false
+    },
+    {
+      "id": 18,
+      "title": "Fine",
+      "completed": false
+    },
+    {
+      "id": 19,
+      "title": "Fine",
+      "completed": false
     }
   ]
 }

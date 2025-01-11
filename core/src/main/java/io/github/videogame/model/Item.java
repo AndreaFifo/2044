@@ -52,7 +52,6 @@ public class Item {
                 this.emitSound();
                 // Aggiungi l'oggetto all'inventario
                 player.getInventory().addItemToInventory(this);
-
                 // Reimposta il flag per abilitare il dialogo per questo oggetto
                 this.isDrawing = true;
             }
