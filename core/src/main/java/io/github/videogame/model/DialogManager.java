@@ -2,10 +2,15 @@ package io.github.videogame.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class DialogManager {
@@ -13,23 +18,34 @@ public class DialogManager {
     private Label dialogLabel;
 
     public DialogManager() {
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage();
 
+        //Spostare i dialoghi in un file
         // Carica il font e crea uno stile per il testo
         BitmapFont font = new BitmapFont(Gdx.files.internal("Font/font.fnt")); // Assicurati di avere un file di font
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLUE);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
 
-        // Crea il Label per il dialogo
+        Table dialogBox = new Table();
+        TextureRegionDrawable dialogBoxBG = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("UI/dialog-box.png"))));
         dialogLabel = new Label("", labelStyle);
-        dialogLabel.setWrap(true); // Permette di andare a capo se il testo è lungo
+        dialogLabel.setWrap(true);
+        dialogLabel.setFontScale(0.7F);
+        Label avatarLabel = new Label("Joseph", labelStyle);
+        avatarLabel.setFontScale(0.7F);
 
-        // Configura il layout
-        Table table = new Table();
-        table.setFillParent(true);
-        table.bottom().pad(20); // Posiziona il dialogo in basso
-        table.add(dialogLabel).width(Gdx.graphics.getWidth() * 0.8f); // Limita la larghezza del testo
+        dialogBox.setBackground(dialogBoxBG);
+        dialogBox.setSize(768, 222);
+        dialogBox.setPosition((float) (Gdx.graphics.getWidth() / 2) - 384, 30);
 
-        stage.addActor(table);
+        Image avatar = new Image(new Texture(Gdx.files.internal("UI/joseph.png")));
+        avatar.setSize(128, 128);
+
+        //dialogBox.setDebug(true);
+        dialogBox.add(avatarLabel).center();
+        dialogBox.row().padTop(20);
+        dialogBox.add(avatar).size(128, 128).expand(true, false).left().padLeft(65);
+        dialogBox.add(dialogLabel).width(460).height(120).top().center().padLeft(10).padRight(45);
+        stage.addActor(dialogBox);
     }
 
     public void setDialog(String text) {

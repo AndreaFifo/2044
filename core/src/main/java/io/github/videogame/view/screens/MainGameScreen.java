@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import io.github.videogame.model.NpcAnastasia;
+import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.model.*;
 import io.github.videogame.controller.MovementController;
 import io.github.videogame.view.TaskView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +26,7 @@ public class MainGameScreen implements Screen {
     private Player player;
     private int stateDirection;
     private MovementController movementController;
+    private ScreenManager screenManager;
     private SpriteBatch batch;
     private OrthographicCamera camera;
 
@@ -47,6 +50,9 @@ public class MainGameScreen implements Screen {
     private boolean d=true;
     private boolean statoAtto3Aurora = false;
     private boolean statoAtto4Aurora = false;
+    private MapManager mapManager;
+    public static float movementControllerStateX=200,movementControllerStateY=426;
+    String mapFile = "Mappe/sopra.tmx";
 
     //NPC
     private NpcKiller NpcKiller;
@@ -69,6 +75,9 @@ public class MainGameScreen implements Screen {
     private int indiceAurora;
     private int indiceAnastasia;
 
+    //
+    static boolean f_map=false;
+    static String m;
     //Task
     private TaskView taskView;
 
@@ -77,8 +86,53 @@ public class MainGameScreen implements Screen {
     {
         this.game = game;
         this.show();
+        this.screenManager = ScreenManager.getInstance();
     }
 
+    //creazione del memento
+    public Gamestate createMemento()
+    {
+        if(f_map==false)
+            return new Gamestate(movementControllerStateX, movementControllerStateY, mapFile, player.getInventory().getIteminventary());
+        else
+            return new Gamestate(movementControllerStateX, movementControllerStateY, m, player.getInventory().getIteminventary());
+
+    }
+
+    // Metodo per ripristinare lo stato da un memento
+    public void restoreState(Gamestate memento) {
+        movementControllerStateX = memento.getPlayerX();
+        movementControllerStateY = memento.getPlayerY();
+        m = memento.getCurrentMap();
+        ArrayList<String> inventario=player.getInventory().getIteminventary();
+        inventario= new ArrayList<>(memento.getIteminventary());
+
+    }
+
+    // Metodo che carica l'inventario dal salvataggio (array di nomi degli oggetti)
+    public void loadInventory(ArrayList<String> inventario) {
+        // Pulisci l'inventario corrente
+        Inventory inventory = Inventory.getInventoryInstance();
+        inventory.getItemList().clear();  // Pulisce l'inventario per evitare duplicati
+
+        // Carica gli oggetti nell'inventario in base ai nomi
+        for (String itemName : inventario) {
+            if (itemName.equals("Magnetic Key")) {
+                System.out.println("preso salvataggio carta mangetica");
+                inventory.addItemToInventory(new MagneticKey(420, 100, movementController, player, this));
+            } else if (itemName.equals("FlashDriveInnocente")) {
+
+                inventory.addItemToInventory(new FlashDriveInnocent(500, 500, movementController, player, this));
+            }
+            // Aggiungi altre condizioni per altri oggetti se necessario
+        }
+    }
+
+
+
+
+
+    //
 
     @Override
     public void show() {
@@ -92,7 +146,21 @@ public class MainGameScreen implements Screen {
         }
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 960, 540);
-        this.mapManager = new MapManager(mapFile,camera);
+
+        if(f_map==false)//mappa di default, prima giocata
+        {
+            m=mapFile;
+            this.mapManager = new MapManager(m,camera);
+            f_map=true;
+        }
+        else if(f_map==true)//mappa attuale(dove è possibile fare spostamenti tra varie mappe)
+        {
+
+            this.mapManager = new MapManager(m,camera);
+        }
+
+
+        //this.mapManager = new MapManager(mapFile,camera);
         this.magneticKey = new MagneticKey(88, 480, movementController, player,this);
         this.flashDriveInnocent = new FlashDriveInnocent(420, 305, movementController, player,this);
         this.flashDriveKiller = new FlashDriveKiller(1430,715, movementController, player,this);
@@ -130,8 +198,49 @@ public class MainGameScreen implements Screen {
         NpcInnocent.addObserver(taskView);
         NpcDeadBody.addObserver(taskView);
         NpcAurora.addObserver(taskView);
+    }
 
+    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
+    public void renderStaticState(SpriteBatch batch) {
+        // Pulisci il batch solo all'inizio
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
 
+        // 1. Rendi lo stato della mappa
+        mapManager.render();
+
+        // 2. Disegna il personaggio
+        TextureRegion currentFrame = player.getCurrentFrame(
+            movementController.getStateDirection(),
+            movementController.isPlayerMoving(),
+            0
+        );
+        batch.draw(currentFrame, movementController.getX(), movementController.getY());
+
+        // 3. Disegna gli oggetti
+        drawObjects();
+
+        // 4. Disegna gli NPC
+        drawNpc();
+
+        // Aggiungi altri oggetti o elementi che desideri renderizzare
+
+        batch.end();
+    }
+    private void drawElevatorMenu() {
+        for (Rectangle elevator : mapManager.getElevatorRectangles()) {
+            if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
+                movementController.getX(), movementController.getY(), List.of(elevator))) {
+                String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
+                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
+                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
+                break;
+            }
+        }
+    }
+    public void savePlayerState() {
+        movementControllerStateX = movementController.getX();
+        movementControllerStateY = movementController.getY();
     }
 
     @Override
@@ -140,7 +249,7 @@ public class MainGameScreen implements Screen {
         // LA SEGUENTE PARTE GESTISCE IL VIDEO INIZIALE, IL VIDEO FINALE ED IL VIDEO DEL FINALE ALTERNATIVO
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { //Video introduttivo
             savePlayerState();
-            game.setScreen(new MenuPausa(game, this));
+            screenManager.showScreen(ScreenManager.ScreenType.PAUSE); // Mostra il menu pausa
             return;
         }
 
@@ -278,7 +387,6 @@ public class MainGameScreen implements Screen {
 
         //Disegno le task
         taskView.draw();
-
 
 
 
@@ -490,16 +598,24 @@ public class MainGameScreen implements Screen {
         if (mapManager != null) {
             mapManager.dispose(); // Rilascia risorse della vecchia mappa
         }
-        mapFile = mapFilePath;
-        System.out.println(mapFile);
+        if(f_map==false)//controllo se è la prima giocata
+        {
+            mapFile = mapFilePath;
+            m=mapFile;
+        }
+        else
+            m=mapFilePath;
+
+        //mapFile = mapFilePath;
+        //System.out.println(mapFile);
         this.mapManager = new MapManager( mapFilePath, camera); // Carica la nuova mappa
-        if(Objects.equals(mapFile, "Mappe/sopra.tmx")){
+        if(Objects.equals(m, "Mappe/sopra.tmx")){
             movementControllerStateX = 200;
             movementControllerStateY = 426;
-        } else if (Objects.equals(mapFile,"Mappe/ingresso.tmx")) {
+        } else if (Objects.equals(m,"Mappe/ingresso.tmx")) {
             movementControllerStateX = 835;
             movementControllerStateY = 520;
-        } else if (Objects.equals(mapFile,"Mappe/garage.tmx")) {
+        } else if (Objects.equals(m,"Mappe/garage.tmx")) {
             movementControllerStateX = 379;
             movementControllerStateY = 270;
         }
@@ -508,7 +624,6 @@ public class MainGameScreen implements Screen {
         camera.update();
         System.out.println("Mappa aggiornata a: " + mapFilePath);
     }
-
 
     //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
     public void renderStaticState(SpriteBatch batch) {
@@ -536,4 +651,5 @@ public class MainGameScreen implements Screen {
         movementControllerStateX = movementController.getX();
         movementControllerStateY = movementController.getY();
     }
+
 }
