@@ -17,6 +17,7 @@ public class CollisionDebugger {
     }
 
     public void render(List<Rectangle> rectangles, float x, float y, float width, float height) {
+        shapeRenderer.setProjectionMatrix(MapManager.getInstance().getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
         // Disegna rettangoli di collisione

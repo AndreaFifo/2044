@@ -9,13 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import io.github.videogame.model.CareTaker;
-import io.github.videogame.model.Gioco;
-import io.github.videogame.model.Utility;
+import io.github.videogame.model.*;
 import io.github.videogame.view.screens.MainGameScreen;
 import io.github.videogame.view.screens.MenuScreen;
 import io.github.videogame.view.screens.VideoIntroScreen;
-import io.github.videogame.model.GameState;
 
 import java.util.ArrayList;
 
@@ -53,6 +50,10 @@ public class MenuController {
                     return;
                 }
 
+                if(!view.isLoadFlag()) {
+                    GameStateController.getInstance().initialGameState();
+                }
+
                 screenManager.showScreen(ScreenManager.ScreenType.GAME);
             }
         });
@@ -61,7 +62,8 @@ public class MenuController {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 buttonClickSound.play(audioController.getSoundsVolume());
-                loadGameState();
+                GameStateController.getInstance().loadGameState();
+                view.setLoadFlag();
             }
         });
 
@@ -79,25 +81,6 @@ public class MenuController {
                 Gdx.app.exit();
             }
         });
-    }
-    public void loadGameState() {
-        try {
-            FileHandle file = Gdx.files.internal("saves/game_save.json");
-            String jsonString = file.readString();
-
-            GameState gameState = new Json().fromJson(GameState.class, jsonString);
-
-            CareTaker.saveMemento(gameState);
-
-            // Ripristina lo stato del gioco usando il Memento
-            MainGameScreen mainGameScreen = (MainGameScreen) ScreenManager.getInstance().createScreen(ScreenManager.ScreenType.GAME);
-            mainGameScreen.restoreState(gameState);
-
-            mainGameScreen.loadInventory(gameState.getInventory());
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Errore durante il caricamento dello stato del gioco.");
-        }
     }
 
 //    public void loadGameState() {

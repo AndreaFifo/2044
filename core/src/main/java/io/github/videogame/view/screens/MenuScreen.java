@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import io.github.videogame.controller.AudioController;
+import io.github.videogame.model.GameState;
 import io.github.videogame.model.Gioco;
 import io.github.videogame.model.Utility;
 import io.github.videogame.controller.MenuController;
@@ -34,8 +35,8 @@ public class MenuScreen implements Screen {
     private Button exit;
 
     private Skin skin;
-    //attributo utilizzato per il salvataggio
-    private MainGameScreen mainGameScreen;
+
+    private boolean loadFlag;
 
     public MenuScreen(Gioco game) {
         this.game = game;
@@ -51,8 +52,11 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        loadFlag = false;
         menuMusic.play();
         batch.setProjectionMatrix(stage.getCamera().combined);
+        System.out.println(GameState.getInstance().toString());
+
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -156,5 +160,13 @@ public class MenuScreen implements Screen {
         table.add(exit);
         table.row();
         stage.addActor(table);
+    }
+
+    public boolean isLoadFlag() {
+        return loadFlag;
+    }
+
+    public void setLoadFlag() {
+        loadFlag = true;
     }
 }

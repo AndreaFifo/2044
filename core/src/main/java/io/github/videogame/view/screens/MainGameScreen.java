@@ -36,7 +36,7 @@ public class MainGameScreen implements Screen {
     private FlashDriveKiller flashDriveKiller;
     private JosephPhone josephPhone;
     private MapManager mapManager;
-    public static float movementControllerStateX=350, movementControllerStateY=526;
+    private GameState gameState;
     String mapFile = "Mappa-prova/uffici.tmx";
 
     //NPC
@@ -64,82 +64,34 @@ public class MainGameScreen implements Screen {
     // Costruttore
     public MainGameScreen(Gioco game) {
         this.game = game;
+        this.gameState = GameState.getInstance();
+
+        this.mapManager = MapManager.getInstance();
+        this.camera = mapManager.getCamera();
 
         this.player = Player.getInstance();
-        player.setSpawn(movementControllerStateX, movementControllerStateY);
         this.movementController = MovementController.getInstance();
 
         this.playerView = new PlayerView(player, movementController);
-
         this.screenManager = ScreenManager.getInstance();
-        this.camera = new OrthographicCamera();
-        collisionDebugger = new CollisionDebugger();
+
+        this.collisionDebugger = new CollisionDebugger();
         this.elevatorDecisionBox = new ElevatorDecisionBox();
-    }
-
-    //creazione del memento
-    public Gamestate createMemento() {
-        if(!f_map)
-            return new Gamestate(movementControllerStateX, movementControllerStateY, mapFile, player.getInventory().getIteminventary(), TaskModel.getInstance().getIdCurrentTask());
-        else
-            return new Gamestate(movementControllerStateX, movementControllerStateY, m, player.getInventory().getIteminventary(), TaskModel.getInstance().getIdCurrentTask());
-
-    }
-
-    // Metodo per ripristinare lo stato da un memento
-    public void restoreState(Gamestate memento) {
-        movementControllerStateX = memento.getPlayerX();
-        movementControllerStateY = memento.getPlayerY();
-        m = memento.getCurrentMap();
-        ArrayList<String> inventario=player.getInventory().getIteminventary();
-        inventario= new ArrayList<>(memento.getIteminventary());
-        System.out.println(memento.getIdCurrentTask());
-        TaskModel.getInstance().init(memento.getIdCurrentTask());
-
-    }
-
-    // Metodo che carica l'inventario dal salvataggio (array di nomi degli oggetti)
-    public void loadInventory(ArrayList<String> inventario) {
-        // Pulisci l'inventario corrente
-        Inventory inventory = Inventory.getInventoryInstance();
-        inventory.getItemList().clear();  // Pulisce l'inventario per evitare duplicati
-
-        // Carica gli oggetti nell'inventario in base ai nomi
-        for (String itemName : inventario) {
-            if (itemName.equals("Magnetic Key")) {
-                inventory.addItemToInventory(new MagneticKey(420, 100, movementController, player, this));
-            } else if (itemName.equals("FlashDriveInnocente")) {
-                inventory.addItemToInventory(new FlashDriveInnocent(500, 500, movementController, player, this));
-            } else if (itemName.equals("JosephPhone")) {
-                inventory.addItemToInventory(new JosephPhone(420, 100, movementController, player, this));
-            }
-            // Aggiungi altre condizioni per altri oggetti se necessario
-        }
     }
 
     @Override
     public void show() {
+        player.setSpawn(gameState.getPlayerX(), gameState.getPlayerY());
+
         Gdx.input.setInputProcessor(elevatorDecisionBox.getStage());
         this.batch = game.getBatch();
         this.stateDirection=0;
 
-        if(f_map==false)//mappa di default, prima giocata
-        {
-            m=mapFile;
-            this.mapManager = new MapManager();
-            f_map=true;
-        }
-        else if(f_map==true)//mappa attuale(dove è possibile fare spostamenti tra varie mappe)
-        {
-
-            this.mapManager = new MapManager();
-        }
-
         //this.mapManager = new MapManager(mapFile,camera);
-        this.magneticKey = new MagneticKey(350, 526, movementController, player,this);
-        this.flashDriveInnocent = new FlashDriveInnocent(420, 305, movementController, player,this);
-        this.flashDriveKiller = new FlashDriveKiller(1430,715, movementController, player,this);
-        this.josephPhone = new JosephPhone(443,516, movementController, player, this);
+        this.magneticKey = new MagneticKey(350, 526);
+        this.flashDriveInnocent = new FlashDriveInnocent(420, 305);
+        this.flashDriveKiller = new FlashDriveKiller(1430,715);
+        this.josephPhone = new JosephPhone(443,516);
 
         this.NpcKiller = new NpcKiller(610,90, movementController);
         this.NpcInnocent = new NpcInnocent(610, 130, movementController);
@@ -167,77 +119,47 @@ public class MainGameScreen implements Screen {
 
     //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
     public void renderStaticState(SpriteBatch batch) {
-        // Pulisci il batch solo all'inizio
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        // 1. Rendi lo stato della mappa
         mapManager.render();
 
-        // 2. Disegna il personaggio
-//        TextureRegion currentFrame = player.getCurrentFrame(
-//            movementController.getStateDirection(),
-//            movementController.isPlayerMoving(),
-//            0
-//        );
-//        batch.draw(currentFrame, player.getX(), player.getY());
         playerView.render(batch, 0);
 
-        // 3. Disegna gli oggetti
         drawObjects();
 
-        // 4. Disegna gli NPC
         drawNpc();
 
-
         batch.end();
-    }
-//    private void drawElevatorMenu() {
-//        for (Rectangle elevator : mapManager.getElevatorRectangles()) {
-//            if ((Gdx.input.isKeyJustPressed(Input.Keys.E)) && movementController.isColliding2(
-//                player.getX(), player.getY(), List.of(elevator))) {
-//                String targetMap = mapManager.getElevatorTargetMaps().get(elevator);
-//                String targetMap2 = mapManager.getElevatorTargetMap2().get(elevator);
-//                game.setScreen(new ElevatorMenu(game, this, targetMap,targetMap2));
-//                break;
-//            }
-//        }
-//    }
-    public void savePlayerState() {
-        movementControllerStateX = player.getX();
-        movementControllerStateY = player.getY();
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.15f, 0.47f, 0.62f, 1);
+        Gdx.gl.glClearColor(0.12f, 0.37f, 0.50f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Controlla se il tasto ESCAPE è stato premuto
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            savePlayerState();
             screenManager.showScreen(ScreenManager.ScreenType.PAUSE); // Mostra il menu pausa
             return;
         }
 
         movementController.changeStateDirection(delta);
 
-        mapManager.getCamera().position.set(player.getX(), player.getY(), 0f);
-        mapManager.getCamera().update();
+        camera.position.set(player.getX(), player.getY(), 0f);
+        camera.update();
+
+        mapManager.render();
+        batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
 
-        mapManager.render();
-        batch.setProjectionMatrix(mapManager.getCamera().combined);
-
-
         player.getInventory().drawInventory(batch);
-        //Disegna gli oggetti, li inserisce nell'inventario ed altro
+
         drawObjects();
-        //drawElevatorMenu();
         drawNpc();
         playerView.render(batch, delta);
-        //batch.draw(currentFrame, player.getX(), player.getY());
+
         batch.end();
 
         if(NpcDeadBody.getDialogIndex() == 4){
@@ -315,49 +237,38 @@ public class MainGameScreen implements Screen {
         if(Objects.equals(mapFile,"Mappe/sopra.tmx")){batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);}
     }
 
-
-
     //Disegna gli oggetti, SOLO SE IL LORO STATO TAKEN è FALSO
     private void drawObjects() {
-        if (!magneticKey.isTaken()) {
-            if(Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
-                String inventario = player.getInventory().getInventoryAsString();
-                if(!inventario.contains("Magnetic Key")) {
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")){
+            if (!magneticKey.isTaken()) {
+                if(!player.getInventory().getItemInventory().contains("MagneticKey"))
                     batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
-                }
-            }
-            magneticKey.pickUp();
-        }
 
-        if (!flashDriveKiller.isTaken()) {
-            if (Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
-                String inventario = player.getInventory().getInventoryAsString();
-                if (!inventario.contains("FlashDriveKiller")) {
+                magneticKey.pickUp();
+            }
+
+            if (!flashDriveKiller.isTaken()) {
+                if(!player.getInventory().getItemInventory().contains("MagneticKey"))
                     batch.draw(flashDriveKiller.getTexture(), flashDriveKiller.getX(), flashDriveKiller.getY(), 6, 6);
-                }
-            }
-            flashDriveKiller.pickUp();
-        }
 
-        if (!flashDriveInnocent.isTaken()) {
-            if (Objects.equals(mapFile, "Mappe/sopra.tmx")) {
-                String inventario = player.getInventory().getInventoryAsString();
-                if (!inventario.contains("FlashDriveInnocente")) {
-                    batch.draw(flashDriveInnocent.getTexture(), flashDriveInnocent.getX(), flashDriveInnocent.getY(), 6, 6);
-                }
+                flashDriveKiller.pickUp();
             }
-            flashDriveInnocent.pickUp();
-        }
 
-        if (!josephPhone.isTaken()) {
-            if (Objects.equals(mapFile, "Mappa-prova/uffici.tmx")) {
-                String inventario = player.getInventory().getInventoryAsString();
-                if (!inventario.contains("JosephPhone")) {
+            if (!flashDriveInnocent.isTaken()) {
+                if (Objects.equals(mapFile, "Mappe/sopra.tmx")) {
+                    if(!player.getInventory().getItemInventory().contains("MagneticKey")) {
+                        batch.draw(flashDriveInnocent.getTexture(), flashDriveInnocent.getX(), flashDriveInnocent.getY(), 6, 6);
+                    }
+                }
+                flashDriveInnocent.pickUp();
+            }
+        } else
+            if (!josephPhone.isTaken()) {
+                if(!player.getInventory().getItemInventory().contains("MagneticKey"))
                     batch.draw(josephPhone.getTexture(), josephPhone.getX(), josephPhone.getY(), 6, 6);
-                }
+
+                josephPhone.pickUp();
             }
-            josephPhone.pickUp();
-        }
     }
 
     @Override
@@ -370,7 +281,8 @@ public class MainGameScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void dispose() {
@@ -380,66 +292,34 @@ public class MainGameScreen implements Screen {
         if (mapManager != null) {
             mapManager.dispose();
         }
-    }
 
-    public void updateMap(String mapFilePath) {
+        // Rilascia le risorse del giocatore
+        if (player != null) {
+            player.dispose(); // Assicurati che la classe Player gestisca il proprio dispose
+        }
+
+        // Rilascia le risorse della mappa
         if (mapManager != null) {
-            mapManager.dispose(); // Rilascia risorse della vecchia mappa
+            mapManager.dispose(); // Rilascia le risorse della mappa
         }
-        if(f_map==false)//controllo se è la prima giocata
-        {
-            mapFile = mapFilePath;
-            m=mapFile;
+
+        // Rilascia le risorse degli oggetti raccolti
+        if (magneticKey != null) {
+            magneticKey.dispose(); // Assicurati che la classe MagneticKey gestisca il proprio dispose
         }
-        else
-            m=mapFilePath;
-
-        //mapFile = mapFilePath;
-        //System.out.println(mapFile);
-        this.mapManager = new MapManager(); // Carica la nuova mappa
-        if(Objects.equals(m, "Mappe/sopra.tmx")){
-            movementControllerStateX = 200;
-            movementControllerStateY = 426;
-        } else if (Objects.equals(m,"Mappe/ingresso.tmx")) {
-            movementControllerStateX = 835;
-            movementControllerStateY = 520;
-        } else if (Objects.equals(m,"Mappe/garage.tmx")) {
-            movementControllerStateX = 379;
-            movementControllerStateY = 270;
+        if (flashDriveInnocent != null) {
+            flashDriveInnocent.dispose(); // Assicurati che la classe FlashDriveInnocent gestisca il proprio dispose
         }
-        movementController = MovementController.getInstance(); // Reimposta il giocatore
-        camera.position.set(400, 105, 0); // Reimposta la posizione della telecamera
-        camera.update();
-        System.out.println("Mappa aggiornata a: " + mapFilePath);
-    }
-    /*private boolean isCollisionWithMapLayer(Rectangle boundingBox) {
-        //Ottengo il layer delle collisioni
-        MapLayer mapCollisionLayer = mapManager.getCollisionLayer();
-
-        //se non esiste restituisco falso
-        if(mapCollisionLayer == null)
-            return false;
-
-        Rectangle rectangle = null;
-
-        //Per ogni oggetto presente nel collision layer itero
-        for(MapObject object : mapCollisionLayer.getObjects()) {
-            //controllando se esso è un'instanza di RectangleMapObject
-            if(object instanceof RectangleMapObject) {
-                //se lo è lo assegno a rectangle effettuando un casting
-                rectangle = ((RectangleMapObject) object).getRectangle();
-
-                //se il player overlappa il rettangolo allo restituisco true.
-                if(boundingBox.overlaps(rectangle)) {
-                    return true;
-                }
-            }
+        if (flashDriveKiller != null) {
+            flashDriveKiller.dispose(); // Assicurati che la classe FlashDriveKiller gestisca il proprio dispose
         }
-        return false;
-    }
-*/
+        if (josephPhone != null) {
+            josephPhone.dispose(); // Assicurati che la classe JosephPhone gestisca il proprio dispose
+        }
+        // Rilascia il batch
+        if (batch != null) {
+            batch.dispose(); // Rilascia il batch se è stato creato
+        }
 
-    public OrthographicCamera getCamera() {
-        return camera;
     }
 }

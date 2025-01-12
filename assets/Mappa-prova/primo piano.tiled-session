@@ -17,7 +17,7 @@
             "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 804.8333333333333,
+                "x": 804.6666666666665,
                 "y": 520.3333333333333
             }
         },
@@ -34,18 +34,22 @@
             "scaleInDock": 1
         },
         "atrio-mensa.tmx": {
+            "expandedGroupLayers": [
+                12
+            ],
             "expandedObjectLayers": [
-                39
+                39,
+                40
             ],
             "scale": 2,
             "selectedLayer": 22,
             "viewCenter": {
-                "x": 608.25,
-                "y": 325
+                "x": 525.5,
+                "y": 264.5
             }
         },
         "tileset-mensa.tsx": {
-            "scaleInDock": 3,
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "tileset-principale.tsx": {
@@ -58,26 +62,26 @@
         },
         "uffici.tmx": {
             "expandedGroupLayers": [
-                20,
                 48,
-                33,
+                7,
                 67,
                 5,
-                7
+                20,
+                33
             ],
             "expandedObjectLayers": [
-                61,
-                63,
                 66,
+                61,
+                65,
                 59,
-                64,
-                65
+                63,
+                64
             ],
             "scale": 2,
-            "selectedLayer": 57,
+            "selectedLayer": 54,
             "viewCenter": {
-                "x": 565.25,
-                "y": 325.5
+                "x": 560,
+                "y": 196
             }
         }
     },
@@ -90,7 +94,6 @@
     "openFiles": [
         "tileset-principale.tsx",
         "tileset-mensa.tsx",
-        "tilest-componenti-ufficio.tsx",
         "uffici.tmx",
         "atrio-mensa.tmx",
         "C:/Users/grazi/Desktop/2044/assets/Mappe/ingresso.tmx"
@@ -99,11 +102,12 @@
     "recentFiles": [
         "tileset-principale.tsx",
         "tileset-mensa.tsx",
-        "tilest-componenti-ufficio.tsx",
         "uffici.tmx",
         "C:/Users/grazi/Desktop/2044/assets/Mappe/ingresso.tmx",
-        "atrio-mensa.tmx"
+        "atrio-mensa.tmx",
+        "tilest-componenti-ufficio.tsx"
     ],
+    "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
         "height": 16,

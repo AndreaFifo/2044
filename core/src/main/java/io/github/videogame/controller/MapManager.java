@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.*;
+import io.github.videogame.model.GameState;
 import io.github.videogame.model.Player;
 import io.github.videogame.model.Utility;
 
@@ -20,13 +21,16 @@ public class MapManager {
     private List<Rectangle> rectangleCollisions;
     private List<Rectangle> elevator;
 
-    private String currentMap = "Mappa-prova/uffici.tmx";
+    private String currentMap;
 
+    private MapManager() {
+        this.currentMap = GameState.getInstance().getCurrentMap();
+        System.out.println(this.currentMap);
 
-    public MapManager() {
         Utility.loadMapAsset(currentMap);
         this.map = Utility.getAsset(currentMap, TiledMap.class);
-        this.renderer = new OrthogonalTiledMapRenderer(map, 1f);
+        this.renderer = new OrthogonalTiledMapRenderer(null);
+        this.renderer.setMap(map);
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, 960, 540);
 
@@ -65,10 +69,9 @@ public class MapManager {
     }
 
     public boolean isNearElevators(float x, float y){
-        Rectangle playerRect = new Rectangle(x + 3.5f, y + 4.5f, 7, 9);
+        Rectangle playerRect = new Rectangle(x + 3.5f, y + 4.5f, 14, 9);
         for(Rectangle rectangle : elevator) {
             if(rectangle.overlaps(playerRect)) {
-                System.out.println(true);
                 return true;
             }
         }
@@ -88,15 +91,17 @@ public class MapManager {
         return true;
     }
 
-    public void loadNewMap(){
+    public void changeMap(){
+        map.dispose();
         if(currentMap.equals("Mappa-prova/atrio-mensa.tmx"))
             currentMap = "Mappa-prova/uffici.tmx";
         else
             currentMap = "Mappa-prova/atrio-mensa.tmx";
 
         Utility.loadMapAsset(currentMap);
-        this.map = Utility.getAsset(currentMap, TiledMap.class);
-        renderer = new OrthogonalTiledMapRenderer(map, 1f);
+        map = Utility.getAsset(currentMap, TiledMap.class);
+        renderer.setMap(map);
+        fetchCollision();
     }
 
     public void render() {
@@ -113,6 +118,10 @@ public class MapManager {
         return currentMap;
     }
 
+    public void setCurrentMap(String currentMap){
+        this.currentMap = currentMap;
+    }
+
     public void dispose() {
         if (map != null) {
             map.dispose();
@@ -124,5 +133,9 @@ public class MapManager {
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public void resetMapManager(){
+        renderer = new OrthogonalTiledMapRenderer(null);
     }
 }

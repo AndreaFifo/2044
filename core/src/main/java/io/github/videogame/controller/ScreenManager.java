@@ -67,67 +67,50 @@ public class ScreenManager {
             throw new IllegalArgumentException("ScreenType cannot be null.");
         }
 
-        if (screenType == currentScreen) {
-            System.out.println("La schermata " + screenType + " è già attiva.");
+        if (screenType == currentScreen)
             return;
-        }
 
         // Aggiorna previousScreen solo se c'è una schermata attuale
-        if (currentScreen != null) {
+        if (currentScreen != null)
             previousScreen = currentScreen;
-            System.out.println("Impostato previousScreen a: " + previousScreen);
-        }
 
         currentScreen = screenType;
-        System.out.println("Impostato currentScreen a: " + currentScreen);
 
         // Ottieni o crea la schermata
         Screen screen = screens.get(screenType);
         if (screen == null) {
             screen = createScreen(screenType);
             screens.put(screenType, screen);
-            System.out.println("Creata nuova schermata: " + screenType);
         }
 
         // Imposta la nuova schermata nel gioco
         game.setScreen(screen);
-        log();
     }
 
     /**
      * Torna alla schermata precedente, se disponibile.
      */
     public void returnToPreviousScreen() {
-        System.out.println("Cambiando schermata");
-        if (previousScreen == null) {
-            System.out.println("Non c'è nessuna schermata precedente a cui tornare.");
+        if (previousScreen == null)
             return;
-        }
 
-        if (previousScreen == currentScreen) {
-            System.out.println("La schermata precedente è la stessa di quella attuale. Nessuna azione eseguita.");
+        if (previousScreen == currentScreen)
             return;
-        }
 
         ScreenType targetScreen = currentScreen;
         currentScreen = previousScreen;
         previousScreen = targetScreen;
-        System.out.println("Scambio avvenuto diopo");
-        log();
 
-        System.out.println("Tornando alla schermata precedente: " + currentScreen);
 
         // Ottieni la schermata target
         Screen screen = screens.get(currentScreen);
         if (screen == null) {
             screen = createScreen(currentScreen);
             screens.put(currentScreen, screen);
-            System.out.println("Creata nuova schermata: " + currentScreen);
         }
 
         // Imposta la schermata target nel gioco
         game.setScreen(screen);
-        log();
     }
 
     /**
@@ -157,10 +140,8 @@ public class ScreenManager {
     public void dispose() {
         for (Map.Entry<ScreenType, Screen> entry : screens.entrySet()) {
             Screen screen = entry.getValue();
-            if (screen != null) {
+            if (screen != null)
                 screen.dispose();
-                System.out.println("Disposto schermata: " + entry.getKey());
-            }
         }
         screens.clear();
     }

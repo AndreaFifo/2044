@@ -56,6 +56,10 @@ public class Player {
         return walkAnimationsPlayer[direction].getKeyFrame(0f);
     }
 
+    public void setDefaultFrame() {
+
+    }
+
     // Metodo per liberare le risorse
     public void dispose() {
         if (spriteSheetPlayer != null) {

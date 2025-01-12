@@ -19,6 +19,7 @@ public class Item {
     private Player player;                  // Riferimento al giocatore
     private String name;                    // Nome dell'oggetto
     private String description;             // Descrizione dell'oggetto
+    private int idTask;                     // Id della task dove spunta nella mappa l'item
 
     private DialogManager dialogManager;
 

@@ -29,7 +29,7 @@ public class Gioco extends Game {
 
         this.screenManager = ScreenManager.getInstance();
         screenManager.init(this);
-        //Creo un'istanza del menu principale e l'attivo con setScreen
+
         screenManager.showScreen(ScreenManager.ScreenType.MAIN_MENU);
     }
 
