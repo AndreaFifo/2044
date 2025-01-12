@@ -6,18 +6,13 @@ import io.github.videogame.controller.MovementController;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class NpcCreator implements Observable{
+public abstract class NpcCreator implements Observable,NpcCreatorInterface{
 
     private String NpcName;
     private Texture texture;
-    private String[] dialogue;
-    private int dialogIndex;
+    private String[] dialogueAct1;
+    private int dialogIndexAct1;
     private List<Observer> observers = new ArrayList<>();
-
-    public DialogManager getDialogManager() {
-        return dialogManager;
-    }
-
     private DialogManager dialogManager;
     private final float spawn_x;
     private final float spawn_y;
@@ -27,17 +22,65 @@ public abstract class NpcCreator implements Observable{
     public NpcCreator(float spawn_x, float spawn_y, MovementController movementControllerPlayer){
         this.spawn_x = spawn_x;
         this.spawn_y = spawn_y;
-        this.dialogIndex = 0;
-        this.dialogue = new String[200];
+        this.dialogIndexAct1 = 0;
+        this.dialogueAct1 = new String[50];
         this.movementControllerPlayer = movementControllerPlayer;
         this.dialogManager = new DialogManager();
     }
 
-    public abstract void drawDialogue();
 
-    public abstract boolean canBeInteracted();
 
-    public abstract String[] InitDialog(String[] dialogue);
+    //IMPLEMENTAZIONE DELL'INTERFACCIA NpcCreatorInterface
+
+    //Fare l'Override nelle sotto classi poiché ogni personaggio ha la sua GUI di dialogo
+    public abstract void drawDialogueAct1();
+
+    //Fare l'Override nelle sotto classi poiché ogni ATTO I fra gli NPC è diverso
+    public abstract String[] InitDialogAct1(String[] dialogue);
+
+    //Override fatto già adesso poiché è comune a tutti gli NPC
+    @Override
+    public boolean canBeInteracted() {
+        return Player.getInstance().getX() <= this.getSpawn_x() + 30 &&
+            Player.getInstance().getX() >= this.getSpawn_x() - 30 &&
+            Player.getInstance().getY() <= this.getSpawn_y() + 30 &&
+            Player.getInstance().getY() >= this.getSpawn_y() - 30;
+    }
+
+    //Override fatto già adesso poichè è comune a tutti gli NPC
+    @Override
+    public void setDialogueAct1(String[] dialogueAct1) {
+        this.dialogueAct1 = dialogueAct1;
+    }
+
+
+
+
+
+
+    //IMPLEMENTAZIONE DELL'INTERFACCIA Observable
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update();
+        }
+    }
+
+
+
+
+
+    //METODI GET E SET MOLTO STANDARD
 
     public void setNpcName(String npcName) {
         NpcName = npcName;
@@ -47,6 +90,9 @@ public abstract class NpcCreator implements Observable{
         this.texture = texture;
     }
 
+    public DialogManager getDialogManager() {
+        return dialogManager;
+    }
 
     public String getNpcName(){
         return NpcName;
@@ -68,41 +114,20 @@ public abstract class NpcCreator implements Observable{
         return texture;
     }
 
-    public String[] getDialogue() {
-        return dialogue;
+    public String[] getDialogueAct1() {
+        return dialogueAct1;
     }
 
-    public void setDialogue(String[] dialogue) {
-        this.dialogue = dialogue;
+    public int getDialogIndexAct1() {
+        return dialogIndexAct1;
     }
 
-    public int getDialogIndex() {
-        return dialogIndex;
-    }
-
-    public void setDialogIndex(int dialogIndex) {
-        this.dialogIndex = dialogIndex;
+    public void setDialogIndexAct1(int dialogIndexAct1) {
+        this.dialogIndexAct1 = dialogIndexAct1;
     }
 
     public MovementController getMovementControllerPlayer() {
         return movementControllerPlayer;
-    }
-
-    @Override
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    @Override
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.update();
-        }
     }
 
 }

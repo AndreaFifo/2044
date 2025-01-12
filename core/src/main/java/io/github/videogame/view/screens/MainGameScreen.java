@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import io.github.videogame.controller.CollisionDebugger;
 import io.github.videogame.controller.MapManager;
 import io.github.videogame.controller.ScreenManager;
@@ -15,9 +14,6 @@ import io.github.videogame.controller.MovementController;
 import io.github.videogame.view.ElevatorDecisionBox;
 import io.github.videogame.view.PlayerView;
 import io.github.videogame.view.TaskView;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 
 //Lo scopo di questa classe è gestire la finestra della sessione di gioco
@@ -42,7 +38,7 @@ public class MainGameScreen implements Screen {
     //NPC
     private NpcKiller NpcKiller;
     private NpcInnocent NpcInnocent;
-    private NpcChiefOfPolicie NpcChiefOfPolicie;
+    private NpcChiefOfPolice NpcChiefOfPolicie;
     private NpcDeadBody NpcDeadBody;
     private io.github.videogame.model.NpcAurora NpcAurora;
     private CollisionDebugger collisionDebugger;
@@ -88,23 +84,23 @@ public class MainGameScreen implements Screen {
         this.stateDirection=0;
 
         //this.mapManager = new MapManager(mapFile,camera);
-        this.magneticKey = new MagneticKey(350, 526);
-        this.flashDriveInnocent = new FlashDriveInnocent(420, 305);
-        this.flashDriveKiller = new FlashDriveKiller(1430,715);
-        this.josephPhone = new JosephPhone(443,516);
+        this.magneticKey = new MagneticKey(210, 425); //OK
+        this.flashDriveInnocent = new FlashDriveInnocent(440, 530); //OK
+        this.flashDriveKiller = new FlashDriveKiller(675,525); //OK
+        this.josephPhone = new JosephPhone(193,395); //OK
 
-        this.NpcKiller = new NpcKiller(610,90, movementController);
-        this.NpcInnocent = new NpcInnocent(610, 130, movementController);
-        this.NpcChiefOfPolicie = new NpcChiefOfPolicie(710,100,movementController);
-        this.NpcDeadBody = new NpcDeadBody(150,200,movementController);
-        this.NpcAurora = new NpcAurora(168,158,movementController);
+        this.NpcKiller = new NpcKiller(470,322, movementController); //OK
+        this.NpcInnocent = new NpcInnocent(664, 315, movementController); //OK
+        this.NpcChiefOfPolicie = new NpcChiefOfPolice(500,240,movementController); //OK
+        this.NpcDeadBody = new NpcDeadBody(550,300,movementController); //OK
+        this.NpcAurora = new NpcAurora(540,240,movementController); //OK
 
-        //Setto gli indici correttamente (li salva anche se cambia schermata)
+       /* //Setto gli indici correttamente (li salva anche se cambia schermata)
         this.NpcChiefOfPolicie.setDialogIndex(indicePolice);
         this.NpcKiller.setDialogIndex(indiceKiller);
         this.NpcInnocent.setDialogIndex(indiceInnocent);
         this.NpcDeadBody.setDialogIndex(indiceDead);
-        this.NpcAurora.setDialogIndex(indiceAurora);
+        this.NpcAurora.setDialogIndex(indiceAurora);*/
 
         //TASK
         this.taskView = new TaskView();
@@ -161,11 +157,11 @@ public class MainGameScreen implements Screen {
         playerView.render(batch, delta);
 
         batch.end();
-
+/*
         if(NpcDeadBody.getDialogIndex() == 4){
             NpcDeadBody.notifyObservers();
             NpcDeadBody.setDialogIndex(5);
-        }
+        }*/
 
         if(mapManager.isNearElevators(player.getX(), player.getY()))
             elevatorDecisionBox.show();
@@ -180,7 +176,8 @@ public class MainGameScreen implements Screen {
 
         //I due metodo gestiranno il dialogo del NPC
         drawNpcDialogue();
-        setIndexNpc();
+        drawItemDialogue();
+        //setIndexNpc();
 
         //Disegno le task
         taskView.draw();
@@ -191,9 +188,13 @@ public class MainGameScreen implements Screen {
             player.getY() + 4.f,
             7,9f
         );
+
+
+     //  System.out.println(player.getX() + "    " + player.getY());
+
     }
 
-    public void setIndexNpc(){
+   /* public void setIndexNpc(){
         //Salvataggio degli indici dei dialoghi degli NPC
         if(indicePolice <= NpcChiefOfPolicie.getDialogIndex()){
             indicePolice = NpcChiefOfPolicie.getDialogIndex();
@@ -210,66 +211,90 @@ public class MainGameScreen implements Screen {
         if(indiceAurora <= NpcAurora.getDialogIndex()){
             indiceAurora = NpcAurora.getDialogIndex();
         }
-    }
+    }*/
 
 
     public void drawNpcDialogue(){
-        //Disegna dialoghi degli NPC piano terra
-        if(Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
-            NpcKiller.drawDialogue();
-            NpcInnocent.drawDialogue();
-            NpcChiefOfPolicie.drawDialogue();
+
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")) {
+            NpcChiefOfPolicie.drawDialogueAct1();
+            NpcChiefOfPolicie.drawDialogueAct2();
+            NpcInnocent.drawDialogueAct1();
+            NpcKiller.drawDialogueAct1();
         }
-        //Disegna dialoghi degli NPC primo piano
-        if(Objects.equals(mapFile, "Mappe/sopra.tmx")) {
-            NpcDeadBody.drawDialogue();
-            NpcAurora.drawDialogue();
+
+        if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
+            NpcDeadBody.drawDialogueAct1();
+            NpcAurora.drawDialogueAct1();
+
         }
     }
 
 
     public void drawNpc(){
-        if(Objects.equals(mapFile, "Mappe/ingresso.tmx")) {
-            batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 32, 32);
-            batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 32, 32);
-            batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 32, 32);
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")){
+            batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 16, 36);
+            batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 16, 36);
+            batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 16, 36);
         }
-        if(Objects.equals(mapFile,"Mappe/sopra.tmx")){batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);}
+        if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);}
     }
+
+
+
 
     //Disegna gli oggetti, SOLO SE IL LORO STATO TAKEN è FALSO
     private void drawObjects() {
-        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")){
-            if (!magneticKey.isTaken()) {
-                if(!player.getInventory().getItemInventory().contains("MagneticKey"))
-                    batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
 
-                magneticKey.pickUp();
+        //OGGETTI DEL PIANO TERRA
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")){
+
+                //OGGETTO CHIAVE MAGNETICA
+                if(!player.getInventory().getItemInventory().contains("MagneticKey")) {
+                    batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
+                    magneticKey.pickUp();
+                }
+
             }
 
-            if (!flashDriveKiller.isTaken()) {
-                if(!player.getInventory().getItemInventory().contains("MagneticKey"))
-                    batch.draw(flashDriveKiller.getTexture(), flashDriveKiller.getX(), flashDriveKiller.getY(), 6, 6);
+        //OGGETTI DEL PRIMO PIANO
+        if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
 
+            //OGGETTO CHIAVETTA DEL KILLER
+            if(!player.getInventory().getItemInventory().contains("FlashDriveKiller")){
+                batch.draw(flashDriveKiller.getTexture(), flashDriveKiller.getX(), flashDriveKiller.getY(), 6, 6);
                 flashDriveKiller.pickUp();
             }
 
-            if (!flashDriveInnocent.isTaken()) {
-                if (Objects.equals(mapFile, "Mappe/sopra.tmx")) {
-                    if(!player.getInventory().getItemInventory().contains("MagneticKey")) {
-                        batch.draw(flashDriveInnocent.getTexture(), flashDriveInnocent.getX(), flashDriveInnocent.getY(), 6, 6);
-                    }
-                }
+            //OGGETTO CHIAVETTA DELL'INNOCENTE
+            if(!player.getInventory().getItemInventory().contains("FlashDriveInnocente")) {
+                batch.draw(flashDriveInnocent.getTexture(), flashDriveInnocent.getX(), flashDriveInnocent.getY(), 6, 6);
                 flashDriveInnocent.pickUp();
             }
-        } else
-            if (!josephPhone.isTaken()) {
-                if(!player.getInventory().getItemInventory().contains("MagneticKey"))
-                    batch.draw(josephPhone.getTexture(), josephPhone.getX(), josephPhone.getY(), 6, 6);
 
+            //OGGETTO TELEFONO DI JOSEPH
+            if(!player.getInventory().getItemInventory().contains("JosephPhone")){
+                batch.draw(josephPhone.getTexture(), josephPhone.getX(),josephPhone.getY(), 6,6);
                 josephPhone.pickUp();
             }
+
+
+        }
+
+
     }
+
+    private void drawItemDialogue(){
+        josephPhone.drawDialogue();
+        flashDriveKiller.drawDialogue();
+        flashDriveInnocent.drawDialogue();
+        magneticKey.drawDialogue();
+    }
+
+
+
+
+
 
     @Override
     public void resize(int width, int height) {}

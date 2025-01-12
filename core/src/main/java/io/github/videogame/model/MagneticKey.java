@@ -11,7 +11,7 @@ public class MagneticKey extends Item {
         super(x, y);
         this.setTexture("Oggetti/MagneticCard.png");
         this.setPickUpSound("Oggetti/keyPickUpSound.mp3");
-        this.setName("Magnetic Key");
+        this.setName("MagneticKey");
         this.setDescription("A magnetic card of an office");
         this.getDialogManager().setDialog(getDescription());
     }
