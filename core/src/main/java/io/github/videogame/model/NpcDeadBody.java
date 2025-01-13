@@ -35,6 +35,7 @@ public class NpcDeadBody extends NpcCreator{
     public void drawDialogueAct1() {
         StoryState storyState = StoryState.getInstance();
 
+
         if (canBeInteracted()) {
             this.getDialogManager().draw();
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {

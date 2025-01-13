@@ -21,7 +21,6 @@ public class Lwjgl3Launcher {
         configuration.setTitle("2044");
 
         configuration.useVsync(true);
-
         configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
 
         configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
