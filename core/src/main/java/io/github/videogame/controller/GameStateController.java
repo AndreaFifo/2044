@@ -3,10 +3,9 @@ package io.github.videogame.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
-import io.github.videogame.model.CareTaker;
-import io.github.videogame.model.GameState;
-import io.github.videogame.model.Player;
-import io.github.videogame.model.TaskModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import io.github.videogame.model.*;
 import io.github.videogame.view.screens.MainGameScreen;
 
 import java.util.ArrayList;
@@ -18,13 +17,14 @@ public class GameStateController {
     private Player player;
     private TaskModel taskModel;
     private MapManager mapManager;
-    private Map<String, Boolean> storyState;
+    private StoryState storyState;
 
     private GameStateController() {
         this.player = Player.getInstance();
         this.taskModel = TaskModel.getInstance();
         this.gameState = GameState.getInstance();
         this.mapManager = MapManager.getInstance();
+        this.storyState = StoryState.getInstance();
     }
 
     public static GameStateController getInstance() {
@@ -41,11 +41,12 @@ public class GameStateController {
 
             GameState tempGameState = new Json().fromJson(GameState.class, jsonString);
             gameState.init(
-                tempGameState.getPlayerX(),
-                tempGameState.getPlayerY(),
-                tempGameState.getCurrentMap(),
-                tempGameState.getInventory(),
-                tempGameState.getIdCurrentTask()
+                    tempGameState.getPlayerX(),
+                    tempGameState.getPlayerY(),
+                    tempGameState.getCurrentMap(),
+                    tempGameState.getInventory(),
+                    tempGameState.getIdCurrentTask(),
+                    tempGameState.getStoryState()
             );
 
             restoreGameState();
@@ -55,6 +56,14 @@ public class GameStateController {
             e.printStackTrace();
             System.out.println("Errore durante il caricamento dello stato del gioco.");
         }
+    }
+
+    public void restoreInitialGameState(){
+        player.setSpawn(gameState.getPlayerX(), gameState.getPlayerY());
+        player.setInventory(gameState.getInventory());
+        taskModel.setTask(gameState.getIdCurrentTask());
+        mapManager.setCurrentMap(gameState.getCurrentMap());
+        storyState.setDialogueStates(gameState.getStoryState());
     }
 
     public void restoreGameState(){
@@ -71,15 +80,16 @@ public class GameStateController {
             gameState.setItemInventory(player.getInventory().getItemInventory());
             gameState.setCurrentMap(mapManager.getCurrentMap());
             gameState.setIdCurrentTask(taskModel.getIdCurrentTask());
-
+            gameState.setStoryState(storyState.getDialogueStates());
 
             CareTaker.saveMemento(gameState);
 
-            Json json = new Json();
-            String jsonString = json.toJson(gameState);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String jsonString = gson.toJson(gameState);
 
             FileHandle file = Gdx.files.local("saves/game_save.json");
             file.writeString(jsonString, false);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,7 +97,7 @@ public class GameStateController {
 
     public void initialGameState(){
         gameState.initialState();
-        restoreGameState();
+        restoreInitialGameState();
 
         FileHandle file = Gdx.files.local("saves/game_save.json");
         file.writeString("", false);

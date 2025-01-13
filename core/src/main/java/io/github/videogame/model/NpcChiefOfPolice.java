@@ -12,15 +12,15 @@ public class NpcChiefOfPolice extends NpcCreator {
     private int dialogIndexAct3 = 0;
 
     public NpcChiefOfPolice(float spawn_x, float spawn_y) {
-        super(spawn_x, spawn_y);
+        super(spawn_x, spawn_y, 21);
         // Setto il nome del Npc
         this.setNpcName("Nome_Capo_Polizia");
         // Setto la texture del Npc
         this.setTexture(new Texture("NPC/capo-polizia.png"));
         // Setto i dialoghi
         this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
-        this.dialogueAct2 = InitDialogAct2(new String[30]); // ATTO II
-        this.dialogueAct3 = InitDialogAct3(new String[30]); // ATTO III
+        this.dialogueAct2 = InitDialogAct2(new String[6]); // ATTO II
+        this.dialogueAct3 = InitDialogAct3(new String[5]); // ATTO III
     }
 
     public int getDialogIndexAct2() {
@@ -59,8 +59,17 @@ public class NpcChiefOfPolice extends NpcCreator {
         dialogue[18] = "Capo della Polizia: Se trovi qualcosa, vieni subito da me. Non agire senza avvisarmi, capito?";
         dialogue[19] = "Joseph Forest: Lo farò, ma non posso promettere di stare fermo. Caleb meritava giustizia, e non mi fermerò finché non la otterrò.";
         dialogue[20] = "Capo della Polizia: Buona fortuna, Forest. Ne avrai bisogno.";
-        dialogue[21] = "";
         return dialogue;
+    }
+
+    @Override
+    public void drawDialogue() {
+
+    }
+
+    @Override
+    public String[] initDialogues(String[] dialogues) {
+        return new String[0];
     }
 
     public String[] InitDialogAct2(String[] dialogue) {
@@ -70,7 +79,6 @@ public class NpcChiefOfPolice extends NpcCreator {
         dialogue[3] = "Capo della Polizia:\nDunque supponi che il killer sia in qualche modo una spia nemica?";
         dialogue[4] = "Joseph:\nÈ difficile da ammettere, ma probabilmente uno dei miei stimati colleghi è in realtà un traditore.";
         dialogue[5] = "Capo della Polizia:\nGrazie per l'informazione, vedrò di seguire questa eventuale pista nelle mie indagini.";
-        dialogue[6] = "";
         return dialogue;
     }
 
@@ -80,7 +88,6 @@ public class NpcChiefOfPolice extends NpcCreator {
         dialogue[2] = "Capo della Polizia:\nOra mi ceda le prove raccolte.";
         dialogue[3] = "Joseph:\nUn attimo, devo fare prima una cosa con la chiavetta.";
         dialogue[4] = "Capo della Polizia:\nD'accordo, ma faccia presto.";
-        dialogue[5] = "";
         return dialogue;
     }
 
@@ -90,6 +97,9 @@ public class NpcChiefOfPolice extends NpcCreator {
         StoryState storyState = StoryState.getInstance();
         Inventory inventory = Inventory.getInventoryInstance();
 
+        if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1"))
+            return;
+
         if (storyState.getDialogueState("NPC_DEADBODY_ACT1") & inventory.getItemInventory().contains("JosephPhone")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
@@ -97,9 +107,9 @@ public class NpcChiefOfPolice extends NpcCreator {
                     if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
                         this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]);
                         this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
+                    } else {
                         storyState.setDialogueCompleted("NPC_CHIEF_OF_POLICE_ACT1");
                         this.notifyObservers(3);
-                    } else {
                         this.getDialogManager().setDialog("");
                         this.setDialogIndexAct1(0);
                     }
@@ -112,6 +122,9 @@ public class NpcChiefOfPolice extends NpcCreator {
     public void drawDialogueAct2() {
         StoryState storyState = StoryState.getInstance();
 
+        if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT2"))
+            return;
+
         if (storyState.getDialogueState("NPC_AURORA_ACT1")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
@@ -119,9 +132,9 @@ public class NpcChiefOfPolice extends NpcCreator {
                     if (this.dialogIndexAct2 < this.dialogueAct2.length) {
                         this.getDialogManager().setDialog(this.dialogueAct2[dialogIndexAct2]);
                         this.dialogIndexAct2++;
+                    } else {
                         storyState.setDialogueCompleted("NPC_CHIEF_OF_POLICE_ACT2");
                         this.notifyObservers(5);
-                    } else {
                         this.getDialogManager().setDialog("");
                         this.dialogIndexAct2 = 0;
                     }
@@ -135,6 +148,9 @@ public class NpcChiefOfPolice extends NpcCreator {
     public void drawDialogueAct3() {
         StoryState storyState = StoryState.getInstance();
 
+        if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3"))
+            return;
+
         if (storyState.getDialogueState("NPC_KILLER_ACT2")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
@@ -142,9 +158,9 @@ public class NpcChiefOfPolice extends NpcCreator {
                     if (this.dialogIndexAct3 < this.dialogueAct3.length) {
                         this.getDialogManager().setDialog(this.dialogueAct3[dialogIndexAct3]);
                         this.dialogIndexAct3++;
+                    } else {
                         storyState.setDialogueCompleted("NPC_CHIEF_OF_POLICE_ACT3");
                         this.notifyObservers(11);
-                    } else {
                         this.getDialogManager().setDialog("");
                         this.dialogIndexAct3 = 0;
                     }

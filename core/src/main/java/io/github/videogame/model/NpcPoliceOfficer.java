@@ -8,7 +8,7 @@ import io.github.videogame.controller.MovementController;
 public class NpcPoliceOfficer extends NpcCreator implements PrototypePoliceOfficer {
 
     public NpcPoliceOfficer(float spawn_x, float spawn_y) {
-        super(spawn_x, spawn_y);
+        super(spawn_x, spawn_y, 5);
         //Setto il nome del Npc
         this.setNpcName("Poliziotto");
         //Setto la texture del Npc
@@ -41,8 +41,17 @@ public class NpcPoliceOfficer extends NpcCreator implements PrototypePoliceOffic
         dialogue[2] = "Poliziotto: Non abbiamo ancora trovato niente di sospetto.";
         dialogue[3] = "Poliziotto: Se scopri qualcosa, fammelo sapere.";
         dialogue[4] = "Poliziotto: Mi assicurerò che nessuno entri nella scena del crimine.";
-        dialogue[5] = "";
         return dialogue;
+    }
+
+    @Override
+    public void drawDialogue() {
+
+    }
+
+    @Override
+    public String[] initDialogues(String[] dialogues) {
+        return new String[0];
     }
 
 

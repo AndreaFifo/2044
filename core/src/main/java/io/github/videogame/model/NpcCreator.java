@@ -16,11 +16,11 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     private final float spawn_x;
     private final float spawn_y;
 
-    public NpcCreator(float spawn_x, float spawn_y){
+    public NpcCreator(float spawn_x, float spawn_y, int numDiag){
         this.spawn_x = spawn_x;
         this.spawn_y = spawn_y;
         this.dialogIndexAct1 = 0;
-        this.dialogueAct1 = new String[50];
+        this.dialogueAct1 = new String[numDiag];
         this.dialogManager = new DialogManager();
     }
 
@@ -36,7 +36,6 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     @Override
     public boolean canBeInteracted() {
         Player player = Player.getInstance();
-
 
         return player.getX() <= this.getSpawn_x() + 30 &&
             player.getX() >= this.getSpawn_x() - 30 &&
@@ -112,4 +111,8 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     public void setDialogIndexAct1(int dialogIndexAct1) {
         this.dialogIndexAct1 = dialogIndexAct1;
     }
+
+    public abstract void drawDialogue();
+
+    public abstract String[] initDialogues(String[] dialogues);
 }

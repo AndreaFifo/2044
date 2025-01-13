@@ -1,6 +1,7 @@
 package io.github.videogame.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GameState {
@@ -10,7 +11,7 @@ public class GameState {
     private String currentMap;
     private ArrayList<String> inventory;
     private int idCurrentTask;
-    private Map<String, Boolean> storyState;
+    private HashMap<String, Boolean> storyState;
 
     public GameState(){
         initialState();
@@ -22,7 +23,7 @@ public class GameState {
         currentMap = "Mappa-prova/atrio-mensa.tmx";
         inventory = new ArrayList<>();
         idCurrentTask = 1;
-
+        storyState = StoryState.getInstance().getDialogueStates();
     }
 
     public static GameState getInstance() {
@@ -32,12 +33,13 @@ public class GameState {
         return instance;
     }
 
-    public void init(float playerX, float playerY, String currentMap, ArrayList<String> itemInventory, int idCurrentTask){
+    public void init(float playerX, float playerY, String currentMap, ArrayList<String> itemInventory, int idCurrentTask, HashMap<String, Boolean> storyState) {
         this.playerX = playerX;
         this.playerY = playerY;
         this.currentMap = currentMap;
         this.inventory = itemInventory;
         this.idCurrentTask = idCurrentTask;
+        this.storyState = storyState;
     }
 
 
@@ -79,6 +81,14 @@ public class GameState {
 
     public void setIdCurrentTask(int idCurrentTask) {
         this.idCurrentTask = idCurrentTask;
+    }
+
+    public HashMap<String, Boolean> getStoryState() {
+        return storyState;
+    }
+
+    public void setStoryState(HashMap<String, Boolean> storyState) {
+        this.storyState = storyState;
     }
 
     @Override

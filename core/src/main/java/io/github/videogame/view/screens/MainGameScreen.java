@@ -131,10 +131,9 @@ public class MainGameScreen implements Screen {
             screenManager.showScreen(ScreenManager.ScreenType.PAUSE); // Mostra il menu pausa
             return;
         }
+
         if(NpcAurora.getDialogIndexAct4() > 5){game.setScreen(new VideoOutroScreen(game));}
         if(NpcAnastasia.getDialogIndexAct1() > 22 & Gdx.input.isKeyJustPressed(Input.Keys.Y) & NpcAnastasia.canBeInteracted()){game.setScreen(new VideoOutro2Screen(game));}
-
-
 
         if(NpcAurora.getDialogIndexAct4() > 5){game.setScreen(new VideoOutroScreen(game));}
         if(NpcAnastasia.getDialogIndexAct1() > 22 & Gdx.input.isKeyJustPressed(Input.Keys.Y) & NpcAnastasia.canBeInteracted()){game.setScreen(new VideoOutro2Screen(game));}
@@ -211,7 +210,6 @@ public class MainGameScreen implements Screen {
                 NpcPoliceOfficer3.drawDialogueAct1();
                 NpcPoliceOfficer4.drawDialogueAct1();
             }
-
         }
     }
 
@@ -228,8 +226,8 @@ public class MainGameScreen implements Screen {
         }
         //NPC NEL PRIMO PIANO
         if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
-            batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);
-
+            if(!storyState.getDialogueState("NPC_DEADBODY_ACT1"))
+                batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);
 
             if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")){
                 batch.draw(NpcPoliceOfficer2.getTexture(),NpcPoliceOfficer2.getSpawn_x(),NpcPoliceOfficer2.getSpawn_y(),16,36);

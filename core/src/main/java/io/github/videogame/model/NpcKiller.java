@@ -20,14 +20,14 @@ public class NpcKiller extends NpcCreator {
     private int dialogIndexAct2 =0;
 
     public NpcKiller(float spawn_x, float spawn_y) {
-        super(spawn_x, spawn_y);
+        super(spawn_x, spawn_y, 14);
         // Setto il nome del Npc
         this.setNpcName("Nome_Killer");
         // Setto la texture del Npc
         this.setTexture(new Texture("NPC/ryan.png"));
         // Setto il dialogo del Npc
         this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
-        this.dialogueAct2 = InitDialogAct2(new String[30]); // ATTO II
+        this.dialogueAct2 = InitDialogAct2(new String[4]); // ATTO II
     }
 
     // Inizializza il dialogo del killer
@@ -51,6 +51,16 @@ public class NpcKiller extends NpcCreator {
         return dialogue;
     }
 
+    @Override
+    public void drawDialogue() {
+
+    }
+
+    @Override
+    public String[] initDialogues(String[] dialogues) {
+        return new String[0];
+    }
+
     private String[] InitDialogAct2(String[] dialogue){
         dialogue[0] = "Si sono stato io";
         dialogue[1] = "Come hai potuto farlo....";
@@ -65,17 +75,19 @@ public class NpcKiller extends NpcCreator {
     public void drawDialogueAct1() {
         StoryState storyState = StoryState.getInstance();
 
-        if (storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT2")) {
+        if(storyState.getDialogueState("NPC_KILLER_ACT1"))
+            return;
 
+        if (storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT2")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
                 if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                     if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
                         this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
                         this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
+                    } else {
                         storyState.setDialogueCompleted("NPC_KILLER_ACT1");
                         this.notifyObservers(8);
-                    } else {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.setDialogIndexAct1(0); // Resetta il dialogo
                     }
@@ -90,18 +102,19 @@ public class NpcKiller extends NpcCreator {
     public void drawDialogueAct2() {
         StoryState storyState = StoryState.getInstance();
 
-        if (storyState.getDialogueState("NPC_AURORA_ACT3")) {
+        if(storyState.getDialogueState("NPC_KILLER_ACT2"))
+            return;
 
+        if (storyState.getDialogueState("NPC_AURORA_ACT3")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
                 if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                     if (this.dialogIndexAct2 < this.dialogueAct2.length) {
                         this.getDialogManager().setDialog(this.dialogueAct2[dialogIndexAct2]); // Mostra la linea corrente
                         this.dialogIndexAct2 = dialogIndexAct2 + 1;
+                    } else {
                         storyState.setDialogueCompleted("NPC_KILLER_ACT2");
                         this.notifyObservers(10);
-
-                    } else {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.dialogIndexAct2 = 0; // Resetta il dialogo
                     }

@@ -27,7 +27,7 @@ public class DialogManager {
 
         Table dialogBox = new Table();
         TextureRegionDrawable dialogBoxBG = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("UI/dialog-box.png"))));
-        dialogLabel = new Label("", labelStyle);
+        dialogLabel = new Label("Press [SPACE] to start the dialog", labelStyle);
         dialogLabel.setWrap(true);
         dialogLabel.setFontScale(0.7F);
         Label avatarLabel = new Label("Joseph", labelStyle);

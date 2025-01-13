@@ -7,14 +7,13 @@ import io.github.videogame.controller.MovementController;
 
 public class NpcAnastasia extends NpcCreator {
     public NpcAnastasia(float spawn_x, float spawn_y) {
-        super(spawn_x, spawn_y);
+        super(spawn_x, spawn_y, 23);
         // Setto il nome del Npc
         this.setNpcName("Anastasia");
         // Setto la texture del Npc
         this.setTexture(new Texture("Oggetti/nobackground.png"));
         // Setto i dialoghi del Npc
         this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
-
     }
 
     public String[] InitDialogAct1(String[] dialogue) {
@@ -41,9 +40,18 @@ public class NpcAnastasia extends NpcCreator {
         dialogue[20] = "Joseph:\nLei deve fare la scelta giusta per se stesso. Inserisca la chiavetta";
         dialogue[21] = "***Appaiono caratteri Russi su schermo***";
         dialogue[22] = "Inserire la chiavetta all'interno del computer del Dott.Pierce? Y/N";
-        dialogue[23] = "";
 
         return dialogue;
+    }
+
+    @Override
+    public void drawDialogue() {
+
+    }
+
+    @Override
+    public String[] initDialogues(String[] dialogues) {
+        return new String[0];
     }
 
     //Conseguenza dell'interazione, cambio di stato del dialogo

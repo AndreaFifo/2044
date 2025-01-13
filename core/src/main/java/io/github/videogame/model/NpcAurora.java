@@ -43,16 +43,16 @@ public class NpcAurora extends NpcCreator {
     private int dialogIndexAct4 =0;
 
     public NpcAurora(float spawn_x, float spawn_y) {
-        super(spawn_x, spawn_y);
+        super(spawn_x, spawn_y, 15);
         // Setto il nome del Npc
         this.setNpcName("Aurora");
         // Setto la texture del Npc
         this.setTexture(new Texture("Oggetti/nobackground.png"));
         // Setto i dialoghi del Npc
         this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
-        this.dialogueAct2 = InitDialogAct2(new String[30]); // ATTO II
-        this.dialogueAct3 = InitDialogAct3(new String[30]); // ATTO III
-        this.dialogueAct4 = InitDialogAct4(new String[30]); // ATTO IV
+        this.dialogueAct2 = InitDialogAct2(new String[9]); // ATTO II
+        this.dialogueAct3 = InitDialogAct3(new String[7]); // ATTO III
+        this.dialogueAct4 = InitDialogAct4(new String[6]); // ATTO IV
     }
 
     public String[] InitDialogAct1(String[] dialogue) {
@@ -71,8 +71,17 @@ public class NpcAurora extends NpcCreator {
         dialogue[12] = "Aurora:\nSarà sufficiente trovare un dispositivo con all'interno il file e controllare se la data di creazione di quest'ultimo coincide.";
         dialogue[13] = "Joseph:\nSei fantastica, vado a riferire agli agenti. Grazie mille.";
         dialogue[14] = "Aurora:\nÈ sempre un piacere aiutarla dott. Forest. A presto.";
-        dialogue[15] = "";
         return dialogue;
+    }
+
+    @Override
+    public void drawDialogue() {
+
+    }
+
+    @Override
+    public String[] initDialogues(String[] dialogues) {
+        return new String[0];
     }
 
     public String[] InitDialogAct2(String[] dialogue) {
@@ -85,7 +94,6 @@ public class NpcAurora extends NpcCreator {
         dialogue[6] = "Joseph:\nVa bene, grazie Aurora.";
         dialogue[7] = "Aurora:\nA presto dott. Forest.";
         dialogue[8] = "De-inserimento della chiavetta.";
-        dialogue[9] = "";
         return dialogue;
     }
 
@@ -97,7 +105,6 @@ public class NpcAurora extends NpcCreator {
         dialogue[4] = "Aurora:\nMi spiace dott. Forest, sembra esserci una corrispondenza. Stimo che al 99.7% il dott. Pierce sia il killer che stava cercando.";
         dialogue[5] = "Joseph:\nNon posso crederci! Dopo tutto questo tempo... Non mi sono accorto di chi avevo davanti.";
         dialogue[6] = "De-inserimento della chiavetta.";
-        dialogue[7] = "";
         return dialogue;
     }
 
@@ -108,7 +115,6 @@ public class NpcAurora extends NpcCreator {
         dialogue[3] = "Aurora:\nPubblicare il file 30_e_lode contenente l'algoritmo richiesto sui server governativi?";
         dialogue[4] = "Joseph:\nSì.";
         dialogue[5] = "Aurora:\nPubblicazione avvenuta con successo. È sempre un piacere lavorare con lei dott. & detective Forest ;)";
-        dialogue[6] = "";
         return dialogue;
     }
 
@@ -119,6 +125,9 @@ public class NpcAurora extends NpcCreator {
     public void drawDialogueAct1() {
         StoryState storyState = StoryState.getInstance();
 
+        if(storyState.getDialogueState("NPC_AURORA_ACT1"))
+            return;
+
         if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
@@ -126,9 +135,9 @@ public class NpcAurora extends NpcCreator {
                     if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
                         this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
                         this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
+                    } else {
                         storyState.setDialogueCompleted("NPC_AURORA_ACT1");
                         this.notifyObservers(4);
-                    } else {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.setDialogIndexAct1(0); // Resetta il dialogo
                     }
@@ -142,6 +151,9 @@ public class NpcAurora extends NpcCreator {
         StoryState storyState = StoryState.getInstance();
         Inventory inventory = Inventory.getInventoryInstance();
 
+        if(storyState.getDialogueState("NPC_AURORA_ACT2"))
+            return;
+
         if (storyState.getDialogueState("NPC_INNOCENT_ACT1") &
             inventory.getItemInventory().contains("MagneticKey") &
             inventory.getItemInventory().contains("FlashDriveInnocente")) {
@@ -151,9 +163,9 @@ public class NpcAurora extends NpcCreator {
                     if (this.dialogIndexAct2 < this.dialogueAct2.length) {
                         this.getDialogManager().setDialog(this.dialogueAct2[dialogIndexAct2]); // Mostra la linea corrente
                         this.dialogIndexAct2 = dialogIndexAct2 + 1;
+                    } else {
                         storyState.setDialogueCompleted("NPC_AURORA_ACT2");
                         this.notifyObservers(7);
-                    } else {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.dialogIndexAct2 = 0; // Resetta il dialogo
                     }
@@ -166,6 +178,9 @@ public class NpcAurora extends NpcCreator {
         StoryState storyState = StoryState.getInstance();
         Inventory inventory = Inventory.getInventoryInstance();
 
+        if(storyState.getDialogueState("NPC_AURORA_ACT3"))
+            return;
+
         if( storyState.getDialogueState("NPC_KILLER_ACT1") &
             inventory.getItemInventory().contains("FlashDriveKiller")) {
 
@@ -175,9 +190,9 @@ public class NpcAurora extends NpcCreator {
                     if (this.dialogIndexAct3 < this.dialogueAct3.length) {
                         this.getDialogManager().setDialog(this.dialogueAct3[dialogIndexAct3]); // Mostra la linea corrente
                         this.dialogIndexAct3 = dialogIndexAct3 + 1;
+                    } else {
                         storyState.setDialogueCompleted("NPC_AURORA_ACT3");
                         this.notifyObservers(9);
-                    } else {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.dialogIndexAct3 = 0; // Resetta il dialogo
                     }
@@ -189,6 +204,10 @@ public class NpcAurora extends NpcCreator {
 
     public void drawDialogueAct4() {
         StoryState storyState = StoryState.getInstance();
+
+        if(storyState.getDialogueState("NPC_AURORA_ACT4"))
+            return;
+
         if (storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
@@ -196,8 +215,8 @@ public class NpcAurora extends NpcCreator {
                     if (this.dialogIndexAct4 < this.dialogueAct4.length) {
                         this.getDialogManager().setDialog(this.dialogueAct4[dialogIndexAct4]); // Mostra la linea corrente
                         this.dialogIndexAct4 = dialogIndexAct4 + 1;
-                        storyState.setDialogueCompleted("NPC_AURORA_ACT4");
                     } else {
+                        storyState.setDialogueCompleted("NPC_AURORA_ACT4");
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.dialogIndexAct4 = 0; // Resetta il dialogo
                     }

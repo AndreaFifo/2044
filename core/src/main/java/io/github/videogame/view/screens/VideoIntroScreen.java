@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.video.VideoPlayer;
 import com.badlogic.gdx.video.VideoPlayerCreator;
+import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.model.Gioco;
 
 import java.io.FileNotFoundException;
@@ -56,7 +57,6 @@ public class VideoIntroScreen implements Screen {
 
         batch.end();
 
-        // Controllo dell'input per skippare il video
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched()) {
             goToMainScreen();
         }
@@ -64,7 +64,7 @@ public class VideoIntroScreen implements Screen {
 
     private void goToMainScreen() {
         videoPlayer.stop(); // Interrompe il video se è ancora in riproduzione
-        game.setScreen(new MainGameScreen(game)); // Passa alla schermata principale
+        ScreenManager.getInstance().showScreen(ScreenManager.ScreenType.GAME); // Passa alla schermata principale
     }
 
     @Override

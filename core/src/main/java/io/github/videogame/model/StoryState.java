@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class StoryState {
     private static StoryState instance;
-    private Map<String, Boolean> dialogueStates;
+    private HashMap<String, Boolean> dialogueStates;
 
-    private StoryState() {
+    public StoryState() {
         init();
     }
 
@@ -37,12 +37,20 @@ public class StoryState {
 
     // Metodo per impostare un dialogo come completato
     public void setDialogueCompleted(String dialogueKey) {
-        dialogueStates.put(dialogueKey, true);
+        dialogueStates.put(dialogueKey,true);
     }
 
     // Metodo per ottenere il valore associato a una chiave
     public boolean getDialogueState(String dialogueKey) {
         return dialogueStates.getOrDefault(dialogueKey, false);
+    }
+
+    public HashMap<String, Boolean> getDialogueStates() {
+        return dialogueStates;
+    }
+
+    public void setDialogueStates(HashMap<String, Boolean> dialogueStates) {
+        this.dialogueStates = dialogueStates;
     }
 
     public void restoreStoryState(int id){

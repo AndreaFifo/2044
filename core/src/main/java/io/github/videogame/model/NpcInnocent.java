@@ -7,7 +7,7 @@ import io.github.videogame.controller.MovementController;
 
 public class NpcInnocent extends NpcCreator{
     public NpcInnocent(float spawn_x, float spawn_y){
-        super(spawn_x, spawn_y);
+        super(spawn_x, spawn_y, 16);
         //Setto il nome del Npc
         this.setNpcName("Nome_Innocente");
         //Setto la texture del Npc
@@ -41,10 +41,23 @@ public class NpcInnocent extends NpcCreator{
         return dialogue;
     }
 
+    @Override
+    public void drawDialogue() {
+
+    }
+
+    @Override
+    public String[] initDialogues(String[] dialogues) {
+        return new String[0];
+    }
+
     //Conseguenza dell'interazione, cambio di stato del dialogo
     @Override
     public void drawDialogueAct1() {
         StoryState storyState = StoryState.getInstance();
+
+        if(storyState.getDialogueState("NPC_INNOCENT_ACT1"))
+            return;
 
         if (storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT2")) {
             if (canBeInteracted()) {
@@ -53,9 +66,9 @@ public class NpcInnocent extends NpcCreator{
                     if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
                         this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
                         this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
+                    } else {
                         storyState.setDialogueCompleted("NPC_INNOCENT_ACT1");
                         this.notifyObservers(6);
-                    } else {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.setDialogIndexAct1(0); // Resetta il dialogo
                     }

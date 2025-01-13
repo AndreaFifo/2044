@@ -9,9 +9,6 @@ public interface NpcCreatorInterface {
     //Impostare il dialogo
     void setDialogueAct1(String[] dialogueAct1);
 
-    //Disegna l'atto 1 -> GUI personalizzata in base all'NPC
-    void drawDialogueAct1();
-
     //Imposta se può essere interagibile
     boolean canBeInteracted();
 }
