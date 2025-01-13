@@ -15,7 +15,6 @@ import io.github.videogame.view.ElevatorDecisionBox;
 import io.github.videogame.view.PlayerView;
 import io.github.videogame.view.TaskView;
 
-
 //Lo scopo di questa classe è gestire la finestra della sessione di gioco
 
 public class MainGameScreen implements Screen {
@@ -45,6 +44,7 @@ public class MainGameScreen implements Screen {
     private NpcPoliceOfficer NpcPoliceOfficer2;
     private NpcPoliceOfficer NpcPoliceOfficer3;
     private NpcPoliceOfficer NpcPoliceOfficer4;
+
     private CollisionDebugger collisionDebugger;
     private ElevatorDecisionBox elevatorDecisionBox;
 
@@ -88,6 +88,7 @@ public class MainGameScreen implements Screen {
         this.NpcAurora = new NpcAurora(540,240); //OK
         this.NpcAnastasia = new NpcAnastasia(700,510); //OK
         this.NpcPoliceOfficerOriginal = new NpcPoliceOfficer(715,415); //OK
+
         this.NpcPoliceOfficer1 = NpcPoliceOfficerOriginal.clone(220,480); //OK
         this.NpcPoliceOfficer2 = NpcPoliceOfficerOriginal.clone(340,517); //OK
         this.NpcPoliceOfficer3 = NpcPoliceOfficerOriginal.clone(775,413); //OK
@@ -101,6 +102,7 @@ public class MainGameScreen implements Screen {
         NpcInnocent.addObserver(taskView);
         NpcDeadBody.addObserver(taskView);
         NpcAurora.addObserver(taskView);
+        //NpcAnastasia.addObserver(taskView);
     }
 
     //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
@@ -129,6 +131,10 @@ public class MainGameScreen implements Screen {
             screenManager.showScreen(ScreenManager.ScreenType.PAUSE); // Mostra il menu pausa
             return;
         }
+        if(NpcAurora.getDialogIndexAct4() > 5){game.setScreen(new VideoOutroScreen(game));}
+        if(NpcAnastasia.getDialogIndexAct1() > 22 & Gdx.input.isKeyJustPressed(Input.Keys.Y) & NpcAnastasia.canBeInteracted()){game.setScreen(new VideoOutro2Screen(game));}
+
+
 
         if(NpcAurora.getDialogIndexAct4() > 5){game.setScreen(new VideoOutroScreen(game));}
         if(NpcAnastasia.getDialogIndexAct1() > 22 & Gdx.input.isKeyJustPressed(Input.Keys.Y) & NpcAnastasia.canBeInteracted()){game.setScreen(new VideoOutro2Screen(game));}
@@ -173,6 +179,7 @@ public class MainGameScreen implements Screen {
     }
 
 
+
     public void drawNpcDialogue(){
         StoryState storyState1 = StoryState.getInstance();
 
@@ -204,6 +211,7 @@ public class MainGameScreen implements Screen {
                 NpcPoliceOfficer3.drawDialogueAct1();
                 NpcPoliceOfficer4.drawDialogueAct1();
             }
+
         }
     }
 
