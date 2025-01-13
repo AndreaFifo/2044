@@ -1,7 +1,6 @@
 package io.github.videogame.model;
 
 public interface NpcCreatorInterface {
-
     //FUNZIONI PER GESTIRE I DIALOGHI
 
     //Inizializza l'atto 1 del personaggio: (Imposta l'array di stringhe)
@@ -15,7 +14,4 @@ public interface NpcCreatorInterface {
 
     //Imposta se può essere interagibile
     boolean canBeInteracted();
-
-
-
 }

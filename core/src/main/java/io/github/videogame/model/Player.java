@@ -31,6 +31,7 @@ public class Player {
         this.x = 0;
         this.y = 0;
     }
+
     // Metodo statico per ottenere l'istanza del Singleton
     public static Player getInstance() {
         synchronized (Player.class) {
@@ -94,5 +95,9 @@ public class Player {
     public void setSpawn(float x, float y) {
         this.x = x;
         this.y = y;
+    }
+
+    public float getStateTime() {
+        return stateTime;
     }
 }

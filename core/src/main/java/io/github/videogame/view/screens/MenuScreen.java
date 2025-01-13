@@ -29,14 +29,14 @@ public class MenuScreen implements Screen {
     private Music menuMusic;
     private Sound buttonClickSound;
 
-    private Button play;
-    private Button load;
+    private Button newGame;
+    private Button continuee;
     private Button settings;
     private Button exit;
 
     private Skin skin;
 
-    private boolean loadFlag;
+    private boolean continueFlag;
 
     public MenuScreen(Gioco game) {
         this.game = game;
@@ -52,7 +52,14 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        loadFlag = false;
+        if(Gdx.files.local("saves/game_save.json").length() != 0) {
+            continueFlag = true;
+            continuee.setDisabled(false);
+        } else {
+            continueFlag = false;
+            continuee.setDisabled(true);
+        }
+
         menuMusic.play();
         batch.setProjectionMatrix(stage.getCamera().combined);
         System.out.println(GameState.getInstance().toString());
@@ -103,12 +110,12 @@ public class MenuScreen implements Screen {
         stage.dispose();
     }
 
-    public Button getPlayBtn() {
-        return play;
+    public Button getNewGameBtn() {
+        return newGame;
     }
 
-    public Button getLoadBtn() {
-        return load;
+    public Button getContinueeBtn() {
+        return continuee;
     }
 
     public Button getSettingsBtn() {
@@ -142,18 +149,21 @@ public class MenuScreen implements Screen {
         menuMusic.setLooping(true);
         menuMusic.play();
 
-        this.play = new Button(skin, "play");
-        this.load = new Button(skin, "load");
+        this.newGame = new Button(skin, "newgame");
+        this.continuee = new Button(skin, "continue");
         this.settings = new Button(skin, "settings");
         this.exit = new Button(skin, "exit");
+
+        if(!continueFlag)
+            continuee.setDisabled(true);
 
         table.setPosition((float) -Gdx.graphics.getWidth() / 4, 0);
         table.setFillParent(true);
         table.add(new Image(gameTitle)).padBottom(60).size((float) (gameTitle.getWidth() * 1.30), (float) (gameTitle.getHeight() * 1.3));
         table.row();
-        table.add(play).padBottom(20);
+        table.add(newGame).padBottom(20);
         table.row();
-        table.add(load).padBottom(20);
+        table.add(continuee).padBottom(20);
         table.row();
         table.add(settings).padBottom(20);
         table.row();
@@ -162,11 +172,7 @@ public class MenuScreen implements Screen {
         stage.addActor(table);
     }
 
-    public boolean isLoadFlag() {
-        return loadFlag;
-    }
-
-    public void setLoadFlag() {
-        loadFlag = true;
+    public boolean getContinueFlag() {
+        return continueFlag;
     }
 }

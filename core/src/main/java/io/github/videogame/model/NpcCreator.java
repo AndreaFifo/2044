@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class NpcCreator implements Observable,NpcCreatorInterface{
-
     private String NpcName;
     private Texture texture;
     private String[] dialogueAct1;
@@ -16,19 +15,14 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     private DialogManager dialogManager;
     private final float spawn_x;
     private final float spawn_y;
-    private MovementController movementControllerPlayer;
 
-
-    public NpcCreator(float spawn_x, float spawn_y, MovementController movementControllerPlayer){
+    public NpcCreator(float spawn_x, float spawn_y){
         this.spawn_x = spawn_x;
         this.spawn_y = spawn_y;
         this.dialogIndexAct1 = 0;
         this.dialogueAct1 = new String[50];
-        this.movementControllerPlayer = movementControllerPlayer;
         this.dialogManager = new DialogManager();
     }
-
-
 
     //IMPLEMENTAZIONE DELL'INTERFACCIA NpcCreatorInterface
 
@@ -41,10 +35,13 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     //Override fatto già adesso poiché è comune a tutti gli NPC
     @Override
     public boolean canBeInteracted() {
-        return Player.getInstance().getX() <= this.getSpawn_x() + 30 &&
-            Player.getInstance().getX() >= this.getSpawn_x() - 30 &&
-            Player.getInstance().getY() <= this.getSpawn_y() + 30 &&
-            Player.getInstance().getY() >= this.getSpawn_y() - 30;
+        Player player = Player.getInstance();
+
+
+        return player.getX() <= this.getSpawn_x() + 30 &&
+            player.getX() >= this.getSpawn_x() - 30 &&
+            player.getY() <= this.getSpawn_y() + 30 &&
+            player.getY() >= this.getSpawn_y() - 30;
     }
 
     //Override fatto già adesso poichè è comune a tutti gli NPC
@@ -52,11 +49,6 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     public void setDialogueAct1(String[] dialogueAct1) {
         this.dialogueAct1 = dialogueAct1;
     }
-
-
-
-
-
 
     //IMPLEMENTAZIONE DELL'INTERFACCIA Observable
     @Override
@@ -70,18 +62,13 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     }
 
     @Override
-    public void notifyObservers() {
+    public void notifyObservers(int id) {
         for (Observer observer : observers) {
-            observer.update();
+            observer.update(id);
         }
     }
 
-
-
-
-
     //METODI GET E SET MOLTO STANDARD
-
     public void setNpcName(String npcName) {
         NpcName = npcName;
     }
@@ -125,9 +112,4 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     public void setDialogIndexAct1(int dialogIndexAct1) {
         this.dialogIndexAct1 = dialogIndexAct1;
     }
-
-    public MovementController getMovementControllerPlayer() {
-        return movementControllerPlayer;
-    }
-
 }

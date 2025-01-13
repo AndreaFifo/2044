@@ -6,6 +6,7 @@
     "activeFile": "atrio-mensa.tmx",
     "expandedProjectPaths": [
     ],
+    "file.lastUsedOpenFilter": "Tutti i file (*)",
     "fileStates": {
         "C:/Users/grazi/Desktop/2044/assets/Mappe/Interiors_free_16x16.tsx": {
             "scaleInDock": 1
@@ -17,8 +18,8 @@
             "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 804.6666666666665,
-                "y": 520.3333333333333
+                "x": 804.6666666666666,
+                "y": 520.1666666666666
             }
         },
         "C:/Users/grazi/Desktop/2044/assets/Mappe/kitchen16_tan.tsx": {
@@ -35,17 +36,17 @@
         },
         "atrio-mensa.tmx": {
             "expandedGroupLayers": [
-                12
+                12,
+                13
             ],
             "expandedObjectLayers": [
-                39,
                 40
             ],
             "scale": 2,
-            "selectedLayer": 22,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 525.5,
-                "y": 264.5
+                "x": 319.25,
+                "y": 223.5
             }
         },
         "tileset-mensa.tsx": {
@@ -54,7 +55,7 @@
         },
         "tileset-principale.tsx": {
             "scaleInDock": 1.5,
-            "scaleInEditor": 1
+            "scaleInEditor": 1.5
         },
         "tilest-componenti-ufficio.tsx": {
             "scaleInDock": 2,
@@ -62,29 +63,25 @@
         },
         "uffici.tmx": {
             "expandedGroupLayers": [
-                48,
-                7,
-                67,
-                5,
                 20,
-                33
+                7,
+                5,
+                67,
+                33,
+                48
             ],
             "expandedObjectLayers": [
-                66,
-                61,
-                65,
-                59,
-                63,
-                64
+                61
             ],
-            "scale": 2,
-            "selectedLayer": 54,
+            "scale": 5.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 560,
-                "y": 196
+                "x": 433.9090909090909,
+                "y": 126.36363636363636
             }
         }
     },
+    "frame.defaultDuration": 90,
     "last.imagePath": "C:/Users/grazi/Desktop/Mappa",
     "map.height": 40,
     "map.lastUsedFormat": "tmx",
@@ -107,7 +104,7 @@
         "atrio-mensa.tmx",
         "tilest-componenti-ufficio.tsx"
     ],
-    "resizeMap.removeObjects": true,
+    "resizeMap.removeObjects": false,
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
         "height": 16,

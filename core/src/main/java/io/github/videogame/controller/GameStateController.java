@@ -10,6 +10,7 @@ import io.github.videogame.model.TaskModel;
 import io.github.videogame.view.screens.MainGameScreen;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class GameStateController {
     private static GameStateController instance;
@@ -17,6 +18,7 @@ public class GameStateController {
     private Player player;
     private TaskModel taskModel;
     private MapManager mapManager;
+    private Map<String, Boolean> storyState;
 
     private GameStateController() {
         this.player = Player.getInstance();
@@ -70,6 +72,7 @@ public class GameStateController {
             gameState.setCurrentMap(mapManager.getCurrentMap());
             gameState.setIdCurrentTask(taskModel.getIdCurrentTask());
 
+
             CareTaker.saveMemento(gameState);
 
             Json json = new Json();
@@ -84,7 +87,9 @@ public class GameStateController {
 
     public void initialGameState(){
         gameState.initialState();
+        restoreGameState();
+
+        FileHandle file = Gdx.files.local("saves/game_save.json");
+        file.writeString("", false);
     }
-
-
 }

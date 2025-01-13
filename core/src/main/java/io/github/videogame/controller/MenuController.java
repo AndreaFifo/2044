@@ -34,7 +34,7 @@ public class MenuController {
     public void setup() {
         this.buttonClickSound = Utility.getAsset("menu/button-click.mp3", Sound.class);
 
-        view.getPlayBtn().addListener(new ChangeListener() {
+        view.getNewGameBtn().addListener(new ChangeListener() {
             final Preferences preferences = Gdx.app.getPreferences("game_preferences");
             final boolean isFirstGame = preferences.getBoolean("first_game", true);
 
@@ -50,20 +50,20 @@ public class MenuController {
                     return;
                 }
 
-                if(!view.isLoadFlag()) {
-                    GameStateController.getInstance().initialGameState();
-                }
-
+                GameStateController.getInstance().initialGameState();
                 screenManager.showScreen(ScreenManager.ScreenType.GAME);
             }
         });
 
-        view.getLoadBtn().addListener(new ChangeListener() {
+        view.getContinueeBtn().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if(!view.getContinueFlag())
+                    return;
+
                 buttonClickSound.play(audioController.getSoundsVolume());
                 GameStateController.getInstance().loadGameState();
-                view.setLoadFlag();
+                screenManager.showScreen(ScreenManager.ScreenType.GAME);
             }
         });
 

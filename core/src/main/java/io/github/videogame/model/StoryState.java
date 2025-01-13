@@ -5,10 +5,22 @@ import java.util.Map;
 
 public class StoryState {
     private static StoryState instance;
-    private final Map<String, Boolean> dialogueStates;
+    private Map<String, Boolean> dialogueStates;
 
     private StoryState() {
+        init();
+    }
+
+    public static StoryState getInstance() {
+        if (instance == null) {
+            instance = new StoryState();
+        }
+        return instance;
+    }
+
+    public void init() {
         dialogueStates = new HashMap<>();
+
         dialogueStates.put("NPC_DEADBODY_ACT1",false);
         dialogueStates.put("NPC_AURORA_ACT1",false);
         dialogueStates.put("NPC_AURORA_ACT2",false);
@@ -23,13 +35,6 @@ public class StoryState {
         //AGGIUNGERE QUELLO CON ANASTASIA
     }
 
-    public static StoryState getInstance() {
-        if (instance == null) {
-            instance = new StoryState();
-        }
-        return instance;
-    }
-
     // Metodo per impostare un dialogo come completato
     public void setDialogueCompleted(String dialogueKey) {
         dialogueStates.put(dialogueKey, true);
@@ -40,5 +45,11 @@ public class StoryState {
         return dialogueStates.getOrDefault(dialogueKey, false);
     }
 
+    public void restoreStoryState(int id){
 
+    }
+
+    public void saveStoryState(){
+
+    }
 }

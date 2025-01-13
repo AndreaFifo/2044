@@ -56,6 +56,15 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		up: resume
 		down: resume-active
 	}
+	continue: {
+		up: continue-button-inactive
+		down: continue-button-active
+		disabled: continue-button-disabled
+	}
+	newgame: {
+		up: newgame-button-inactive
+		down: newgame_button_active
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {

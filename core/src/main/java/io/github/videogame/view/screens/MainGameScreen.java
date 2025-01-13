@@ -22,7 +22,6 @@ public class MainGameScreen implements Screen {
     private Gioco game;
     private Player player;
     private PlayerView playerView;
-    private int stateDirection;
     private MovementController movementController;
     private ScreenManager screenManager;
     private SpriteBatch batch;
@@ -33,31 +32,24 @@ public class MainGameScreen implements Screen {
     private JosephPhone josephPhone;
     private MapManager mapManager;
     private GameState gameState;
-    String mapFile = "Mappa-prova/uffici.tmx";
 
     //NPC
     private NpcKiller NpcKiller;
     private NpcInnocent NpcInnocent;
     private NpcChiefOfPolice NpcChiefOfPolicie;
     private NpcDeadBody NpcDeadBody;
-    private io.github.videogame.model.NpcAurora NpcAurora;
+    private NpcAurora NpcAurora;
+    private NpcAnastasia NpcAnastasia;
+    private NpcPoliceOfficer NpcPoliceOfficerOriginal;
+    private NpcPoliceOfficer NpcPoliceOfficer1;
+    private NpcPoliceOfficer NpcPoliceOfficer2;
+    private NpcPoliceOfficer NpcPoliceOfficer3;
+    private NpcPoliceOfficer NpcPoliceOfficer4;
     private CollisionDebugger collisionDebugger;
     private ElevatorDecisionBox elevatorDecisionBox;
 
-    //Salvataggio degli indici di dialogo per gli NPC
-    private int indicePolice;
-    private int indiceKiller;
-    private int indiceDead;
-    private int indiceInnocent;
-    private int indiceAurora;
-
-    //
-    static boolean f_map=false;
-    static String m;
-    //Task
     private TaskView taskView;
 
-    // Costruttore
     public MainGameScreen(Gioco game) {
         this.game = game;
         this.gameState = GameState.getInstance();
@@ -77,32 +69,30 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void show() {
+        System.out.println(mapManager.getCurrentMap());
         player.setSpawn(gameState.getPlayerX(), gameState.getPlayerY());
 
         Gdx.input.setInputProcessor(elevatorDecisionBox.getStage());
         this.batch = game.getBatch();
-        this.stateDirection=0;
 
         //this.mapManager = new MapManager(mapFile,camera);
-        this.magneticKey = new MagneticKey(210, 425); //OK
-        this.flashDriveInnocent = new FlashDriveInnocent(440, 530); //OK
-        this.flashDriveKiller = new FlashDriveKiller(675,525); //OK
-        this.josephPhone = new JosephPhone(193,395); //OK
+        this.magneticKey = new MagneticKey(95, 328); //OK
+        this.flashDriveInnocent = new FlashDriveInnocent(325, 430); //OK
+        this.flashDriveKiller = new FlashDriveKiller(565,430); //OK
+        this.josephPhone = new JosephPhone(80,300); //OK
 
-        this.NpcKiller = new NpcKiller(470,322, movementController); //OK
-        this.NpcInnocent = new NpcInnocent(664, 315, movementController); //OK
-        this.NpcChiefOfPolicie = new NpcChiefOfPolice(500,240,movementController); //OK
-        this.NpcDeadBody = new NpcDeadBody(550,300,movementController); //OK
-        this.NpcAurora = new NpcAurora(540,240,movementController); //OK
+        this.NpcKiller = new NpcKiller(380,190); //OK
+        this.NpcInnocent = new NpcInnocent(530, 170); //OK
+        this.NpcChiefOfPolicie = new NpcChiefOfPolice(440,140); //OK
+        this.NpcDeadBody = new NpcDeadBody(430,180); //OK
+        this.NpcAurora = new NpcAurora(540,240); //OK
+        this.NpcAnastasia = new NpcAnastasia(700,510); //OK
+        this.NpcPoliceOfficerOriginal = new NpcPoliceOfficer(715,415); //OK
+        this.NpcPoliceOfficer1 = NpcPoliceOfficerOriginal.clone(220,480); //OK
+        this.NpcPoliceOfficer2 = NpcPoliceOfficerOriginal.clone(340,517); //OK
+        this.NpcPoliceOfficer3 = NpcPoliceOfficerOriginal.clone(775,413); //OK
+        this.NpcPoliceOfficer4 = NpcPoliceOfficerOriginal.clone(464,316); //OK
 
-       /* //Setto gli indici correttamente (li salva anche se cambia schermata)
-        this.NpcChiefOfPolicie.setDialogIndex(indicePolice);
-        this.NpcKiller.setDialogIndex(indiceKiller);
-        this.NpcInnocent.setDialogIndex(indiceInnocent);
-        this.NpcDeadBody.setDialogIndex(indiceDead);
-        this.NpcAurora.setDialogIndex(indiceAurora);*/
-
-        //TASK
         this.taskView = new TaskView();
 
         //Aggiunta osservatore
@@ -140,6 +130,9 @@ public class MainGameScreen implements Screen {
             return;
         }
 
+        if(NpcAurora.getDialogIndexAct4() > 5){game.setScreen(new VideoOutroScreen(game));}
+        if(NpcAnastasia.getDialogIndexAct1() > 22 & Gdx.input.isKeyJustPressed(Input.Keys.Y) & NpcAnastasia.canBeInteracted()){game.setScreen(new VideoOutro2Screen(game));}
+
         movementController.changeStateDirection(delta);
 
         camera.position.set(player.getX(), player.getY(), 0f);
@@ -150,36 +143,25 @@ public class MainGameScreen implements Screen {
 
         batch.begin();
 
-        player.getInventory().drawInventory(batch);
+        player.getInventory().drawInventory(batch, player.getX(), player.getY());
 
         drawObjects();
         drawNpc();
         playerView.render(batch, delta);
 
         batch.end();
-/*
-        if(NpcDeadBody.getDialogIndex() == 4){
-            NpcDeadBody.notifyObservers();
-            NpcDeadBody.setDialogIndex(5);
-        }*/
 
         if(mapManager.isNearElevators(player.getX(), player.getY()))
             elevatorDecisionBox.show();
         else
             elevatorDecisionBox.hide();
-
         elevatorDecisionBox.handleInput();
-
         elevatorDecisionBox.render();
 
 
-
-        //I due metodo gestiranno il dialogo del NPC
         drawNpcDialogue();
         drawItemDialogue();
-        //setIndexNpc();
 
-        //Disegno le task
         taskView.draw();
 
         collisionDebugger.render(
@@ -188,67 +170,71 @@ public class MainGameScreen implements Screen {
             player.getY() + 4.f,
             7,9f
         );
-
-
-     //  System.out.println(player.getX() + "    " + player.getY());
-
     }
-
-   /* public void setIndexNpc(){
-        //Salvataggio degli indici dei dialoghi degli NPC
-        if(indicePolice <= NpcChiefOfPolicie.getDialogIndex()){
-            indicePolice = NpcChiefOfPolicie.getDialogIndex();
-        }
-        if(indiceDead <= NpcDeadBody.getDialogIndex()){
-            indiceDead = NpcDeadBody.getDialogIndex();
-        }
-        if(indiceInnocent <= NpcInnocent.getDialogIndex()){
-            indiceInnocent = NpcInnocent.getDialogIndex();
-        }
-        if(indiceKiller <= NpcKiller.getDialogIndex()){
-            indiceKiller = NpcKiller.getDialogIndex();
-        }
-        if(indiceAurora <= NpcAurora.getDialogIndex()){
-            indiceAurora = NpcAurora.getDialogIndex();
-        }
-    }*/
 
 
     public void drawNpcDialogue(){
+        StoryState storyState1 = StoryState.getInstance();
 
-        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")) {
+        //NPC PIANO TERRA
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") & storyState1.getDialogueState("NPC_DEADBODY_ACT1")  & player.getInventory().getItemInventory().contains("JosephPhone")) {
             NpcChiefOfPolicie.drawDialogueAct1();
             NpcChiefOfPolicie.drawDialogueAct2();
             NpcInnocent.drawDialogueAct1();
             NpcKiller.drawDialogueAct1();
+            NpcKiller.drawDialogueAct2();
+            NpcChiefOfPolicie.drawDialogueAct3();
+            NpcPoliceOfficerOriginal.drawDialogueAct1();
+            NpcPoliceOfficer1.drawDialogueAct1();
         }
 
+        //NPC UFFICI
         if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
             NpcDeadBody.drawDialogueAct1();
             NpcAurora.drawDialogueAct1();
+            NpcAurora.drawDialogueAct2();
+            NpcAurora.drawDialogueAct3();
+            NpcChiefOfPolicie.drawDialogueAct3();
+            NpcAurora.drawDialogueAct4();
+            NpcAnastasia.drawDialogueAct1();
 
+            StoryState storyState = StoryState.getInstance();
+            if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")){
+                NpcPoliceOfficer2.drawDialogueAct1();
+                NpcPoliceOfficer3.drawDialogueAct1();
+                NpcPoliceOfficer4.drawDialogueAct1();
+            }
         }
     }
 
 
     public void drawNpc(){
-        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")){
+        StoryState storyState = StoryState.getInstance();
+        //NPC NEL PIANO TERRA
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") & storyState.getDialogueState("NPC_DEADBODY_ACT1")  & player.getInventory().getItemInventory().contains("JosephPhone")){
             batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 16, 36);
             batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 16, 36);
             batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 16, 36);
+            batch.draw(NpcPoliceOfficerOriginal.getTexture(), NpcPoliceOfficerOriginal.getSpawn_x(), NpcPoliceOfficerOriginal.getSpawn_y(), 16,36);
+            batch.draw(NpcPoliceOfficer1.getTexture(),NpcPoliceOfficer1.getSpawn_x(),NpcPoliceOfficer1.getSpawn_y(),16,36);
         }
-        if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);}
+        //NPC NEL PRIMO PIANO
+        if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
+            batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);
+
+
+            if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")){
+                batch.draw(NpcPoliceOfficer2.getTexture(),NpcPoliceOfficer2.getSpawn_x(),NpcPoliceOfficer2.getSpawn_y(),16,36);
+                batch.draw(NpcPoliceOfficer3.getTexture(),NpcPoliceOfficer3.getSpawn_x(),NpcPoliceOfficer3.getSpawn_y(),16,36);
+                batch.draw(NpcPoliceOfficer4.getTexture(),NpcPoliceOfficer4.getSpawn_x(),NpcPoliceOfficer4.getSpawn_y(),16,36);
+            }
+        }
     }
-
-
-
 
     //Disegna gli oggetti, SOLO SE IL LORO STATO TAKEN è FALSO
     private void drawObjects() {
-
         //OGGETTI DEL PIANO TERRA
         if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")){
-
                 //OGGETTO CHIAVE MAGNETICA
                 if(!player.getInventory().getItemInventory().contains("MagneticKey")) {
                     batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
@@ -259,7 +245,6 @@ public class MainGameScreen implements Screen {
 
         //OGGETTI DEL PRIMO PIANO
         if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
-
             //OGGETTO CHIAVETTA DEL KILLER
             if(!player.getInventory().getItemInventory().contains("FlashDriveKiller")){
                 batch.draw(flashDriveKiller.getTexture(), flashDriveKiller.getX(), flashDriveKiller.getY(), 6, 6);
@@ -277,11 +262,7 @@ public class MainGameScreen implements Screen {
                 batch.draw(josephPhone.getTexture(), josephPhone.getX(),josephPhone.getY(), 6,6);
                 josephPhone.pickUp();
             }
-
-
         }
-
-
     }
 
     private void drawItemDialogue(){
@@ -290,11 +271,6 @@ public class MainGameScreen implements Screen {
         flashDriveInnocent.drawDialogue();
         magneticKey.drawDialogue();
     }
-
-
-
-
-
 
     @Override
     public void resize(int width, int height) {}
@@ -318,16 +294,6 @@ public class MainGameScreen implements Screen {
             mapManager.dispose();
         }
 
-        // Rilascia le risorse del giocatore
-        if (player != null) {
-            player.dispose(); // Assicurati che la classe Player gestisca il proprio dispose
-        }
-
-        // Rilascia le risorse della mappa
-        if (mapManager != null) {
-            mapManager.dispose(); // Rilascia le risorse della mappa
-        }
-
         // Rilascia le risorse degli oggetti raccolti
         if (magneticKey != null) {
             magneticKey.dispose(); // Assicurati che la classe MagneticKey gestisca il proprio dispose
@@ -345,6 +311,5 @@ public class MainGameScreen implements Screen {
         if (batch != null) {
             batch.dispose(); // Rilascia il batch se è stato creato
         }
-
     }
 }

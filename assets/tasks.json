@@ -7,52 +7,52 @@
     },
     {
       "id": 2,
-      "title": "Chiama la polizia",
+      "title": "Chiama la polizia e parla di persona con l'agente",
       "completed": false
     },
     {
       "id": 3,
-      "title": "Recati al piano terra per parlare con l'agente",
+      "title": "Cerca indizi nell'ufficio del dott. Morrison",
       "completed": false
     },
     {
       "id": 4,
-      "title":"Trova indizi nell'ufficio del dott.Morrison",
+      "title":"Riferisci le informazioni all'agente",
       "completed": false
     },
     {
       "id": 5,
-      "title": "Informa l'agente su quanto hai scoperto",
+      "title": "Conduci le indagini sui due sospettati",
       "completed": false
     },
     {
       "id": 6,
-      "title": "Interroga il dott. Cooper",
+      "title": "1.Trova la chiave dell'ufficio nella mensa\n2.Trova la chiavetta nell'ufficio e falla analizzare da Aurora",
       "completed": false
     },
     {
       "id": 7,
-      "title": "Trova la chiave magnetica dell'ufficio del dott. Cooper (mensa)",
+      "title": "Interroga l'altro sospettato",
       "completed": false
     },
     {
       "id": 8,
-      "title": "Cerca la chiavetta nell'ufficio del dott. Cooper",
+      "title": "1.Trova la chiavetta nell'ufficio\n2.Fai analizzare la chiavetta da Aurora",
       "completed": false
     },
     {
       "id": 9,
-      "title": "Analizza la chiavetta tramite Aurora",
+      "title": "Chiedi spiegazioni al dott.Pierce ",
       "completed": false
     },
     {
       "id": 10,
-      "title": "Interroga il dott. Pierce",
+      "title": "Informa l'agente",
       "completed": false
     },
     {
       "id": 11,
-      "title": "Cerca la chiavetta nell'ufficio del dott. Pierce",
+      "title": "Pubblica tramite Aurora l'algortimo oppure.....",
       "completed": false
     },
     {

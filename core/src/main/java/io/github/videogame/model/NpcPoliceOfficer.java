@@ -7,8 +7,8 @@ import io.github.videogame.controller.MovementController;
 
 public class NpcPoliceOfficer extends NpcCreator implements PrototypePoliceOfficer {
 
-    public NpcPoliceOfficer(float spawn_x, float spawn_y, MovementController movementControllerPlayer) {
-        super(spawn_x, spawn_y, movementControllerPlayer);
+    public NpcPoliceOfficer(float spawn_x, float spawn_y) {
+        super(spawn_x, spawn_y);
         //Setto il nome del Npc
         this.setNpcName("Poliziotto");
         //Setto la texture del Npc
@@ -49,7 +49,7 @@ public class NpcPoliceOfficer extends NpcCreator implements PrototypePoliceOffic
     @Override
     public NpcPoliceOfficer clone(float newSpawnX, float newSpawnY) {
         // Crea una copia dell'oggetto NpcPoliceOfficer con il nuovo punto di spawn
-        NpcPoliceOfficer clone = new NpcPoliceOfficer(newSpawnX, newSpawnY, this.getMovementControllerPlayer());
+        NpcPoliceOfficer clone = new NpcPoliceOfficer(newSpawnX, newSpawnY);
 
         // Copia il dialogo (Array di stringhe)
         clone.setDialogueAct1(this.getDialogueAct1()); // Clona l'array di dialogo
@@ -60,6 +60,4 @@ public class NpcPoliceOfficer extends NpcCreator implements PrototypePoliceOffic
 
         return clone;
     }
-
-
 }

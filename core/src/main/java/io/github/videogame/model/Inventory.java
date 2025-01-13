@@ -40,6 +40,7 @@ public class Inventory {
     }
 
     public void setInventory(ArrayList<String> itemList) {
+        this.itemList.clear();
         for (String itemName : itemList) {
             switch (itemName) {
                 case "MagneticKey":
@@ -65,12 +66,9 @@ public class Inventory {
 
 
 // Metodo per disegnare l'inventario relativo al MovementController
-
-    public void drawInventory(Batch batch) {
+    public void drawInventory(Batch batch, float baseX, float baseY) {
         if (Gdx.input.isKeyPressed(Input.Keys.I)) {
             // Posizione relativa al MovementController
-            float baseX = Player.getInstance().getX(); // Usa la posizione X del controller
-            float baseY = Player.getInstance().getY(); // Usa la posizione Y del controller
             int offsetX = -480; // Offset per spostare l'inventario rispetto al controller
             int offsetY = 240; // Offset verticale
 
@@ -86,5 +84,9 @@ public class Inventory {
                 i++;
             }
         }
+    }
+
+    public void clearInventory(){
+        this.itemList.clear();
     }
 }

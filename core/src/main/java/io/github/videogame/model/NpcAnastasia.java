@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import io.github.videogame.controller.MovementController;
 
 public class NpcAnastasia extends NpcCreator {
-
-
-    public NpcAnastasia(float spawn_x, float spawn_y, MovementController movementControllerPlayer) {
-        super(spawn_x, spawn_y, movementControllerPlayer);
+    public NpcAnastasia(float spawn_x, float spawn_y) {
+        super(spawn_x, spawn_y);
         // Setto il nome del Npc
         this.setNpcName("Anastasia");
         // Setto la texture del Npc
@@ -43,26 +41,31 @@ public class NpcAnastasia extends NpcCreator {
         dialogue[20] = "Joseph:\nLei deve fare la scelta giusta per se stesso. Inserisca la chiavetta";
         dialogue[21] = "***Appaiono caratteri Russi su schermo***";
         dialogue[22] = "Inserire la chiavetta all'interno del computer del Dott.Pierce? Y/N";
+        dialogue[23] = "";
 
         return dialogue;
     }
 
-
     //Conseguenza dell'interazione, cambio di stato del dialogo
     @Override
     public void drawDialogueAct1() {
-        if (canBeInteracted()) {
-            this.getDialogManager().draw();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
-                    this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
-                    this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
-                } else {
-                    this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
-                    this.setDialogIndexAct1(0); // Resetta il dialogo
+        StoryState storyState = StoryState.getInstance();
+        Inventory inventory = Inventory.getInventoryInstance();
+
+        if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3") &
+            inventory.getItemInventory().contains("FlashDriveKiller")) {
+            if (canBeInteracted()) {
+                this.getDialogManager().draw();
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
+                        this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
+                        this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
+                    } else {
+                        this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
+                        this.setDialogIndexAct1(0); // Resetta il dialogo
+                    }
                 }
             }
         }
     }
-
 }

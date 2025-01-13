@@ -42,8 +42,8 @@ public class NpcAurora extends NpcCreator {
 
     private int dialogIndexAct4 =0;
 
-    public NpcAurora(float spawn_x, float spawn_y, MovementController movementControllerPlayer) {
-        super(spawn_x, spawn_y, movementControllerPlayer);
+    public NpcAurora(float spawn_x, float spawn_y) {
+        super(spawn_x, spawn_y);
         // Setto il nome del Npc
         this.setNpcName("Aurora");
         // Setto la texture del Npc
@@ -117,7 +117,7 @@ public class NpcAurora extends NpcCreator {
     //Conseguenza dell'interazione, cambio di stato del dialogo
     @Override
     public void drawDialogueAct1() {
-       StoryState storyState = StoryState.getInstance();
+        StoryState storyState = StoryState.getInstance();
 
         if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")) {
             if (canBeInteracted()) {
@@ -127,6 +127,7 @@ public class NpcAurora extends NpcCreator {
                         this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
                         this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
                         storyState.setDialogueCompleted("NPC_AURORA_ACT1");
+                        this.notifyObservers(4);
                     } else {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.setDialogIndexAct1(0); // Resetta il dialogo
@@ -138,30 +139,48 @@ public class NpcAurora extends NpcCreator {
 
     //Disegna il secondo atto
     public void drawDialogueAct2() {
-        if (canBeInteracted()) {
-            this.getDialogManager().draw();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if ( this.dialogIndexAct2 < this.dialogueAct2.length) {
-                    this.getDialogManager().setDialog(this.dialogueAct2[dialogIndexAct2]); // Mostra la linea corrente
-                    this.dialogIndexAct2 = dialogIndexAct2+1;
-                } else {
-                    this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
-                    this.dialogIndexAct2 = 0; // Resetta il dialogo
+        StoryState storyState = StoryState.getInstance();
+        Inventory inventory = Inventory.getInventoryInstance();
+
+        if (storyState.getDialogueState("NPC_INNOCENT_ACT1") &
+            inventory.getItemInventory().contains("MagneticKey") &
+            inventory.getItemInventory().contains("FlashDriveInnocente")) {
+            if (canBeInteracted()) {
+                this.getDialogManager().draw();
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (this.dialogIndexAct2 < this.dialogueAct2.length) {
+                        this.getDialogManager().setDialog(this.dialogueAct2[dialogIndexAct2]); // Mostra la linea corrente
+                        this.dialogIndexAct2 = dialogIndexAct2 + 1;
+                        storyState.setDialogueCompleted("NPC_AURORA_ACT2");
+                        this.notifyObservers(7);
+                    } else {
+                        this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
+                        this.dialogIndexAct2 = 0; // Resetta il dialogo
+                    }
                 }
             }
         }
     }
 
     public void drawDialogueAct3() {
-        if (canBeInteracted()) {
-            this.getDialogManager().draw();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if ( this.dialogIndexAct3 < this.dialogueAct3.length) {
-                    this.getDialogManager().setDialog(this.dialogueAct3[dialogIndexAct3]); // Mostra la linea corrente
-                    this.dialogIndexAct3 = dialogIndexAct3+1;
-                } else {
-                    this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
-                    this.dialogIndexAct3 = 0; // Resetta il dialogo
+        StoryState storyState = StoryState.getInstance();
+        Inventory inventory = Inventory.getInventoryInstance();
+
+        if( storyState.getDialogueState("NPC_KILLER_ACT1") &
+            inventory.getItemInventory().contains("FlashDriveKiller")) {
+
+            if (canBeInteracted()) {
+                this.getDialogManager().draw();
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (this.dialogIndexAct3 < this.dialogueAct3.length) {
+                        this.getDialogManager().setDialog(this.dialogueAct3[dialogIndexAct3]); // Mostra la linea corrente
+                        this.dialogIndexAct3 = dialogIndexAct3 + 1;
+                        storyState.setDialogueCompleted("NPC_AURORA_ACT3");
+                        this.notifyObservers(9);
+                    } else {
+                        this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
+                        this.dialogIndexAct3 = 0; // Resetta il dialogo
+                    }
                 }
             }
         }
@@ -169,19 +188,21 @@ public class NpcAurora extends NpcCreator {
 
 
     public void drawDialogueAct4() {
-        if (canBeInteracted()) {
-            this.getDialogManager().draw();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if ( this.dialogIndexAct4 < this.dialogueAct4.length) {
-                    this.getDialogManager().setDialog(this.dialogueAct4[dialogIndexAct4]); // Mostra la linea corrente
-                    this.dialogIndexAct4 = dialogIndexAct4+1;
-                } else {
-                    this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
-                    this.dialogIndexAct4 = 0; // Resetta il dialogo
+        StoryState storyState = StoryState.getInstance();
+        if (storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3")) {
+            if (canBeInteracted()) {
+                this.getDialogManager().draw();
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (this.dialogIndexAct4 < this.dialogueAct4.length) {
+                        this.getDialogManager().setDialog(this.dialogueAct4[dialogIndexAct4]); // Mostra la linea corrente
+                        this.dialogIndexAct4 = dialogIndexAct4 + 1;
+                        storyState.setDialogueCompleted("NPC_AURORA_ACT4");
+                    } else {
+                        this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
+                        this.dialogIndexAct4 = 0; // Resetta il dialogo
+                    }
                 }
             }
         }
     }
-
-
 }

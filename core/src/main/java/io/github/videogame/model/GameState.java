@@ -1,6 +1,7 @@
 package io.github.videogame.model;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class GameState {
     private static GameState instance;
@@ -9,17 +10,19 @@ public class GameState {
     private String currentMap;
     private ArrayList<String> inventory;
     private int idCurrentTask;
+    private Map<String, Boolean> storyState;
 
     public GameState(){
         initialState();
     }
 
     public void initialState() {
-        playerX = 356;
-        playerY = 400;
+        playerX = 456;
+        playerY = 100;
         currentMap = "Mappa-prova/atrio-mensa.tmx";
         inventory = new ArrayList<>();
         idCurrentTask = 1;
+
     }
 
     public static GameState getInstance() {

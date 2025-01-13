@@ -6,49 +6,84 @@ filter: Linear, Linear
 repeat: none
 Devil Children GBC English Patch Font
   rotate: false
-  xy: 1, 939
+  xy: 1, 972
   size: 505, 31
   orig: 505, 31
   offset: 0, 0
   index: -1
 Devil Children GBC English Patch Font(1)
   rotate: false
-  xy: 1, 906
+  xy: 1, 939
   size: 503, 31
   orig: 503, 31
   offset: 0, 0
   index: -1
+continue-button-active
+  rotate: false
+  xy: 387, 417
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+continue-button-disabled
+  rotate: false
+  xy: 387, 319
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+continue-button-inactive
+  rotate: false
+  xy: 387, 221
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+newgame-button-inactive
+  rotate: false
+  xy: 387, 25
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+newgame_button_active
+  rotate: false
+  xy: 387, 123
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
 checkbox-act
   rotate: false
-  xy: 894, 956
+  xy: 773, 891
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 checkbox-not-act
   rotate: false
-  xy: 773, 858
+  xy: 387, 923
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 exit_button_active
   rotate: false
-  xy: 1, 808
+  xy: 1, 841
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 exit_button_inactive
   rotate: false
-  xy: 387, 482
+  xy: 387, 515
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 knob-bf
   rotate: false
-  xy: 387, 895
+  xy: 1, 46
   size: 9, 9
   split: 0, 0, 0, 0
   orig: 9, 9
@@ -56,91 +91,91 @@ knob-bf
   index: -1
 load_button_active
   rotate: false
-  xy: 1, 710
+  xy: 1, 743
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 load_button_inactive
   rotate: false
-  xy: 1, 612
+  xy: 1, 645
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 main-menu
   rotate: false
-  xy: 1, 514
+  xy: 1, 547
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 main-menu-active
   rotate: false
-  xy: 1, 416
+  xy: 1, 449
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 play_button_active
   rotate: false
-  xy: 1, 318
+  xy: 1, 351
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 play_button_inactive
   rotate: false
-  xy: 1, 220
+  xy: 1, 253
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 resume
   rotate: false
-  xy: 1, 122
+  xy: 1, 155
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 resume-active
   rotate: false
-  xy: 1, 24
+  xy: 1, 57
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 save
   rotate: false
-  xy: 508, 874
+  xy: 508, 907
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 save-active
   rotate: false
-  xy: 387, 776
+  xy: 387, 809
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 settings_button_active
   rotate: false
-  xy: 387, 678
+  xy: 387, 711
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 settings_button_inactive
   rotate: false
-  xy: 387, 580
+  xy: 387, 613
   size: 384, 96
   orig: 384, 96
   offset: 0, 0
   index: -1
 slider
   rotate: false
-  xy: 1, 1
+  xy: 894, 982
   size: 111, 21
   split: 0, 0, 0, 0
   pad: 8, 8, 7, 7

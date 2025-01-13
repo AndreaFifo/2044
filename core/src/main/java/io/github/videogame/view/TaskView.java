@@ -46,15 +46,10 @@ public class TaskView implements Observer {
     public void dispose() {
         stage.dispose();
     }
-    /*
-    public void setNextTask(){
-        taskModel.setNextTask();
-        updateTasks();
-    }*/
 
     @Override
-    public void update() {
-        taskModel.setNextTask();
+    public void update(int id) {
+        taskModel.setTask(id);
         updateTasks();
     }
 }

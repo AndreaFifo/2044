@@ -10,7 +10,6 @@ import io.github.videogame.view.screens.MainGameScreen;
 //Factory Method
 
 public class Item {
-
     // Attributi dell'oggetto
     private Texture texture;                 // Texture dell'oggetto
     private Sound pickUpSound;              // Suono emesso quando l'oggetto viene raccolto
@@ -127,6 +126,4 @@ public class Item {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
 }

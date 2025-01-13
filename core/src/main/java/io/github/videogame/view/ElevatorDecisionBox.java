@@ -48,7 +48,7 @@ public class ElevatorDecisionBox {
     public void show() {
         String mapName = MapManager.getInstance().getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") ? "offices" : "lobby";
         label.setText("[E] Go to the " + mapName);
-        table.setPosition(Player.getInstance().getX() + 450, Player.getInstance().getY() + 200);
+        table.setPosition(Player.getInstance().getX() + 550, Player.getInstance().getY() + 300);
         label.setVisible(true);
         visible = true;
     }
