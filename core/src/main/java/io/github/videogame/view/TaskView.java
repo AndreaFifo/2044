@@ -51,10 +51,15 @@ public class TaskView implements Observer {
         taskModel.setNextTask();
         updateTasks();
     }*/
-
+/*
     @Override
     public void update() {
         taskModel.setNextTask();
+        updateTasks();
+    }*/
+    @Override
+    public void update(int id) {
+        taskModel.setTask(id);
         updateTasks();
     }
 }

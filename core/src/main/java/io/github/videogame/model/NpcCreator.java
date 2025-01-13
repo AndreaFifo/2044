@@ -70,9 +70,9 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     }
 
     @Override
-    public void notifyObservers() {
+    public void notifyObservers(int id) {
         for (Observer observer : observers) {
-            observer.update();
+            observer.update(id);
         }
     }
 

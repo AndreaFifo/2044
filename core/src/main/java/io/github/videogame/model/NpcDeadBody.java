@@ -35,13 +35,16 @@ public class NpcDeadBody extends NpcCreator{
     public void drawDialogueAct1() {
         StoryState storyState = StoryState.getInstance();
 
+
         if (canBeInteracted()) {
             this.getDialogManager().draw();
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if (this.getDialogIndexAct1() < this.getDialogueAct1().length -1) {
+                if (this.getDialogIndexAct1() < this.getDialogueAct1().length ) {
                     this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
                     this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
                     storyState.setDialogueCompleted("NPC_DEADBODY_ACT1");
+                    this.notifyObservers(2);
+
                 } else {
                     this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                     this.setDialogIndexAct1(0); // Resetta il dialogo

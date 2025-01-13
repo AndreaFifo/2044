@@ -43,6 +43,7 @@ public class NpcAnastasia extends NpcCreator {
         dialogue[20] = "Joseph:\nLei deve fare la scelta giusta per se stesso. Inserisca la chiavetta";
         dialogue[21] = "***Appaiono caratteri Russi su schermo***";
         dialogue[22] = "Inserire la chiavetta all'interno del computer del Dott.Pierce? Y/N";
+        dialogue[23] = "";
 
         return dialogue;
     }
@@ -51,15 +52,21 @@ public class NpcAnastasia extends NpcCreator {
     //Conseguenza dell'interazione, cambio di stato del dialogo
     @Override
     public void drawDialogueAct1() {
-        if (canBeInteracted()) {
-            this.getDialogManager().draw();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
-                    this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
-                    this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
-                } else {
-                    this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
-                    this.setDialogIndexAct1(0); // Resetta il dialogo
+        StoryState storyState = StoryState.getInstance();
+        Inventory inventory = Inventory.getInventoryInstance();
+
+        if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3") &
+        inventory.getItemInventory().contains("FlashDriveKiller")) {
+            if (canBeInteracted()) {
+                this.getDialogManager().draw();
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
+                        this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
+                        this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
+                    } else {
+                        this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
+                        this.setDialogIndexAct1(0); // Resetta il dialogo
+                    }
                 }
             }
         }

@@ -56,6 +56,7 @@ public class NpcInnocent extends NpcCreator{
                         this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
                         this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
                         storyState.setDialogueCompleted("NPC_INNOCENT_ACT1");
+                        this.notifyObservers(6);
                     } else {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.setDialogIndexAct1(0); // Resetta il dialogo

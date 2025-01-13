@@ -99,6 +99,7 @@ public class NpcChiefOfPolice extends NpcCreator {
                         this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]);
                         this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
                         storyState.setDialogueCompleted("NPC_CHIEF_OF_POLICE_ACT1");
+                        this.notifyObservers(3);
                     } else {
                         this.getDialogManager().setDialog("");
                         this.setDialogIndexAct1(0);
@@ -120,6 +121,7 @@ public class NpcChiefOfPolice extends NpcCreator {
                         this.getDialogManager().setDialog(this.dialogueAct2[dialogIndexAct2]);
                         this.dialogIndexAct2++;
                         storyState.setDialogueCompleted("NPC_CHIEF_OF_POLICE_ACT2");
+                        this.notifyObservers(5);
                     } else {
                         this.getDialogManager().setDialog("");
                         this.dialogIndexAct2 = 0;
@@ -132,15 +134,21 @@ public class NpcChiefOfPolice extends NpcCreator {
 
     // Disegna il terzo atto
     public void drawDialogueAct3() {
-        if (canBeInteracted()) {
-            this.getDialogManager().draw();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if (this.dialogIndexAct3 < this.dialogueAct3.length) {
-                    this.getDialogManager().setDialog(this.dialogueAct3[dialogIndexAct3]);
-                    this.dialogIndexAct3++;
-                } else {
-                    this.getDialogManager().setDialog("");
-                    this.dialogIndexAct3 = 0;
+        StoryState storyState = StoryState.getInstance();
+
+        if (storyState.getDialogueState("NPC_KILLER_ACT2")) {
+            if (canBeInteracted()) {
+                this.getDialogManager().draw();
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (this.dialogIndexAct3 < this.dialogueAct3.length) {
+                        this.getDialogManager().setDialog(this.dialogueAct3[dialogIndexAct3]);
+                        this.dialogIndexAct3++;
+                        storyState.setDialogueCompleted("NPC_CHIEF_OF_POLICE_ACT3");
+                        this.notifyObservers(11);
+                    } else {
+                        this.getDialogManager().setDialog("");
+                        this.dialogIndexAct3 = 0;
+                    }
                 }
             }
         }

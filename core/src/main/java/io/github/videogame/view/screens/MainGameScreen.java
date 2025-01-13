@@ -40,16 +40,19 @@ public class MainGameScreen implements Screen {
     private NpcInnocent NpcInnocent;
     private NpcChiefOfPolice NpcChiefOfPolicie;
     private NpcDeadBody NpcDeadBody;
-    private io.github.videogame.model.NpcAurora NpcAurora;
+    private NpcAurora NpcAurora;
+    private NpcAnastasia NpcAnastasia;
+    private NpcPoliceOfficer NpcPoliceOfficerOriginal;
+    private NpcPoliceOfficer NpcPoliceOfficer1;
+    private NpcPoliceOfficer NpcPoliceOfficer2;
+    private NpcPoliceOfficer NpcPoliceOfficer3;
+    private NpcPoliceOfficer NpcPoliceOfficer4;
+
+
+
     private CollisionDebugger collisionDebugger;
     private ElevatorDecisionBox elevatorDecisionBox;
 
-    //Salvataggio degli indici di dialogo per gli NPC
-    private int indicePolice;
-    private int indiceKiller;
-    private int indiceDead;
-    private int indiceInnocent;
-    private int indiceAurora;
 
     //
     static boolean f_map=false;
@@ -94,13 +97,14 @@ public class MainGameScreen implements Screen {
         this.NpcChiefOfPolicie = new NpcChiefOfPolice(500,240,movementController); //OK
         this.NpcDeadBody = new NpcDeadBody(550,300,movementController); //OK
         this.NpcAurora = new NpcAurora(540,240,movementController); //OK
+        this.NpcAnastasia = new NpcAnastasia(700,510,movementController); //OK
+        this.NpcPoliceOfficerOriginal = new NpcPoliceOfficer(715,415,movementController); //OK
+        this.NpcPoliceOfficer1 = NpcPoliceOfficerOriginal.clone(220,480); //OK
+        this.NpcPoliceOfficer2 = NpcPoliceOfficerOriginal.clone(340,517); //OK
+        this.NpcPoliceOfficer3 = NpcPoliceOfficerOriginal.clone(775,413); //OK
+        this.NpcPoliceOfficer4 = NpcPoliceOfficerOriginal.clone(464,316); //OK
 
-       /* //Setto gli indici correttamente (li salva anche se cambia schermata)
-        this.NpcChiefOfPolicie.setDialogIndex(indicePolice);
-        this.NpcKiller.setDialogIndex(indiceKiller);
-        this.NpcInnocent.setDialogIndex(indiceInnocent);
-        this.NpcDeadBody.setDialogIndex(indiceDead);
-        this.NpcAurora.setDialogIndex(indiceAurora);*/
+        //
 
         //TASK
         this.taskView = new TaskView();
@@ -111,6 +115,7 @@ public class MainGameScreen implements Screen {
         NpcInnocent.addObserver(taskView);
         NpcDeadBody.addObserver(taskView);
         NpcAurora.addObserver(taskView);
+        //NpcAnastasia.addObserver(taskView);
     }
 
     //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
@@ -139,6 +144,10 @@ public class MainGameScreen implements Screen {
             screenManager.showScreen(ScreenManager.ScreenType.PAUSE); // Mostra il menu pausa
             return;
         }
+        if(NpcAurora.getDialogIndexAct4() > 5){game.setScreen(new VideoOutroScreen(game));}
+        if(NpcAnastasia.getDialogIndexAct1() > 22 & Gdx.input.isKeyJustPressed(Input.Keys.Y) & NpcAnastasia.canBeInteracted()){game.setScreen(new VideoOutro2Screen(game));}
+
+
 
         movementController.changeStateDirection(delta);
 
@@ -157,11 +166,7 @@ public class MainGameScreen implements Screen {
         playerView.render(batch, delta);
 
         batch.end();
-/*
-        if(NpcDeadBody.getDialogIndex() == 4){
-            NpcDeadBody.notifyObservers();
-            NpcDeadBody.setDialogIndex(5);
-        }*/
+
 
         if(mapManager.isNearElevators(player.getX(), player.getY()))
             elevatorDecisionBox.show();
@@ -177,7 +182,17 @@ public class MainGameScreen implements Screen {
         //I due metodo gestiranno il dialogo del NPC
         drawNpcDialogue();
         drawItemDialogue();
-        //setIndexNpc();
+
+/*
+        StoryState storyState = StoryState.getInstance();
+        if(storyState.getDialogueState("NPC_DEADBODY_ACT1")){
+            NpcDeadBody.notifyObservers(2);
+        }
+*/
+
+
+
+
 
         //Disegno le task
         taskView.draw();
@@ -190,54 +205,73 @@ public class MainGameScreen implements Screen {
         );
 
 
-     //  System.out.println(player.getX() + "    " + player.getY());
+       System.out.println(player.getX() + "    " + player.getY());
 
     }
 
-   /* public void setIndexNpc(){
-        //Salvataggio degli indici dei dialoghi degli NPC
-        if(indicePolice <= NpcChiefOfPolicie.getDialogIndex()){
-            indicePolice = NpcChiefOfPolicie.getDialogIndex();
-        }
-        if(indiceDead <= NpcDeadBody.getDialogIndex()){
-            indiceDead = NpcDeadBody.getDialogIndex();
-        }
-        if(indiceInnocent <= NpcInnocent.getDialogIndex()){
-            indiceInnocent = NpcInnocent.getDialogIndex();
-        }
-        if(indiceKiller <= NpcKiller.getDialogIndex()){
-            indiceKiller = NpcKiller.getDialogIndex();
-        }
-        if(indiceAurora <= NpcAurora.getDialogIndex()){
-            indiceAurora = NpcAurora.getDialogIndex();
-        }
-    }*/
+
 
 
     public void drawNpcDialogue(){
 
-        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")) {
+        StoryState storyState1 = StoryState.getInstance();
+
+        //NPC PIANO TERRA
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") & storyState1.getDialogueState("NPC_DEADBODY_ACT1")  & player.getInventory().getItemInventory().contains("JosephPhone")) {
             NpcChiefOfPolicie.drawDialogueAct1();
             NpcChiefOfPolicie.drawDialogueAct2();
             NpcInnocent.drawDialogueAct1();
             NpcKiller.drawDialogueAct1();
+            NpcKiller.drawDialogueAct2();
+            NpcChiefOfPolicie.drawDialogueAct3();
+            NpcPoliceOfficerOriginal.drawDialogueAct1();
+            NpcPoliceOfficer1.drawDialogueAct1();
+
         }
 
+        //NPC UFFICI
         if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
             NpcDeadBody.drawDialogueAct1();
             NpcAurora.drawDialogueAct1();
+            NpcAurora.drawDialogueAct2();
+            NpcAurora.drawDialogueAct3();
+            NpcChiefOfPolicie.drawDialogueAct3();
+            NpcAurora.drawDialogueAct4();
+            NpcAnastasia.drawDialogueAct1();
+
+            StoryState storyState = StoryState.getInstance();
+            if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")){
+                NpcPoliceOfficer2.drawDialogueAct1();
+                NpcPoliceOfficer3.drawDialogueAct1();
+                NpcPoliceOfficer4.drawDialogueAct1();
+            }
+
 
         }
     }
 
 
     public void drawNpc(){
-        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")){
+        StoryState storyState = StoryState.getInstance();
+        //NPC NEL PIANO TERRA
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") & storyState.getDialogueState("NPC_DEADBODY_ACT1")  & player.getInventory().getItemInventory().contains("JosephPhone")){
             batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 16, 36);
             batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 16, 36);
             batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 16, 36);
+            batch.draw(NpcPoliceOfficerOriginal.getTexture(), NpcPoliceOfficerOriginal.getSpawn_x(), NpcPoliceOfficerOriginal.getSpawn_y(), 16,36);
+            batch.draw(NpcPoliceOfficer1.getTexture(),NpcPoliceOfficer1.getSpawn_x(),NpcPoliceOfficer1.getSpawn_y(),16,36);
         }
-        if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);}
+        //NPC NEL PRIMO PIANO
+        if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
+            batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);
+
+
+            if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")){
+                batch.draw(NpcPoliceOfficer2.getTexture(),NpcPoliceOfficer2.getSpawn_x(),NpcPoliceOfficer2.getSpawn_y(),16,36);
+                batch.draw(NpcPoliceOfficer3.getTexture(),NpcPoliceOfficer3.getSpawn_x(),NpcPoliceOfficer3.getSpawn_y(),16,36);
+                batch.draw(NpcPoliceOfficer4.getTexture(),NpcPoliceOfficer4.getSpawn_x(),NpcPoliceOfficer4.getSpawn_y(),16,36);
+            }
+        }
     }
 
 
