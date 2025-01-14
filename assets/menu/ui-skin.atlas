@@ -1,0 +1,191 @@
+
+ui-skin.png
+size: 2048, 2048
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+Devil Children GBC English Patch Font
+  rotate: false
+  xy: 1, 1471
+  size: 505, 31
+  orig: 505, 31
+  offset: 0, 0
+  index: -1
+Devil Children GBC English Patch Font(1)
+  rotate: false
+  xy: 515, 1985
+  size: 503, 31
+  orig: 503, 31
+  offset: 0, 0
+  index: -1
+continue-button-active
+  rotate: false
+  xy: 1, 393
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+continue-button-disabled
+  rotate: false
+  xy: 1, 295
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+continue-button-inactive
+  rotate: false
+  xy: 1, 197
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+newgame-button-inactive
+  rotate: false
+  xy: 1, 1
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+newgame_button_active
+  rotate: false
+  xy: 1, 99
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+checkbox-act
+  rotate: false
+  xy: 387, 1455
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+checkbox-not-act
+  rotate: false
+  xy: 901, 1969
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+exit_button_active
+  rotate: false
+  xy: 1, 1373
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+exit_button_inactive
+  rotate: false
+  xy: 1, 491
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+knob-bf
+  rotate: false
+  xy: 515, 1582
+  size: 9, 9
+  split: 0, 0, 0, 0
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
+load_button_active
+  rotate: false
+  xy: 515, 1887
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+load_button_inactive
+  rotate: false
+  xy: 1, 1275
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+main-menu
+  rotate: false
+  xy: 515, 1789
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+main-menu-active
+  rotate: false
+  xy: 1, 1177
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+play_button_active
+  rotate: false
+  xy: 515, 1691
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+play_button_inactive
+  rotate: false
+  xy: 1, 1079
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+resume
+  rotate: false
+  xy: 515, 1593
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+resume-active
+  rotate: false
+  xy: 1, 981
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+save
+  rotate: false
+  xy: 1, 883
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+save-active
+  rotate: false
+  xy: 1, 785
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+settings_button_active
+  rotate: false
+  xy: 1, 687
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+settings_button_inactive
+  rotate: false
+  xy: 1, 589
+  size: 384, 96
+  orig: 384, 96
+  offset: 0, 0
+  index: -1
+slider
+  rotate: false
+  xy: 1020, 1995
+  size: 111, 21
+  split: 0, 0, 0, 0
+  pad: 8, 8, 7, 7
+  orig: 111, 21
+  offset: 0, 0
+  index: -1
+font
+  rotate: false
+  xy: 1, 1504
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1

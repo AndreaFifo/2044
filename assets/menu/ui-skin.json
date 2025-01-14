@@ -1,0 +1,106 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	Devil_Children_GBC_English_Patch_Font: {
+		file: Devil Children GBC English Patch Font.fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+	Devil_Children_GBC_English_Patch_Font1: {
+		file: Devil Children GBC English Patch Font(1).fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+	font: {
+		file: font.fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	RGBA_0_0_0_255: {
+		r: 0
+		g: 0
+		b: 0
+		a: 1
+	}
+	RGBA_255_255_255_255: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	exit: {
+		up: exit_button_inactive
+		down: exit_button_active
+	}
+	load: {
+		up: load_button_inactive
+		down: load_button_active
+	}
+	settings: {
+		up: settings_button_inactive
+		down: settings_button_active
+	}
+	play: {
+		up: play_button_inactive
+		down: play_button_active
+	}
+	main-menu: {
+		up: main-menu
+		down: main-menu-active
+	}
+	save: {
+		up: save
+		down: save-active
+	}
+	resume: {
+		up: resume
+		down: resume-active
+	}
+	continue: {
+		up: continue-button-inactive
+		down: continue-button-active
+		disabled: continue-button-disabled
+	}
+	newgame: {
+		up: newgame-button-inactive
+		down: newgame_button_active
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+	default: {
+		checkboxOn: checkbox-act
+		checkboxOff: checkbox-not-act
+		font: Devil_Children_GBC_English_Patch_Font1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: Devil_Children_GBC_English_Patch_Font
+	}
+	general: {
+		font: Devil_Children_GBC_English_Patch_Font1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+	default-horizontal: {
+		background: slider
+		knobBefore: knob-bf
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: Devil_Children_GBC_English_Patch_Font1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+}

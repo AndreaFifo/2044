@@ -2,91 +2,87 @@ package io.github.videogame.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.*;
+import io.github.videogame.model.GameState;
+import io.github.videogame.model.Player;
 
-
-//Questa classe gestisce i movimenti del gioco
+import java.util.List;
 
 public class MovementController {
-
+    private static MovementController instance;
     private static final float SPEED = 150;
-    private float x, y;
-    private float velocityX, velocityY;
-    //Stato di direzione (0 = giù, 1 = sinistra, 2 = destra, 3 = su)
-    private int StateDirection;
+    private Player player;
+    private int stateDirection;
+    private boolean isMoving;
+    private MapManager mapManager;
 
-
-    // Costruttore:
-    public MovementController(float SpawnAscissa, float SpawnOrdinata, int stateDirection) {
-        this.x = SpawnAscissa;
-        this.y = SpawnOrdinata;
-        this.velocityX = 0f;
-        this.velocityY = 0f;
-        this.StateDirection = setStateDirection(0); // Direzione iniziale (giù)
+    private MovementController() {
+        this.player = Player.getInstance();
+        this.stateDirection = setStateDirection(0);
+        this.isMoving = false;
+        this.mapManager = MapManager.getInstance();
     }
 
-    public int setStateDirection(int stateDirection){
-        return this.StateDirection = stateDirection;
+    public static MovementController getInstance() {
+        synchronized (MovementController.class) {
+            if (instance == null) {
+                instance = new MovementController();
+            }
+        }
+
+        return instance;
     }
 
-    // Aggiorna il movimento
+    public int setStateDirection(int stateDirection) {
+        return this.stateDirection = stateDirection;
+    }
+
     public void changeStateDirection(float deltaTime) {
-
-        // Ripristina la velocità per ogni frame
-        velocityX = 0f;
-        velocityY = 0f;
+        float velocityX = 0f;
+        float velocityY = 0f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            velocityY = SPEED;  // Movimento positivo sull'asse Y (su)
-            StateDirection = setStateDirection(1); // Su
+            velocityY = SPEED;
+            stateDirection = setStateDirection(1);
         }
-        // Movimento giù
         if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            velocityY = -SPEED; // Movimento negativo sull'asse Y (giù)
-            StateDirection = setStateDirection(0); // Giù
+            velocityY = -SPEED;
+            stateDirection = setStateDirection(0);
         }
-        // Movimento sinistra
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            velocityX = -SPEED; // Movimento negativo sull'asse X (sinistra)
-            StateDirection = setStateDirection(2); // Sinistra
+            velocityX = -SPEED;
+            stateDirection = setStateDirection(2);
         }
-        // Movimento destra
         if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            velocityX = SPEED;  // Movimento positivo sull'asse X (destra)
-            StateDirection = setStateDirection(3); // Destra
+            velocityX = SPEED;
+            stateDirection = setStateDirection(3);
         }
 
-        // Aggiornamento della posizione attuale della texture del personaggio
-        x += velocityX * deltaTime;
-        y += velocityY * deltaTime;
+        // Calcola la nuova posizione
+        float newX = player.getX() + velocityX * deltaTime;
+        float newY = player.getY() + velocityY * deltaTime;
+
+        if(mapManager.isColliding(newX, player.getY()))
+            player.setX(newX);
+        if(mapManager.isColliding(player.getX(), newY))
+            player.setY(newY);
+
+        // Aggiorna lo stato di movimento
+        isMoving = velocityX != 0 || velocityY != 0;
+
+        updateGameState();
     }
 
-    public boolean isPlayerMoving(){
-        return (getVelocityX() != 0 || getVelocityY() != 0);
+    public boolean isPlayerMoving() {
+        return isMoving;
     }
 
-    // Getter per le coordinate
-    //in teoria dovrebbero essere nel player queste cose
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    // Getter per la direzione corrente
     public int getStateDirection() {
-        return StateDirection;
+        return stateDirection;
     }
 
-    // Getter per la velocità orizzontale
-    public float getVelocityX() {
-        return velocityX;
+    private void updateGameState() {
+        GameState.getInstance().setPlayerX(player.getX());
+        GameState.getInstance().setPlayerY(player.getY());
     }
-
-    // Getter per la velocità verticale
-    public float getVelocityY() {
-        return velocityY;
-    }
-
 }

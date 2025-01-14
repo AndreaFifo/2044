@@ -1,6 +1,7 @@
 package io.github.videogame.view.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.video.VideoPlayer;
 import com.badlogic.gdx.video.VideoPlayerCreator;
+import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.model.Gioco;
 
 import java.io.FileNotFoundException;
@@ -54,6 +56,15 @@ public class VideoIntroScreen implements Screen {
             batch.draw(frame, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         batch.end();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched()) {
+            goToMainScreen();
+        }
+    }
+
+    private void goToMainScreen() {
+        videoPlayer.stop(); // Interrompe il video se è ancora in riproduzione
+        ScreenManager.getInstance().showScreen(ScreenManager.ScreenType.GAME); // Passa alla schermata principale
     }
 
     @Override

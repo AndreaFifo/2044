@@ -8,11 +8,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
 public final class Utility {
-    public static final AssetManager assetManager = new AssetManager();
+    public static AssetManager assetManager = new AssetManager();
 
     private static final InternalFileHandleResolver filePathResolver = new InternalFileHandleResolver();
 
@@ -46,6 +47,9 @@ public final class Utility {
                         break;
                     case "sounds":
                         loadAsset(path, Sound.class);
+                        break;
+                    case "skin":
+                        loadAsset(path, Skin.class);
                         break;
                 }
             }

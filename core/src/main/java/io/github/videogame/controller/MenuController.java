@@ -1,48 +1,70 @@
 package io.github.videogame.controller;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import io.github.videogame.model.Gioco;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+import io.github.videogame.model.*;
 import io.github.videogame.view.screens.MainGameScreen;
-import io.github.videogame.model.Utility;
 import io.github.videogame.view.screens.MenuScreen;
 import io.github.videogame.view.screens.VideoIntroScreen;
+
+import java.util.ArrayList;
 
 public class MenuController {
     private final Gioco game;
     private final MenuScreen view;
-    private final Sound buttonClickSound;
+    private ScreenManager screenManager;
+    private AudioController audioController;
+    private Sound buttonClickSound;
 
     public MenuController(Gioco game, MenuScreen view) {
         this.game = game;
         this.view = view;
-        this.buttonClickSound = Utility.getAsset("menu/button-click.mp3", Sound.class);
+        this.screenManager = ScreenManager.getInstance();
 
-        setupListeners();
+        this.audioController = AudioController.getInstance();
     }
 
-    private void setupListeners() {
-        view.getPlayBtn().addListener(new ChangeListener() {
+    public void setup() {
+        this.buttonClickSound = Utility.getAsset("menu/button-click.mp3", Sound.class);
+
+        view.getNewGameBtn().addListener(new ChangeListener() {
+            final Preferences preferences = Gdx.app.getPreferences("game_preferences");
+            final boolean isFirstGame = preferences.getBoolean("first_game", true);
+
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                buttonClickSound.play();
+                buttonClickSound.play(audioController.getSoundsVolume());
+                audioController.getMusic("menu/main-menu-music.mp3").stop();
+                GameStateController.getInstance().initialGameState();
+
                 game.setScreen(new VideoIntroScreen(game));
             }
         });
 
-        view.getLoadBtn().addListener(new ChangeListener() {
+        view.getContinueeBtn().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                buttonClickSound.play();
+                if(!view.getContinueFlag())
+                    return;
+
+                buttonClickSound.play(audioController.getSoundsVolume());
+                GameStateController.getInstance().loadGameState();
+                screenManager.showScreen(ScreenManager.ScreenType.GAME);
             }
         });
 
         view.getSettingsBtn().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                buttonClickSound.play();
+                buttonClickSound.play(audioController.getSoundsVolume());
+                screenManager.showScreen(ScreenManager.ScreenType.SETTINGS);
             }
         });
 
@@ -53,4 +75,55 @@ public class MenuController {
             }
         });
     }
+
+//    public void loadGameState() {
+//        try {
+//            // Leggi il contenuto del file JSON
+//            BufferedReader reader = new BufferedReader(new FileReader("saves/game_save.json"));
+//            StringBuilder content = new StringBuilder();
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                content.append(line.trim());
+//            }
+//            reader.close();
+//
+//            System.out.println(content.toString());
+//
+//            //per trovare riga inventario
+//            // Trova la riga che contiene "iteminventory"
+//            String inventoryLine = "";
+//            String jsonContent = content.toString();
+//            int startIndex = jsonContent.indexOf("\"iteminventory\":"); // Trova l'inizio della sezione "iteminventory"
+//            if (startIndex != -1) {
+//                // Trova la posizione dell'inizio dell'array
+//                int arrayStartIndex = jsonContent.indexOf("[", startIndex);  // Trova l'inizio dell'array
+//                if (arrayStartIndex != -1) {
+//                    // Trova la fine dell'array
+//                    int arrayEndIndex = jsonContent.indexOf("]", arrayStartIndex);
+//                    if (arrayEndIndex != -1) {
+//                        // Estrai l'array senza le virgolette
+//                        inventoryLine = jsonContent.substring(arrayStartIndex, arrayEndIndex + 1);  // Estrarre la parte che contiene l'inventario
+//                    }
+//                }
+//            }
+//
+//            // Usa Gson per deserializzare il JSON nel GameState
+//            Gson gson = new Gson();
+//            Gamestate gameState = gson.fromJson(content.toString(), Gamestate.class);
+//
+//
+//            if (gameState == null) {
+//                System.out.println("Errore nel parsing del JSON. Il contenuto potrebbe non corrispondere alla struttura attesa.");
+//                return;
+//            }
+//
+//
+//            // Aggiungi il Memento al Caretaker
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Errore durante il caricamento dello stato del gioco.");
+//        }
+//    }
+
 }

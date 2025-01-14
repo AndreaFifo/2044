@@ -2,22 +2,23 @@ package io.github.videogame.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 // SINGLETON
 public class Inventory {
 
     // Variabile statica per l'istanza singleton
     private static Inventory instance;
-    private ArrayList<Item> itemList;
-
-
+    private Map<String, Texture> itemList;
 
     // Costruttore privato per impedire l'istanza diretta
     private Inventory() {
-        this.itemList = new ArrayList<>();
+        this.itemList = new TreeMap<>();
     }
 
     // Ottieni l'istanza dell'inventario (metodo singleton)
@@ -28,46 +29,66 @@ public class Inventory {
         return instance;
     }
 
-    // Restituisce la lista degli oggetti nell'inventario
-    public ArrayList<Item> getItemList() {
-        return itemList;
+
+    public ArrayList<String> getItemInventory() {
+        ArrayList<String> nomi = new ArrayList<String>();
+
+        for (Map.Entry<String, Texture> item : itemList.entrySet()) {
+            nomi.add(item.getKey());
+        }
+        return nomi;
     }
 
-    // Aggiunge un oggetto all'inventario
-    public void addItemToInventory(Item item) {
-        this.itemList.add(item);
-    }
-
-    // Restituisce una stringa che rappresenta il contenuto dell'inventario
-    public String getInventoryAsString() {
-        if (itemList.isEmpty()) {
-            return "L'inventario è vuoto.";
-        } else {
-            StringBuilder sb = new StringBuilder("Contenuto dell'inventario:\n");
-            for (int i = 0; i < itemList.size(); i++) {
-                Item item = itemList.get(i);
-                sb.append(i + 1).append(". ")
-                    .append(item.getName()).append(" - ")
-                    .append(item.getDescription()).append("\n");
+    public void setInventory(ArrayList<String> itemList) {
+        this.itemList.clear();
+        for (String itemName : itemList) {
+            switch (itemName) {
+                case "MagneticKey":
+                    this.itemList.put(itemName, new Texture("Oggetti/Chiave.png"));
+                    break;
+                case "FlashDriveInnocente":
+                    this.itemList.put(itemName, new Texture("Oggetti/FlashDrive.png"));
+                    break;
+                case "JosephPhone":
+                    this.itemList.put(itemName, new Texture("Oggetti/JosephPhone.png"));
+                    break;
             }
-            return sb.toString();
         }
     }
+    // Aggiunge un oggetto all'inventario
+    public void addItemToInventory(String name, Texture texture) {
+        itemList.put(name, texture);
+    }
 
-    // Metodo per disegnare l'inventario alla pressione del tasto 'I'
+
+    //CAMBIARE LA POSIZIONE DI DISEGNO
     public void drawInventory(Batch batch) {
         if (Gdx.input.isKeyPressed(Input.Keys.I)) {
-            // Disegna gli oggetti dell'inventario in una griglia
-            int x = 20; // Posizione in x, vicino al bordo sinistro
-            int y = Gdx.graphics.getHeight() - 80; // Posizione iniziale in y
-            int spacing = 30; // Spazio tra gli oggetti
+            // Posizione relativa al MovementController
+            float baseX = Player.getInstance().getX(); // Usa la posizione X del controller
+            float baseY = Player.getInstance().getY(); // Usa la posizione Y del controller
+            int offsetX = -480; // Offset per spostare l'inventario rispetto al controller
+            int offsetY = 240; // Offset verticale
 
-            for (int i = 0; i < itemList.size(); i++)
-                batch.draw(itemList.get(i).getTexture(), x + (i % 5) * spacing, y - (i / 5) * spacing, 32, 32);
+            // Spaziatura tra gli oggetti
+            int spacing = 30;
+            int columns = 5; // Numero massimo di colonne
 
+            int i = 0;
+            for (Map.Entry<String, Texture> entry : itemList.entrySet()) {
+                int column = i % columns; // Colonna corrente
+                int row = i / columns; // Riga corrente
 
+                batch.draw(entry.getValue(),
+                    baseX + offsetX + column * spacing, // Posizione X
+                    baseY + offsetY - row * spacing, // Posizione Y
+                    16, 16); // Dimensione degli oggetti
+                i++;
+            }
         }
     }
 
-
+    public void clearInventory(){
+        this.itemList.clear();
+    }
 }

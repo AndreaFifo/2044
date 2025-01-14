@@ -9,63 +9,62 @@ import io.github.videogame.view.screens.MainGameScreen;
 
 //Factory Method
 
-public class Item {
-
+public class Item implements ItemInterface {
     // Attributi dell'oggetto
     private Texture texture;                 // Texture dell'oggetto
     private Sound pickUpSound;              // Suono emesso quando l'oggetto viene raccolto
     private float x, y;                     // Posizione dell'oggetto
     private boolean taken;                  // Stato dell'oggetto (raccolto o meno)
-    private MovementController movementController; // Controller del movimento del giocatore
     private Player player;                  // Riferimento al giocatore
     private String name;                    // Nome dell'oggetto
     private String description;             // Descrizione dell'oggetto
-
-
-    public MainGameScreen getMainGameScreen() {
-        return mainGameScreen;
-    }
-
-    private MainGameScreen mainGameScreen;
+    private int idTask;                     // Id della task dove spunta nella mappa l'item
 
     private DialogManager dialogManager;
 
     // Costruttore con valori di default
-    public Item(float x, float y, MovementController movementController, Player player, MainGameScreen mainGameScreen) {
+    public Item(float x, float y) {
         this.x = x;
         this.y = y;
         this.taken = false;
-        this.movementController = movementController;
-        this.player = player;
+        this.player = Player.getInstance();
         this.dialogManager = new DialogManager();
-        this.dialogManager.setDialog("Add a description");
-        this.mainGameScreen = mainGameScreen;
+        //this.dialogManager.setDialog(description);
     }
+
+    private boolean isDrawing = true;
 
     // Metodo per raccogliere l'oggetto e aggiungerlo all'inventario
     public void pickUp() {
+        if (canBePickedUp()) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                this.taken = true;
+                this.emitSound();
+                // Aggiungi l'oggetto all'inventario
+                player.getInventory().addItemToInventory(this.name, this.texture);
 
-            if (canBePickedUp()) {
-                if (Gdx.input.isKeyPressed(Input.Keys.F)) {
-                    this.taken = true;
-                    this.emitSound();
-                    //Aggiungi l'oggetto all'inventario
-                    player.getInventory().addItemToInventory(this);
-                    //Disegna il dialogo della raccolta dell'oggetto
-                    this.getDialogManager().draw();
-
-                }
+                // Reimposta il flag per abilitare il dialogo per questo oggetto
+                this.isDrawing = true;
             }
+        }
     }
 
+    public void drawDialogue() {
+        if (this.isTaken() && isDrawing) {
+            this.getDialogManager().draw();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            this.isDrawing = false; // Nasconde il dialogo per questo oggetto
+        }
+    }
 
     //Controlla se l'oggetto può essere raccolto in base alla posizione del giocatore.
-    private boolean canBePickedUp() {
+    public boolean canBePickedUp() {
         return !taken &&
-            movementController.getX() <= x + 100 &&
-            movementController.getX() >= x - 100 &&
-            movementController.getY() <= y + 100 &&
-            movementController.getY() >= y - 100;
+            player.getX() <= x + 30 &&
+            player.getX() >= x - 30 &&
+            player.getY() <= y + 30 &&
+            player.getY() >= y - 30;
     }
 
     // Metodo per emettere il suono di raccolta
@@ -127,6 +126,4 @@ public class Item {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
 }

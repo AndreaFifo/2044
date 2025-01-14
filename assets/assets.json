@@ -2,25 +2,17 @@
   "menu": {
     "textures": [
       "menu/bg-menu.png",
-      "menu/play_button_inactive.png",
-      "menu/play_button_active.png",
-      "menu/load_button_inactive.png",
-      "menu/load_button_active.png",
-      "menu/settings_button_inactive.png",
-      "menu/settings_button_active.png",
-      "menu/exit_button_inactive.png",
-      "menu/exit_button_active.png",
       "menu/text-2044.png",
-      "menu/bg-menu.png",
-      "menu/slider.png",
-      "menu/barra.png",
-      "menu/knob.png"
+      "menu/bg-menu.png"
     ],
     "musics": [
-      "menu/main_menu_music_dbd.mp3"
+      "menu/main-menu-music.mp3"
     ],
     "sounds": [
       "menu/button-click.mp3"
+    ],
+    "skin": [
+      "menu/ui-skin.json"
     ]
   }
 }
