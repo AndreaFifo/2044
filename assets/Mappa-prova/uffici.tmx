@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#1f5f7f" nextlayerid="88" nextobjectid="167">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="45" height="30" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#1f5f7f" nextlayerid="89" nextobjectid="170">
  <tileset firstgid="1" source="tileset-principale.tsx"/>
  <tileset firstgid="801" source="tilest-componenti-ufficio.tsx"/>
  <tileset firstgid="1201" source="tileset-mensa.tsx"/>
@@ -448,7 +448,7 @@
   </object>
  </objectgroup>
  <objectgroup id="86" name="porte">
-  <object id="163" x="288.606" y="105.288" width="31.4545" height="44.0909">
+  <object id="163" x="288.606" y="105.288" width="31.4545" height="32.3409">
    <properties>
     <property name="owner" value="bryan"/>
    </properties>

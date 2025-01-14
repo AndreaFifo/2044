@@ -99,7 +99,7 @@ public class MainGameScreen implements Screen {
         this.NpcPoliceOfficerOriginal = new NpcPoliceOfficer(630,315); //OK
 
         this.NpcPoliceOfficer1 = NpcPoliceOfficerOriginal.clone(150,380); //OK
-        this.NpcPoliceOfficer2 = NpcPoliceOfficerOriginal.clone(350,417); //OK
+        this.NpcPoliceOfficer2 = NpcPoliceOfficerOriginal.clone(370,417); //OK
         this.NpcPoliceOfficer3 = NpcPoliceOfficerOriginal.clone(600,300); //OK
         this.NpcPoliceOfficer4 = NpcPoliceOfficerOriginal.clone(464,316); //OK
 
@@ -294,7 +294,10 @@ public class MainGameScreen implements Screen {
     public void resize(int width, int height) {}
 
     @Override
-    public void pause() {}
+    public void pause() {
+        gameMusic.pause();
+        audioController.stopAllSounds();
+    }
 
     @Override
     public void resume() {
@@ -303,7 +306,8 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void hide() {
-        gameMusic.pause();
+        gameMusic.stop();
+        audioController.stopAllSounds();
     }
 
     @Override

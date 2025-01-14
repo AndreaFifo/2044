@@ -67,8 +67,8 @@ public class Inventory {
             // Posizione relativa al MovementController
             float baseX = Player.getInstance().getX(); // Usa la posizione X del controller
             float baseY = Player.getInstance().getY(); // Usa la posizione Y del controller
-            int offsetX = -480; // Offset per spostare l'inventario rispetto al controller
-            int offsetY = 240; // Offset verticale
+            int offsetX = -300; // Offset per spostare l'inventario rispetto al controller
+            int offsetY = 180; // Offset verticale
 
             // Spaziatura tra gli oggetti
             int spacing = 30;
@@ -77,7 +77,7 @@ public class Inventory {
             int i = 0;
             for (Map.Entry<String, Texture> entry : itemList.entrySet()) {
                 int column = i % columns; // Colonna corrente
-                int row = i / columns; // Riga corrente
+                int row = i % columns; // Riga corrente
 
                 batch.draw(entry.getValue(),
                     baseX + offsetX + column * spacing, // Posizione X

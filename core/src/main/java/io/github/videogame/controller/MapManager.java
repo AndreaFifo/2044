@@ -1,6 +1,7 @@
 package io.github.videogame.controller;
 
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.*;
 import io.github.videogame.model.GameState;
+import io.github.videogame.model.Inventory;
 import io.github.videogame.model.Utility;
 
 import java.util.*;
@@ -27,6 +29,7 @@ public class MapManager {
     private List<TiledMapTile> backDoorClosedTiles;
     private List<TiledMapTile> frontDoorOpenedTiles;
     private List<TiledMapTile> backDoorOpenedTiles;
+    private RectangleMapObject bryanDoor;
 
     private List<Vector2> coordinateAscensore;
     private List<Vector2> coordinateAscensoreDestra;
@@ -105,7 +108,6 @@ public class MapManager {
         coordinatePortaCaleeb.add(new Vector2(28, 15));
     }
 
-
     private void fetchCollision(){
         rectangleCollisions = new ArrayList<>();
         for(MapObject object : map.getLayers().get("collisioni").getObjects()) {
@@ -167,6 +169,9 @@ public class MapManager {
         doorCollisions = new ArrayList<>();
         for(MapObject object : map.getLayers().get("porte").getObjects()) {
             if(object instanceof RectangleMapObject) {
+                if(object.getProperties().get("owner").equals("bryan"))
+                    bryanDoor = (RectangleMapObject) object;
+
                 doorCollisions.add((RectangleMapObject) object);
             }
         }
@@ -186,8 +191,6 @@ public class MapManager {
             else
                 changeElevatorTiles(rectangleLato, elevatorClosedTiles);
         }
-
-
         return false;
     }
 
@@ -211,7 +214,7 @@ public class MapManager {
         for(RectangleMapObject rectangle : doorCollisions) {
             String rectangleProp = rectangle.getProperties().get("owner", String.class);
             Rectangle newRectangle = rectangle.getRectangle();
-            if (rectangleProp.equals("bryan")){
+            if (rectangleProp.equals("bryan") && Inventory.getInventoryInstance().getItemInventory().contains("MagneticKey")){
                 if(newRectangle.overlaps(playerRect))
                     changeDoorTiles(coordinatePortaBryan, frontDoorOpenedTiles);
                 else
@@ -294,6 +297,15 @@ public class MapManager {
         }
 
         return true;
+    }
+
+    public boolean isCollidingWithBryanDoor(float x, float y){
+        Rectangle playerRect = new Rectangle(x + 3.5f, y + 4.5f, 7, 9);
+
+        if(currentMap.equals("Mappa-prova/atrio-mensa.tmx"))
+            return true;
+
+        return !bryanDoor.getRectangle().overlaps(playerRect) || Inventory.getInventoryInstance().getItemInventory().contains("MagneticKey");
     }
 
     public void changeMap(){

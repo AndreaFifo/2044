@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import io.github.videogame.controller.AudioController;
 import io.github.videogame.controller.MovementController;
 import io.github.videogame.view.screens.MainGameScreen;
 
@@ -54,7 +55,7 @@ public class Item implements ItemInterface {
             this.getDialogManager().draw();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            this.isDrawing = false; // Nasconde il dialogo per questo oggetto
+            this.isDrawing = false;
         }
     }
 
@@ -70,7 +71,7 @@ public class Item implements ItemInterface {
     // Metodo per emettere il suono di raccolta
     public void emitSound() {
         if (pickUpSound != null) {
-            pickUpSound.play();
+            pickUpSound.play(AudioController.getInstance().getSoundsVolume());
         }
     }
 
@@ -94,7 +95,9 @@ public class Item implements ItemInterface {
     }
 
     public void setPickUpSound(String path) {
-        this.pickUpSound = Gdx.audio.newSound(Gdx.files.internal(path));
+        Utility.loadAsset(path, Sound.class);
+        this.pickUpSound = Utility.getAsset(path, Sound.class);
+        AudioController.getInstance().addNewSound(path, pickUpSound);
     }
 
     // Getter per posizione e texture
