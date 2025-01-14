@@ -55,6 +55,7 @@ public class MenuController {
                     return;
 
                 buttonClickSound.play(audioController.getSoundsVolume());
+                audioController.getMusic("menu/main-menu-music.mp3").stop();
                 GameStateController.getInstance().loadGameState();
                 screenManager.showScreen(ScreenManager.ScreenType.GAME);
             }
@@ -75,55 +76,5 @@ public class MenuController {
             }
         });
     }
-
-//    public void loadGameState() {
-//        try {
-//            // Leggi il contenuto del file JSON
-//            BufferedReader reader = new BufferedReader(new FileReader("saves/game_save.json"));
-//            StringBuilder content = new StringBuilder();
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                content.append(line.trim());
-//            }
-//            reader.close();
-//
-//            System.out.println(content.toString());
-//
-//            //per trovare riga inventario
-//            // Trova la riga che contiene "iteminventory"
-//            String inventoryLine = "";
-//            String jsonContent = content.toString();
-//            int startIndex = jsonContent.indexOf("\"iteminventory\":"); // Trova l'inizio della sezione "iteminventory"
-//            if (startIndex != -1) {
-//                // Trova la posizione dell'inizio dell'array
-//                int arrayStartIndex = jsonContent.indexOf("[", startIndex);  // Trova l'inizio dell'array
-//                if (arrayStartIndex != -1) {
-//                    // Trova la fine dell'array
-//                    int arrayEndIndex = jsonContent.indexOf("]", arrayStartIndex);
-//                    if (arrayEndIndex != -1) {
-//                        // Estrai l'array senza le virgolette
-//                        inventoryLine = jsonContent.substring(arrayStartIndex, arrayEndIndex + 1);  // Estrarre la parte che contiene l'inventario
-//                    }
-//                }
-//            }
-//
-//            // Usa Gson per deserializzare il JSON nel GameState
-//            Gson gson = new Gson();
-//            Gamestate gameState = gson.fromJson(content.toString(), Gamestate.class);
-//
-//
-//            if (gameState == null) {
-//                System.out.println("Errore nel parsing del JSON. Il contenuto potrebbe non corrispondere alla struttura attesa.");
-//                return;
-//            }
-//
-//
-//            // Aggiungi il Memento al Caretaker
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("Errore durante il caricamento dello stato del gioco.");
-//        }
-//    }
 
 }

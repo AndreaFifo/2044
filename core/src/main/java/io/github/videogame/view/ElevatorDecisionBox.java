@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.videogame.controller.MapManager;
 import io.github.videogame.model.Player;
 import io.github.videogame.model.Utility;
-import jdk.jshell.execution.Util;
 
 public class ElevatorDecisionBox {
     private Stage stage;

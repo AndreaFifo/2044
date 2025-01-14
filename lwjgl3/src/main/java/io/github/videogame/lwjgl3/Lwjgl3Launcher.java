@@ -27,7 +27,7 @@ public class Lwjgl3Launcher {
 
         configuration.setResizable(false);
 
-        configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
+        configuration.setWindowIcon("icon_16x16.png", "icon_32x32.png", "icon_128x128.png");
         return configuration;
     }
 }

@@ -80,16 +80,15 @@ public class NpcAnastasia extends NpcCreator {
                 }
 
                 if (completed && !end) {
-                    this.getDialogManager().setDialog("Fa la tua scelta: [Y] tradisci, [N] rimani fedele");
+                    this.getDialogManager().setDialog("Make your choice: [Y] betray, [N] stay loyal");
                     if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
-                        this.getDialogManager().setDialog("Ben Fatto Dottor Forrest, benvenuto tra noi!");
+                        this.getDialogManager().setDialog("Well done, Dr. Forrest! Welcome to our side!");
                         ScreenManager.getInstance().showScreen(ScreenManager.ScreenType.OUTRO_ALTERNATIVE);
                         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
                             end = true;
-                            this.getDialogManager().setDialog("Bel tentativo! Adesso spegniti.");
+                            this.getDialogManager().setDialog("Nice try! Now shut yourself down.");
                         }
                     }
-
                 }
             }
         }

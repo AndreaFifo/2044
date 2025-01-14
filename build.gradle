@@ -70,4 +70,3 @@ subprojects {
 }
 
 eclipse.project.name = '2044' + '-parent'
-

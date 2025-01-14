@@ -62,9 +62,9 @@ public class MovementController {
         float newX = player.getX() + velocityX * deltaTime;
         float newY = player.getY() + velocityY * deltaTime;
 
-        if(mapManager.isColliding(newX, player.getY()))
+        if(mapManager.isColliding(newX, player.getY()) && mapManager.isCollidingWithBryanDoor(newX, player.getY()))
             player.setX(newX);
-        if(mapManager.isColliding(player.getX(), newY))
+        if(mapManager.isColliding(player.getX(), newY) && mapManager.isCollidingWithBryanDoor(player.getX(), newY))
             player.setY(newY);
 
         // Aggiorna lo stato di movimento
