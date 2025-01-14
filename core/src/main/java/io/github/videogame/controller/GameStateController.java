@@ -48,6 +48,7 @@ public class GameStateController {
                     tempGameState.getIdCurrentTask(),
                     tempGameState.getStoryState()
             );
+            System.out.println(gameState.toString());
 
             restoreGameState();
 
@@ -71,6 +72,7 @@ public class GameStateController {
         player.setInventory(gameState.getInventory());
         taskModel.setTask(gameState.getIdCurrentTask());
         mapManager.setCurrentMap(gameState.getCurrentMap());
+        storyState.setDialogueStates(gameState.getStoryState());
     }
 
     public void saveGameState(){

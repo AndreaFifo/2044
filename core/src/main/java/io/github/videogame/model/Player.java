@@ -23,7 +23,7 @@ public class Player {
         TextureRegion[][] regions = TextureRegion.split(spriteSheetPlayer, 16, 32);
         walkAnimationsPlayer = new Animation[4];
         for (int i = 0; i < 4; i++) {
-            walkAnimationsPlayer[i] = new Animation<>(0.15f, regions[i]);
+            walkAnimationsPlayer[i] = new Animation<>(0.1f, regions[i]);
         }
 
         this.inventory = Inventory.getInventoryInstance();

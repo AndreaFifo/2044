@@ -26,7 +26,7 @@ public class TaskModel {
     }
 
     private TreeMap<Integer, Task> loadTasks() {
-        FileHandle file = Gdx.files.internal("tasks.json"); // Assicurati che il file sia nella cartella assets
+        FileHandle file = Gdx.files.internal("tasks.json");
         String jsonString = file.readString();
 
         JsonReader jsonReader = new JsonReader();

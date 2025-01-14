@@ -15,16 +15,12 @@ public class MovementController {
     private int stateDirection;
     private boolean isMoving;
     private MapManager mapManager;
-    private float x, y;
 
     private MovementController() {
         this.player = Player.getInstance();
         this.stateDirection = setStateDirection(0);
         this.isMoving = false;
         this.mapManager = MapManager.getInstance();
-
-        this.x = 0;
-        this.y = 0;
     }
 
     public static MovementController getInstance() {
@@ -71,9 +67,6 @@ public class MovementController {
         if(mapManager.isColliding(player.getX(), newY))
             player.setY(newY);
 
-        this.x = player.getX();
-        this.y = player.getY();
-
         // Aggiorna lo stato di movimento
         isMoving = velocityX != 0 || velocityY != 0;
 
@@ -91,21 +84,5 @@ public class MovementController {
     private void updateGameState() {
         GameState.getInstance().setPlayerX(player.getX());
         GameState.getInstance().setPlayerY(player.getY());
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
     }
 }

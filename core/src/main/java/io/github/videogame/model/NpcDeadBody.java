@@ -18,11 +18,12 @@ public class NpcDeadBody extends NpcCreator{
     //Inizializza il dialogo del killer
     @Override
     public String[] InitDialogAct1(String[] dialogue) {
-        dialogue[0] = "Oh no... Questo non può essere vero...";
-        dialogue[1] = "C'è un corpo qui! È morto...";
-        dialogue[2] = "Chi può aver fatto una cosa del genere?";
-        dialogue[3] = "Devo mantenere la calma... Ma è terribile...";
-        dialogue[4] = "Non posso fare altro... Devo chiamare la polizia.";
+        dialogue[0] = "Joseph Forrest: Oh no... This can't be true...";
+        dialogue[1] = "Joseph Forrest: There's a body here! It's dead...";
+        dialogue[2] = "Joseph Forrest: Who could have done something like this?";
+        dialogue[3] = "Joseph Forrest: I need to stay calm... But it's terrible...";
+        dialogue[4] = "Joseph Forrest: I can't do anything else... I need to call the police.";
+
         return dialogue;
     }
 
@@ -52,7 +53,6 @@ public class NpcDeadBody extends NpcCreator{
                     this.notifyObservers(2);
                     this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                     this.setDialogIndexAct1(0); // Resetta il dialogo
-                    this.getDialogManager().hide();
                 }
             }
         }

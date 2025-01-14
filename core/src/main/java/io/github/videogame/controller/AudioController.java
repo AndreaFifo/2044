@@ -40,6 +40,7 @@ public class AudioController {
     }
 
     public void addNewMusic(String musicPath, Music newMusic){
+        newMusic.setVolume(musicsVolume);
         musics.put(musicPath,newMusic);
     }
 

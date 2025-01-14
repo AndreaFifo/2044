@@ -62,22 +62,26 @@ public class Inventory {
 
 
     //CAMBIARE LA POSIZIONE DI DISEGNO
-
-// Metodo per disegnare l'inventario relativo al MovementController
-    public void drawInventory(Batch batch, float baseX, float baseY) {
+    public void drawInventory(Batch batch) {
         if (Gdx.input.isKeyPressed(Input.Keys.I)) {
             // Posizione relativa al MovementController
+            float baseX = Player.getInstance().getX(); // Usa la posizione X del controller
+            float baseY = Player.getInstance().getY(); // Usa la posizione Y del controller
             int offsetX = -480; // Offset per spostare l'inventario rispetto al controller
             int offsetY = 240; // Offset verticale
 
             // Spaziatura tra gli oggetti
             int spacing = 30;
+            int columns = 5; // Numero massimo di colonne
 
             int i = 0;
-            for(Map.Entry<String, Texture> entry : itemList.entrySet()) {
+            for (Map.Entry<String, Texture> entry : itemList.entrySet()) {
+                int column = i % columns; // Colonna corrente
+                int row = i / columns; // Riga corrente
+
                 batch.draw(entry.getValue(),
-                    baseX + offsetX + (i % 5) * spacing, // Colonna
-                    baseY + offsetY - (i % 5) * spacing, // Riga
+                    baseX + offsetX + column * spacing, // Posizione X
+                    baseY + offsetY - row * spacing, // Posizione Y
                     16, 16); // Dimensione degli oggetti
                 i++;
             }

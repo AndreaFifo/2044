@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.videogame.controller.ScreenManager;
 import io.github.videogame.controller.SettingsController;
 import io.github.videogame.model.Gioco;
@@ -18,9 +19,6 @@ public class SettingsScreen implements Screen {
     private Stage stage;
     private Table table;
 
-    private Label settingsLabel;
-    private Label videoLabel;
-    private Label audioLabel;
     private Label vSyncLabel;
     private Label musicLabel;
     private Label soundLabel;
@@ -30,6 +28,7 @@ public class SettingsScreen implements Screen {
     private CheckBox vSyncCheckBox;
     private TextButton backButton;
     private Texture background;
+    private TextureRegionDrawable tableBG;
 
     private SettingsController settingsController;
 
@@ -45,6 +44,8 @@ public class SettingsScreen implements Screen {
         this.table = new Table();
         this.screenManager = ScreenManager.getInstance();
         this.background = Utility.getAsset("menu/bg-menu.png", Texture.class);
+        Utility.loadAsset("UI/settings-ui.png", Texture.class);
+        this.tableBG = new TextureRegionDrawable(Utility.getAsset("UI/settings-ui.png", Texture.class));
         this.skin = Utility.getAsset("menu/ui-skin.json", Skin.class);
 
         setupUI();
@@ -64,29 +65,29 @@ public class SettingsScreen implements Screen {
         this.soundSlider = new MySlider(0f, 1f, 0.1f, false, skin);
         this.vSyncCheckBox = new CheckBox(null, skin);
 
-        this.settingsLabel = new Label("Settings", skin, "general");
-        this.videoLabel = new Label("Video", skin, "general");
-        this.audioLabel = new Label("Audio", skin, "general");
         this.vSyncLabel = new Label("V-Sync", skin, "general");
         this.soundLabel = new Label("Sound", skin, "general");
         this.musicLabel = new Label("Music", skin, "general");
         this.backButton = new TextButton("Back", skin);
 
-        //table.setDebug(true);
-        table.setFillParent(true);
-        table.add(settingsLabel).padBottom(30);
+        float MENU_WIDTH = 576;
+        float MENU_HEIGHT = 714;
+
+        table.setBackground(tableBG);
+        table.setPosition(((float) Gdx.graphics.getWidth() / 2) - (MENU_WIDTH / 2), ((float) Gdx.graphics.getHeight() /2) - (MENU_HEIGHT / 2));
+        table.setSize(MENU_WIDTH, MENU_HEIGHT);
         table.row();
-        table.add(musicLabel).uniform().padLeft(20);
-        table.add(musicSlider).center().padBottom(20);
-        table.row();
-        table.add(soundLabel).uniform().padLeft(20);
-        table.add(soundSlider).center().padBottom(20);
-        table.row();
-        table.add(vSyncLabel).uniform().padLeft(20);
+        table.add(musicLabel).center().padLeft(50);
+        table.add(musicSlider).center();
+        table.row().padTop(30);
+        table.add(soundLabel).center().padLeft(50);
+        table.add(soundSlider).center();
+        table.row().padTop(30);
+        table.add(vSyncLabel).center().padLeft(50);
         table.add(vSyncCheckBox).center();
+        table.row().padTop(30);
         table.row();
-        table.row();
-        table.add(backButton);
+        table.add(backButton).padTop(50);
         stage.addActor(table);
     }
 
@@ -95,13 +96,16 @@ public class SettingsScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
+        if(previousScreen == ScreenManager.ScreenType.MAIN_MENU) {
             batch.begin();
             batch.draw(background, 0, 0, 1920, 1080);
             batch.end();
+        }
+        else
+            screenManager.getGameScreen().renderStaticState(batch);
 
 
-            stage.act();
+        stage.act();
         stage.draw();
     }
 

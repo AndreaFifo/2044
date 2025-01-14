@@ -9,7 +9,7 @@ import io.github.videogame.view.screens.MainGameScreen;
 
 //Factory Method
 
-public class Item {
+public class Item implements ItemInterface {
     // Attributi dell'oggetto
     private Texture texture;                 // Texture dell'oggetto
     private Sound pickUpSound;              // Suono emesso quando l'oggetto viene raccolto
@@ -29,7 +29,7 @@ public class Item {
         this.taken = false;
         this.player = Player.getInstance();
         this.dialogManager = new DialogManager();
-        this.dialogManager.setDialog("Add a description");
+        //this.dialogManager.setDialog(description);
     }
 
     private boolean isDrawing = true;
@@ -59,7 +59,7 @@ public class Item {
     }
 
     //Controlla se l'oggetto può essere raccolto in base alla posizione del giocatore.
-    private boolean canBePickedUp() {
+    public boolean canBePickedUp() {
         return !taken &&
             player.getX() <= x + 30 &&
             player.getX() >= x - 30 &&

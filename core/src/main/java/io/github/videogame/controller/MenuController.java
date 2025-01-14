@@ -42,16 +42,9 @@ public class MenuController {
             public void changed(ChangeEvent event, Actor actor) {
                 buttonClickSound.play(audioController.getSoundsVolume());
                 audioController.getMusic("menu/main-menu-music.mp3").stop();
-
-                if(isFirstGame) {
-                    preferences.putBoolean("first_game", false);
-                    preferences.flush();
-                    game.setScreen(new VideoIntroScreen(game));
-                    return;
-                }
-
                 GameStateController.getInstance().initialGameState();
-                screenManager.showScreen(ScreenManager.ScreenType.GAME);
+
+                game.setScreen(new VideoIntroScreen(game));
             }
         });
 

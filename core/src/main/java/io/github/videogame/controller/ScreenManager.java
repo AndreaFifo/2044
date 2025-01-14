@@ -2,10 +2,7 @@ package io.github.videogame.controller;
 
 import com.badlogic.gdx.Screen;
 import io.github.videogame.model.Gioco;
-import io.github.videogame.view.screens.MainGameScreen;
-import io.github.videogame.view.screens.MenuPause;
-import io.github.videogame.view.screens.MenuScreen;
-import io.github.videogame.view.screens.SettingsScreen;
+import io.github.videogame.view.screens.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +12,9 @@ public class ScreenManager {
         MAIN_MENU,
         GAME,
         PAUSE,
-        SETTINGS
+        SETTINGS,
+        OUTRO,
+        OUTRO_ALTERNATIVE
     }
 
     private static ScreenManager instance;
@@ -129,6 +128,10 @@ public class ScreenManager {
                 return new MenuPause(game);
             case SETTINGS:
                 return new SettingsScreen(game);
+            case OUTRO:
+                return new VideoOutroScreen(game);
+            case OUTRO_ALTERNATIVE:
+                return new VideoOutro2Screen(game);
             default:
                 throw new IllegalArgumentException("Tipo di schermata non supportato: " + screenType);
         }

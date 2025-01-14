@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import io.github.videogame.controller.MovementController;
+import io.github.videogame.controller.ScreenManager;
+import io.github.videogame.view.screens.VideoOutroScreen;
 
 public class NpcAurora extends NpcCreator {
 
@@ -51,26 +53,26 @@ public class NpcAurora extends NpcCreator {
         // Setto i dialoghi del Npc
         this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
         this.dialogueAct2 = InitDialogAct2(new String[9]); // ATTO II
-        this.dialogueAct3 = InitDialogAct3(new String[7]); // ATTO III
+        this.dialogueAct3 = InitDialogAct3(new String[8]); // ATTO III
         this.dialogueAct4 = InitDialogAct4(new String[6]); // ATTO IV
     }
 
     public String[] InitDialogAct1(String[] dialogue) {
-        dialogue[0] = "Aurora:\nCiao sono Aurora, l'intelligenza artificiale che assiste il dott. Caleb nelle sue ricerche, come posso esserle utile dott. Forest?";
-        dialogue[1] = "Joseph:\nCaleb è stato assassinato, mi servirebbe una mano per scoprire il colpevole.";
-        dialogue[2] = "Aurora:\nQuesto è terribile. Ha già avvisato le autorità?";
-        dialogue[3] = "Joseph:\nSì, la polizia è già stata informata, ma ho bisogno di accedere ai dati e ai messaggi su cui Caleb stava lavorando.";
-        dialogue[4] = "Aurora:\nPosso aiutarti, il dott. Caleb sembrerebbe aver terminato il suo algoritmo di decriptazione.";
-        dialogue[5] = "Joseph:\n... È dal 2039 che cerchiamo invano di creare un algoritmo adatto alla decifrazione dei messaggi...";
-        dialogue[6] = "Joseph:\nFinalmente è riuscito nell'impresa...";
-        dialogue[7] = "Joseph:\nForza, mostrami il file dove è contenuto l'algoritmo, devo subito condividerlo con le autorità!";
-        dialogue[8] = "Aurora:\nTemo che non sia possibile dott. Forest... sembrerebbe che il file contenente l'algoritmo sia stato prelevato da una chiavetta questa notte.";
-        dialogue[9] = "Joseph:\nÈ terribile... questo significa che qualcuno del team è in realtà una spia russa che ci ha ostacolato nelle ricerche tutto questo tempo.";
-        dialogue[10] = "Aurora:\nNon si preoccupi dott. Forest, il dott. Caleb era solito fare degli scherzi a chi copiava le proprie ricerche.";
-        dialogue[11] = "Aurora:\nEcco dott. Forest... all'interno del computer vi è un software che inserisce un file nei dispositivi che copiano i dati del computer.";
-        dialogue[12] = "Aurora:\nSarà sufficiente trovare un dispositivo con all'interno il file e controllare se la data di creazione di quest'ultimo coincide.";
-        dialogue[13] = "Joseph:\nSei fantastica, vado a riferire agli agenti. Grazie mille.";
-        dialogue[14] = "Aurora:\nÈ sempre un piacere aiutarla dott. Forest. A presto.";
+        dialogue[0] = "Aurora: Hi, I'm Aurora, the artificial intelligence assisting Dr. Caleb in his research. How can I help you, Dr. Forest?";
+        dialogue[1] = "Joseph: Caleb has been murdered; I need help to find out who the culprit is.";
+        dialogue[2] = "Aurora: That's terrible. Have you already notified the authorities?";
+        dialogue[3] = "Joseph: Yes, the police have already been informed, but I need access to the data and messages Caleb was working on.";
+        dialogue[4] = "Aurora: I can help you; Dr. Caleb seems to have completed his decryption algorithm.";
+        dialogue[5] = "Joseph: ... We've been trying in vain since 2039 to create a suitable algorithm for decrypting messages...";
+        dialogue[6] = "Joseph: He finally succeeded in the endeavor...";
+        dialogue[7] = "Joseph: Come on, show me the file containing the algorithm; I need to share it with the authorities immediately!";
+        dialogue[8] = "Aurora: I'm afraid that's not possible, Dr. Forest... it seems that the file containing the algorithm was taken from a flash drive last night.";
+        dialogue[9] = "Joseph: This is terrible... this means that someone on the team is actually a Russian spy who has been hindering our research all this time.";
+        dialogue[10] = "Aurora: Don't worry, Dr. Forest; Dr. Caleb used to play tricks on those who copied his research.";
+        dialogue[11] = "Aurora: Here, Dr. Forest... there is software on the computer that inserts a file into devices that copy the computer's data.";
+        dialogue[12] = "Aurora: It will be enough to find a device with the file inside and check if the creation date of that file matches.";
+        dialogue[13] = "Joseph: You're amazing; I'm going to report this to the agents. Thank you very much.";
+        dialogue[14] = "Aurora: It's always a pleasure to help you, Dr. Forest. See you soon.";
         return dialogue;
     }
 
@@ -85,36 +87,37 @@ public class NpcAurora extends NpcCreator {
     }
 
     public String[] InitDialogAct2(String[] dialogue) {
-        dialogue[0] = "Inserimento chiavetta del dott. Cooper nel computer.";
-        dialogue[1] = "Aurora:\nBuongiorno dott. Forest, di cosa ha bisogno?";
-        dialogue[2] = "Joseph:\nAnalizza la chiavetta, dimmi se è quella incriminata contenente il file che stiamo cercando.";
-        dialogue[3] = "Aurora:\nAnalizzando la chiavetta...";
-        dialogue[4] = "Aurora:\nSembrerebbe che questa non corrisponda. Vi sono diversi file del software interessato...";
-        dialogue[5] = "Aurora:\nNessuno però corrisponde alla data che stiamo cercando.";
-        dialogue[6] = "Joseph:\nVa bene, grazie Aurora.";
-        dialogue[7] = "Aurora:\nA presto dott. Forest.";
-        dialogue[8] = "De-inserimento della chiavetta.";
+        dialogue[0] = "Aurora: Inserting Dr. Cooper's flash drive into the computer.";
+        dialogue[1] = "Aurora: Good morning, Dr. Forest, what do you need?";
+        dialogue[2] = "Joseph Forrest: Analyze the flash drive, tell me if it's the incriminating one containing the file we're looking for.";
+        dialogue[3] = "Aurora: Analyzing the flash drive...";
+        dialogue[4] = "Aurora: It seems that this does not match. There are several files of the software in question...";
+        dialogue[5] = "Aurora: However, none correspond to the date we are looking for.";
+        dialogue[6] = "Joseph Forrest: Alright, thank you, Aurora.";
+        dialogue[7] = "Aurora: See you soon, Dr. Forest.";
+        dialogue[8] = "Aurora: Removing the flash drive.";
         return dialogue;
     }
 
     public String[] InitDialogAct3(String[] dialogue) {
-        dialogue[0] = "Inserimento chiavetta del dott. Pierce nel computer.";
-        dialogue[1] = "Aurora:\nBuongiorno dott. Forest, di cosa ha bisogno?";
-        dialogue[2] = "Joseph:\nAnalizza la chiavetta, dimmi se è quella incriminata contenente il file che stiamo cercando.";
-        dialogue[3] = "Aurora:\nAnalizzando la chiavetta...";
-        dialogue[4] = "Aurora:\nMi spiace dott. Forest, sembra esserci una corrispondenza. Stimo che al 99.7% il dott. Pierce sia il killer che stava cercando.";
-        dialogue[5] = "Joseph:\nNon posso crederci! Dopo tutto questo tempo... Non mi sono accorto di chi avevo davanti.";
-        dialogue[6] = "De-inserimento della chiavetta.";
+        dialogue[0] = "Aurora: Inserting Dr. Pierce's flash drive into the computer.";
+        dialogue[1] = "Aurora: Good morning, Dr. Forest, what do you need?";
+        dialogue[2] = "Joseph Forrest: Analyze the flash drive, tell me if it's the incriminating one containing the file we're looking for.";
+        dialogue[3] = "Aurora: Analyzing the flash drive...";
+        dialogue[4] = "Aurora: I'm sorry, Dr. Forest, there seems to be a match.";
+        dialogue[5] = "I estimate that there is a 99.7% chance that Dr. Pierce is the killer we were looking for.";
+        dialogue[6] = "Joseph Forrest: I can't believe it! After all this time... I didn't realize who I had in front of me.";
+        dialogue[7] = "Aurora: Removing the flash drive.";
         return dialogue;
     }
 
     public String[] InitDialogAct4(String[] dialogue) {
-        dialogue[0] = "Joseph:\nNon posso credere a quanto sia accaduto.";
-        dialogue[1] = "Aurora:\nCondoglianze per la sua perdita dott. Forest.";
-        dialogue[2] = "Joseph:\nGrazie, adesso facciamo in modo che la sua perdita non sia stata vana.";
-        dialogue[3] = "Aurora:\nPubblicare il file 30_e_lode contenente l'algoritmo richiesto sui server governativi?";
-        dialogue[4] = "Joseph:\nSì.";
-        dialogue[5] = "Aurora:\nPubblicazione avvenuta con successo. È sempre un piacere lavorare con lei dott. & detective Forest ;)";
+        dialogue[0] = "Joseph Forrest: I can't believe what has happened.";
+        dialogue[1] = "Aurora: My condolences for your loss, Dr. Forest.";
+        dialogue[2] = "Joseph Forrest: Thank you, now let's make sure that his loss was not in vain.";
+        dialogue[3] = "Aurora: Shall I publish the file 30_e_lode.java containing the requested algorithm on the government servers?";
+        dialogue[4] = "Joseph Forrest: Yes.";
+        dialogue[5] = "Aurora: Publication successful. It's always a pleasure working with you, Dr. & Detective Forest ;)";
         return dialogue;
     }
 
@@ -219,6 +222,7 @@ public class NpcAurora extends NpcCreator {
                         storyState.setDialogueCompleted("NPC_AURORA_ACT4");
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.dialogIndexAct4 = 0; // Resetta il dialogo
+                        ScreenManager.getInstance().showScreen(ScreenManager.ScreenType.OUTRO);
                     }
                 }
             }

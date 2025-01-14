@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class DialogManager {
     private Stage stage;
     private Label dialogLabel;
+    private Label avatarLabel;
+    private Image avatar;
 
     public DialogManager() {
         stage = new Stage();
@@ -29,15 +31,22 @@ public class DialogManager {
         TextureRegionDrawable dialogBoxBG = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("UI/dialog-box.png"))));
         dialogLabel = new Label("Press [SPACE] to start the dialog", labelStyle);
         dialogLabel.setWrap(true);
-        dialogLabel.setFontScale(0.7F);
-        Label avatarLabel = new Label("Joseph", labelStyle);
+        dialogLabel.setFontScale(0.65F);
+        avatarLabel = new Label("Joseph", labelStyle);
         avatarLabel.setFontScale(0.7F);
 
         dialogBox.setBackground(dialogBoxBG);
         dialogBox.setSize(768, 222);
         dialogBox.setPosition((float) (Gdx.graphics.getWidth() / 2) - 384, 30);
 
-        Image avatar = new Image(new Texture(Gdx.files.internal("UI/joseph.png")));
+        Utility.loadAsset("UI/joseph.png", Texture.class);
+        Utility.loadAsset("UI/bryan.png", Texture.class);
+        Utility.loadAsset("UI/capo-polizia.png", Texture.class);
+        Utility.loadAsset("UI/polizia.png", Texture.class);
+        Utility.loadAsset("UI/ryan.png", Texture.class);
+        Utility.loadAsset("UI/aurora.png", Texture.class);
+        Utility.loadAsset("UI/anastasia.png", Texture.class);
+        avatar = new Image(Utility.getAsset("UI/joseph.png", Texture.class));
         avatar.setSize(128, 128);
 
         //dialogBox.setDebug(true);
@@ -49,15 +58,20 @@ public class DialogManager {
     }
 
     public void setDialog(String text) {
-        dialogLabel.setText(text);
-    }
-
-    public void setDialog(String[] dialogues) {
-        StringBuilder dialogText = new StringBuilder();
-        for (String line : dialogues) {
-            dialogText.append(line).append("\n"); // Aggiungi ogni linea con un salto di riga
+        if(text.isEmpty()) {
+            dialogLabel.setText("");
+            return;
         }
-        dialogLabel.setText(dialogText.toString()); // Imposta il testo completo
+
+        if(text.contains(":")) {
+            String[] finalText = text.split(": ");
+            dialogLabel.setText(finalText[1]);
+
+            setAvatarTexture(finalText[0]);
+            return;
+        }
+
+        dialogLabel.setText(text);
     }
 
     public void draw() {
@@ -69,6 +83,41 @@ public class DialogManager {
 
     public void hide() {
         dialogLabel.setText(""); // Svuota il testo per nascondere il dialogo
+    }
+
+    public void setAvatarTexture(String text){
+        String texturePath = "UI/joseph.png";
+        String labelText = "Joseph";
+
+        if(text.toLowerCase().contains("joseph forrest")) {
+            texturePath = "UI/joseph.png";
+            labelText = "Joseph";
+        }
+        else if(text.toLowerCase().contains("ryan pierce")){
+            texturePath = "UI/ryan.png";
+            labelText = "Ryan";
+        }
+        else if(text.toLowerCase().contains("bryan cooper")){
+            texturePath = "UI/bryan.png";
+            labelText = "Bryan";
+        }
+        else if(text.toLowerCase().contains("police chief")){
+            texturePath = "UI/capo-polizia.png";
+            labelText = "Chief";
+        }
+        else if(text.toLowerCase().contains("officer")){
+            texturePath = "UI/polizia.png";
+            labelText = "Officer";
+        } else if(text.toLowerCase().contains("aurora")){
+            texturePath = "UI/aurora.png";
+            labelText = "Aurora";
+        } else if(text.toLowerCase().contains("anastasia")){
+            texturePath = "UI/anastasia.png";
+            labelText = "Anastasia";
+        }
+
+        avatar.setDrawable(new TextureRegionDrawable(Utility.getAsset(texturePath, Texture.class)));
+        avatarLabel.setText(labelText);
     }
 
     public Stage getStage() {

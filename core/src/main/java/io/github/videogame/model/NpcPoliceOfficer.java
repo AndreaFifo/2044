@@ -36,11 +36,11 @@ public class NpcPoliceOfficer extends NpcCreator implements PrototypePoliceOffic
 
     // Inizializza il dialogo del poliziotto
     public String[] InitDialogAct1(String[] dialogue) {
-        dialogue[0] = "Poliziotto: Salve, sono qui per aiutare con le indagini.";
-        dialogue[1] = "Poliziotto: Il capo mi ha detto di tenere d'occhio la scena del crimine.";
-        dialogue[2] = "Poliziotto: Non abbiamo ancora trovato niente di sospetto.";
-        dialogue[3] = "Poliziotto: Se scopri qualcosa, fammelo sapere.";
-        dialogue[4] = "Poliziotto: Mi assicurerò che nessuno entri nella scena del crimine.";
+        dialogue[0] = "Officer: Hello, I'm here to assist with the investigation.";
+        dialogue[1] = "Officer: The chief told me to keep an eye on the crime scene.";
+        dialogue[2] = "Officer: We haven't found anything suspicious yet.";
+        dialogue[3] = "Officer: If you discover anything, let me know.";
+        dialogue[4] = "Officer: I will make sure no one enters the crime scene.";
         return dialogue;
     }
 

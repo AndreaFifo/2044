@@ -93,6 +93,6 @@ public class GameState {
 
     @Override
     public String toString() {
-        return "Player x: " + playerX + " Y: " + playerY + " Map: " + currentMap + " Inventory: " + inventory + " ID: " + idCurrentTask;
+        return "Player x: " + playerX + " Y: " + playerY + " Map: " + currentMap + " Inventory: " + inventory + " ID: " + idCurrentTask + " Story: " + storyState.toString();
     }
 }

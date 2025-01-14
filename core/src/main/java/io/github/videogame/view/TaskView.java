@@ -29,7 +29,7 @@ public class TaskView implements Observer {
 
     public void updateTasks() {
         table.clear();
-        BitmapFont font = new BitmapFont(Gdx.files.internal("Font/font.fnt")); // Assicurati di avere un file di font
+        BitmapFont font = new BitmapFont(Gdx.files.internal("Font/font.fnt"));
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
 
         Task task = taskModel.getCurrentTask();

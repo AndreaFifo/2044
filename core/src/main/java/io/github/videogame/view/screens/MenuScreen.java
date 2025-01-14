@@ -140,7 +140,6 @@ public class MenuScreen implements Screen {
         this.buttonClickSound = Utility.getAsset("menu/button-click.mp3", Sound.class);
 
         audioController.addNewMusic("menu/main-menu-music.mp3", this.menuMusic);
-        audioController.setMusicVolume(audioController.getMusicsVolume());
     }
 
     private void setupUI(){

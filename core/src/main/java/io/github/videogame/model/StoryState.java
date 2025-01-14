@@ -32,7 +32,6 @@ public class StoryState {
         dialogueStates.put("NPC_INNOCENT_ACT1",false);
         dialogueStates.put("NPC_KILLER_ACT1",false);
         dialogueStates.put("NPC_KILLER_ACT2",false);
-        //AGGIUNGERE QUELLO CON ANASTASIA
     }
 
     // Metodo per impostare un dialogo come completato
@@ -51,6 +50,10 @@ public class StoryState {
 
     public void setDialogueStates(HashMap<String, Boolean> dialogueStates) {
         this.dialogueStates = dialogueStates;
+    }
+
+    public void log(){
+        dialogueStates.forEach((s, b) -> System.out.println(s + " " + b));
     }
 
     public void restoreStoryState(int id){

@@ -3,17 +3,18 @@ package io.github.videogame.view.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import io.github.videogame.controller.CollisionDebugger;
-import io.github.videogame.controller.MapManager;
-import io.github.videogame.controller.ScreenManager;
+import io.github.videogame.controller.*;
 import io.github.videogame.model.*;
-import io.github.videogame.controller.MovementController;
 import io.github.videogame.view.ElevatorDecisionBox;
 import io.github.videogame.view.PlayerView;
 import io.github.videogame.view.TaskView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 //Lo scopo di questa classe è gestire la finestra della sessione di gioco
 
@@ -31,6 +32,8 @@ public class MainGameScreen implements Screen {
     private JosephPhone josephPhone;
     private MapManager mapManager;
     private GameState gameState;
+    private AudioController audioController;
+    private Music gameMusic;
 
     //NPC
     private NpcKiller NpcKiller;
@@ -45,7 +48,7 @@ public class MainGameScreen implements Screen {
     private NpcPoliceOfficer NpcPoliceOfficer3;
     private NpcPoliceOfficer NpcPoliceOfficer4;
 
-    private CollisionDebugger collisionDebugger;
+    //private CollisionDebugger collisionDebugger;
     private ElevatorDecisionBox elevatorDecisionBox;
 
     private TaskView taskView;
@@ -63,13 +66,19 @@ public class MainGameScreen implements Screen {
         this.playerView = new PlayerView(player, movementController);
         this.screenManager = ScreenManager.getInstance();
 
-        this.collisionDebugger = new CollisionDebugger();
+        //this.collisionDebugger = new CollisionDebugger();
         this.elevatorDecisionBox = new ElevatorDecisionBox();
+
+        this.audioController = AudioController.getInstance();
+        Utility.loadAsset("music/game.mp3", Music.class);
+        this.gameMusic = Utility.getAsset("music/game.mp3", Music.class);
+        audioController.addNewMusic("music/game.mp3", this.gameMusic);
     }
 
     @Override
     public void show() {
-        System.out.println(mapManager.getCurrentMap());
+        gameMusic.setLooping(true);
+        gameMusic.play();
         player.setSpawn(gameState.getPlayerX(), gameState.getPlayerY());
 
         Gdx.input.setInputProcessor(elevatorDecisionBox.getStage());
@@ -84,14 +93,14 @@ public class MainGameScreen implements Screen {
         this.NpcKiller = new NpcKiller(380,190); //OK
         this.NpcInnocent = new NpcInnocent(530, 170); //OK
         this.NpcChiefOfPolicie = new NpcChiefOfPolice(440,140); //OK
-        this.NpcDeadBody = new NpcDeadBody(430,180); //OK
-        this.NpcAurora = new NpcAurora(540,240); //OK
-        this.NpcAnastasia = new NpcAnastasia(700,510); //OK
-        this.NpcPoliceOfficerOriginal = new NpcPoliceOfficer(715,415); //OK
+        this.NpcDeadBody = new NpcDeadBody(440, 180); //OK
+        this.NpcAurora = new NpcAurora(430,150); //OK
+        this.NpcAnastasia = new NpcAnastasia(575,430); //OK
+        this.NpcPoliceOfficerOriginal = new NpcPoliceOfficer(630,315); //OK
 
-        this.NpcPoliceOfficer1 = NpcPoliceOfficerOriginal.clone(220,480); //OK
-        this.NpcPoliceOfficer2 = NpcPoliceOfficerOriginal.clone(340,517); //OK
-        this.NpcPoliceOfficer3 = NpcPoliceOfficerOriginal.clone(775,413); //OK
+        this.NpcPoliceOfficer1 = NpcPoliceOfficerOriginal.clone(150,380); //OK
+        this.NpcPoliceOfficer2 = NpcPoliceOfficerOriginal.clone(350,417); //OK
+        this.NpcPoliceOfficer3 = NpcPoliceOfficerOriginal.clone(600,300); //OK
         this.NpcPoliceOfficer4 = NpcPoliceOfficerOriginal.clone(464,316); //OK
 
         this.taskView = new TaskView();
@@ -102,11 +111,14 @@ public class MainGameScreen implements Screen {
         NpcInnocent.addObserver(taskView);
         NpcDeadBody.addObserver(taskView);
         NpcAurora.addObserver(taskView);
-        //NpcAnastasia.addObserver(taskView);
+        NpcAnastasia.addObserver(taskView);
     }
 
-    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per matentenere visibile lo stato attuale del gioco
+    //metodo utilizzato per il menù di pausa, viene chiamato durante il metodo render per mantenere visibile lo stato attuale del gioco
     public void renderStaticState(SpriteBatch batch) {
+        Gdx.gl.glClearColor(0.12f, 0.37f, 0.50f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
@@ -132,12 +144,6 @@ public class MainGameScreen implements Screen {
             return;
         }
 
-        if(NpcAurora.getDialogIndexAct4() > 5){game.setScreen(new VideoOutroScreen(game));}
-        if(NpcAnastasia.getDialogIndexAct1() > 22 & Gdx.input.isKeyJustPressed(Input.Keys.Y) & NpcAnastasia.canBeInteracted()){game.setScreen(new VideoOutro2Screen(game));}
-
-        if(NpcAurora.getDialogIndexAct4() > 5){game.setScreen(new VideoOutroScreen(game));}
-        if(NpcAnastasia.getDialogIndexAct1() > 22 & Gdx.input.isKeyJustPressed(Input.Keys.Y) & NpcAnastasia.canBeInteracted()){game.setScreen(new VideoOutro2Screen(game));}
-
         movementController.changeStateDirection(delta);
 
         camera.position.set(player.getX(), player.getY(), 0f);
@@ -148,7 +154,7 @@ public class MainGameScreen implements Screen {
 
         batch.begin();
 
-        player.getInventory().drawInventory(batch, player.getX(), player.getY());
+        player.getInventory().drawInventory(batch);
 
         drawObjects();
         drawNpc();
@@ -163,27 +169,29 @@ public class MainGameScreen implements Screen {
         elevatorDecisionBox.handleInput();
         elevatorDecisionBox.render();
 
+        if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx"))
+            mapManager.isNearDoors(player.getX(), player.getY());
+
 
         drawNpcDialogue();
         drawItemDialogue();
 
-        taskView.draw();
+        if(Gdx.input.isKeyPressed(Input.Keys.C))
+            taskView.draw();
 
-        collisionDebugger.render(
-            mapManager.getRectangleCollisions(),
-            player.getX()+ 3.5f,
-            player.getY() + 4.f,
-            7,9f
-        );
+//        collisionDebugger.render(
+//            mapManager.getRectangleCollisions(),
+//            player.getX()+ 3.5f,
+//            player.getY() + 4.f,
+//            7,9f
+//        );
     }
 
-
-
     public void drawNpcDialogue(){
-        StoryState storyState1 = StoryState.getInstance();
+        StoryState storyState = StoryState.getInstance();
 
         //NPC PIANO TERRA
-        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") & storyState1.getDialogueState("NPC_DEADBODY_ACT1")  & player.getInventory().getItemInventory().contains("JosephPhone")) {
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") & storyState.getDialogueState("NPC_DEADBODY_ACT1") & player.getInventory().getItemInventory().contains("JosephPhone")) {
             NpcChiefOfPolicie.drawDialogueAct1();
             NpcChiefOfPolicie.drawDialogueAct2();
             NpcInnocent.drawDialogueAct1();
@@ -204,7 +212,6 @@ public class MainGameScreen implements Screen {
             NpcAurora.drawDialogueAct4();
             NpcAnastasia.drawDialogueAct1();
 
-            StoryState storyState = StoryState.getInstance();
             if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")){
                 NpcPoliceOfficer2.drawDialogueAct1();
                 NpcPoliceOfficer3.drawDialogueAct1();
@@ -216,8 +223,9 @@ public class MainGameScreen implements Screen {
 
     public void drawNpc(){
         StoryState storyState = StoryState.getInstance();
+
         //NPC NEL PIANO TERRA
-        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") & storyState.getDialogueState("NPC_DEADBODY_ACT1")  & player.getInventory().getItemInventory().contains("JosephPhone")){
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") & storyState.getDialogueState("NPC_DEADBODY_ACT1") & player.getInventory().getItemInventory().contains("JosephPhone")){
             batch.draw(NpcKiller.getTexture(), NpcKiller.getSpawn_x(), NpcKiller.getSpawn_y(), 16, 36);
             batch.draw(NpcInnocent.getTexture(), NpcInnocent.getSpawn_x(), NpcInnocent.getSpawn_y(), 16, 36);
             batch.draw(NpcChiefOfPolicie.getTexture(), NpcChiefOfPolicie.getSpawn_x(), NpcChiefOfPolicie.getSpawn_y(), 16, 36);
@@ -229,42 +237,46 @@ public class MainGameScreen implements Screen {
             if(!storyState.getDialogueState("NPC_DEADBODY_ACT1"))
                 batch.draw(NpcDeadBody.getTexture(), NpcDeadBody.getSpawn_x(), NpcDeadBody.getSpawn_y(), 32, 32);
 
+
             if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT1")){
                 batch.draw(NpcPoliceOfficer2.getTexture(),NpcPoliceOfficer2.getSpawn_x(),NpcPoliceOfficer2.getSpawn_y(),16,36);
                 batch.draw(NpcPoliceOfficer3.getTexture(),NpcPoliceOfficer3.getSpawn_x(),NpcPoliceOfficer3.getSpawn_y(),16,36);
                 batch.draw(NpcPoliceOfficer4.getTexture(),NpcPoliceOfficer4.getSpawn_x(),NpcPoliceOfficer4.getSpawn_y(),16,36);
             }
+
+            if(StoryState.getInstance().getDialogueState("NPC_KILLER_ACT2"))
+                batch.draw(NpcAnastasia.getTexture(), NpcAnastasia.getSpawn_x(), NpcAnastasia.getSpawn_y(), 32, 32);
         }
     }
 
     //Disegna gli oggetti, SOLO SE IL LORO STATO TAKEN è FALSO
     private void drawObjects() {
         //OGGETTI DEL PIANO TERRA
-        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx")){
-                //OGGETTO CHIAVE MAGNETICA
-                if(!player.getInventory().getItemInventory().contains("MagneticKey")) {
-                    batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
-                    magneticKey.pickUp();
-                }
-
+        if(mapManager.getCurrentMap().equals("Mappa-prova/atrio-mensa.tmx") && StoryState.getInstance().getDialogueState("NPC_INNOCENT_ACT1")){
+            //OGGETTO CHIAVE MAGNETICA
+            if(!player.getInventory().getItemInventory().contains("MagneticKey")) {
+                batch.draw(magneticKey.getTexture(), magneticKey.getX(), magneticKey.getY(), 16, 16);
+                magneticKey.pickUp();
             }
+
+        }
 
         //OGGETTI DEL PRIMO PIANO
         if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
             //OGGETTO CHIAVETTA DEL KILLER
-            if(!player.getInventory().getItemInventory().contains("FlashDriveKiller")){
+            if(!player.getInventory().getItemInventory().contains("FlashDriveKiller") && StoryState.getInstance().getDialogueState("NPC_KILLER_ACT1")){
                 batch.draw(flashDriveKiller.getTexture(), flashDriveKiller.getX(), flashDriveKiller.getY(), 6, 6);
                 flashDriveKiller.pickUp();
             }
 
             //OGGETTO CHIAVETTA DELL'INNOCENTE
-            if(!player.getInventory().getItemInventory().contains("FlashDriveInnocente")) {
+            if(!player.getInventory().getItemInventory().contains("FlashDriveInnocente") && StoryState.getInstance().getDialogueState("NPC_INNOCENT_ACT1")) {
                 batch.draw(flashDriveInnocent.getTexture(), flashDriveInnocent.getX(), flashDriveInnocent.getY(), 6, 6);
                 flashDriveInnocent.pickUp();
             }
 
             //OGGETTO TELEFONO DI JOSEPH
-            if(!player.getInventory().getItemInventory().contains("JosephPhone")){
+            if(!player.getInventory().getItemInventory().contains("JosephPhone") && StoryState.getInstance().getDialogueState("NPC_DEADBODY_ACT1")){
                 batch.draw(josephPhone.getTexture(), josephPhone.getX(),josephPhone.getY(), 6,6);
                 josephPhone.pickUp();
             }
@@ -285,10 +297,13 @@ public class MainGameScreen implements Screen {
     public void pause() {}
 
     @Override
-    public void resume() {}
+    public void resume() {
+        gameMusic.play();
+    }
 
     @Override
     public void hide() {
+        gameMusic.pause();
     }
 
     @Override
@@ -300,22 +315,28 @@ public class MainGameScreen implements Screen {
             mapManager.dispose();
         }
 
+        if(gameMusic != null) {
+            gameMusic.stop();
+            gameMusic.dispose();
+        }
+
         // Rilascia le risorse degli oggetti raccolti
         if (magneticKey != null) {
-            magneticKey.dispose(); // Assicurati che la classe MagneticKey gestisca il proprio dispose
+            magneticKey.dispose();
         }
         if (flashDriveInnocent != null) {
-            flashDriveInnocent.dispose(); // Assicurati che la classe FlashDriveInnocent gestisca il proprio dispose
+            flashDriveInnocent.dispose();
         }
         if (flashDriveKiller != null) {
-            flashDriveKiller.dispose(); // Assicurati che la classe FlashDriveKiller gestisca il proprio dispose
+            flashDriveKiller.dispose();
         }
         if (josephPhone != null) {
-            josephPhone.dispose(); // Assicurati che la classe JosephPhone gestisca il proprio dispose
+            josephPhone.dispose();
         }
+
         // Rilascia il batch
         if (batch != null) {
-            batch.dispose(); // Rilascia il batch se è stato creato
+            batch.dispose();
         }
     }
 }

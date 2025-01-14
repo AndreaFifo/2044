@@ -37,10 +37,10 @@ public abstract class NpcCreator implements Observable,NpcCreatorInterface{
     public boolean canBeInteracted() {
         Player player = Player.getInstance();
 
-        return player.getX() <= this.getSpawn_x() + 30 &&
-            player.getX() >= this.getSpawn_x() - 30 &&
-            player.getY() <= this.getSpawn_y() + 30 &&
-            player.getY() >= this.getSpawn_y() - 30;
+        return player.getX() <= spawn_x + 30 &&
+            player.getX() >= spawn_x - 30 &&
+            player.getY() <= spawn_y + 30 &&
+            player.getY() >= spawn_y - 30;
     }
 
     //Override fatto già adesso poichè è comune a tutti gli NPC

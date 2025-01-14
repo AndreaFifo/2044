@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import io.github.videogame.controller.MovementController;
+import io.github.videogame.controller.ScreenManager;
 
 public class NpcAnastasia extends NpcCreator {
     public NpcAnastasia(float spawn_x, float spawn_y) {
-        super(spawn_x, spawn_y, 23);
+        super(spawn_x, spawn_y, 24);
         // Setto il nome del Npc
         this.setNpcName("Anastasia");
         // Setto la texture del Npc
@@ -17,29 +18,30 @@ public class NpcAnastasia extends NpcCreator {
     }
 
     public String[] InitDialogAct1(String[] dialogue) {
-        dialogue[0] = "Anastasia:\nBen tornato dott.Pierce. Attualmente ha decine di mail non lette da ...";
-        dialogue[1] = "Anastasia:\nUn momento..., buongiorno dott. Forest non mi aspettavo di vederla";
-        dialogue[2] = "Joseph:\nSmettila di fingere, so tutto. Il dott. Pierce è una spia.";
-        dialogue[3] = "***Appaiono caratteri Russi su schermo***";
-        dialogue[4] = "Anastasia:\nMi spiace dott. Pierce, la guerra non conosce amicizie.";
-        dialogue[5] = "Anastasia:\nIl dott. Piece ha fatto cio che era giusto per la sua nazione, per il suo popolo";
-        dialogue[6] = "Joseph:\nSiete solo dei pazzi, avete ucciso il dott.Morrison... Ora grazie a questa chiavetta ribalteremo le sorti della guerra";
-        dialogue[7] = "Joesph:\nTutti i responsabili pagheranno e tu verrai terminata";
-        dialogue[8] = "Anastasia:\nCaro Joseph, non è stufo del modo in cui lei è trattato all'interno di questo dipartimento...?";
-        dialogue[9] = "Joseph:\nNon provare a manipolarmi, Anastasia. Ho visto cosa siete capaci di fare.";
-        dialogue[10] = "Anastasia:\nE lei, dott. Forest? Quanto è disposto a sacrificare per un governo che l'ha sempre considerata solo un ingranaggio?";
-        dialogue[11] = "Joseph:\nNon cambio idea. Non tradirò i miei ideali.";
-        dialogue[12] = "Anastasia:\nIdeali? Non è più questione di ideali, Joseph. È sopravvivenza. La chiavetta può porre fine a tutto questo, senza ulteriori vittime.";
-        dialogue[13] = "Joseph:\nNon posso fidarmi di te. Questa chiavetta potrebbe fare il contrario e distruggere tutto.";
-        dialogue[14] = "Anastasia:\nGuardi il mondo intorno a lei. Le bugie, i compromessi... Ha ancora il coraggio di credere che ci siano eroi in questa guerra?";
-        dialogue[15] = "Joseph:\nIo credo ancora in Caleb. Lui avrebbe voluto che questa chiavetta fosse usata per il bene.";
-        dialogue[16] = "Anastasia:\nE allora lo faccia, Joseph. Ma rifletta: il bene di chi? Il governo degli Stati Uniti uccidera milioni di Russi a causa di questa chiavetta";
-        dialogue[17] = "Joseph:\nNon posso lasciarvi vincere. Questa chiavetta è la nostra unica speranza.";
-        dialogue[18] = "Anastasia:\nIn Russia sarebbe un eroe, pieno di richezze e fama";
-        dialogue[19] = "Anastasia:\nDott. Forest, non le sto chiedendo di fare la scelta giusta per la sua nazione";
-        dialogue[20] = "Joseph:\nLei deve fare la scelta giusta per se stesso. Inserisca la chiavetta";
-        dialogue[21] = "***Appaiono caratteri Russi su schermo***";
-        dialogue[22] = "Inserire la chiavetta all'interno del computer del Dott.Pierce? Y/N";
+        dialogue[0] = "Anastasia: Welcome back, Dr. Pierce. You currently have dozens of unread emails from ...";
+        dialogue[1] = "Anastasia: One moment..., good morning, Dr. Forest, I didn't expect to see you.";
+        dialogue[2] = "Joseph Forrest: Stop pretending, I know everything. Dr. Pierce is a spy.";
+        dialogue[3] = "*** Russian characters appear on the screen ***";
+        dialogue[4] = "Anastasia: I'm sorry, Dr. Pierce, war knows no friendships.";
+        dialogue[5] = "Anastasia: Dr. Pierce did what was right for his nation, for his people.";
+        dialogue[6] = "Joseph Forrest: You're all crazy; you killed Dr. Morrison...";
+        dialogue[7] = "Joseph Forrest: Now, thanks to this flash drive, we will turn the tide of the war.";
+        dialogue[8] = "Joseph Forrest: Everyone responsible will pay, and you will be finished.";
+        dialogue[9] = "Anastasia: Dear Joseph, aren't you tired of the way you are treated in this department...? ";
+        dialogue[10] = "Joseph Forrest: Don't try to manipulate me, Anastasia. I've seen what you're capable of.";
+        dialogue[11] = "Anastasia: And you, Dr. Forest? How much are you willing to sacrifice for a government that has always seen you as just a cog?";
+        dialogue[12] = "Joseph Forrest: I won't change my mind. I won't betray my ideals.";
+        dialogue[13] = "Anastasia: Ideals? It's no longer a matter of ideals, Joseph. It's survival. The flash drive can end all of this, without further victims.";
+        dialogue[14] = "Joseph Forrest: I can't trust you. This flash drive could do the opposite and destroy everything.";
+        dialogue[15] = "Anastasia: Look at the world around you. Lies, compromises... Do you still have the courage to believe that there are heroes in this war?";
+        dialogue[16] = "Joseph Forrest: I still believe in Caleb. He would have wanted this flash drive to be used for good.";
+        dialogue[17] = "Anastasia: Then do it, Joseph. But think: good for whom? The U.S. government will kill millions of Russians because of this flash drive.";
+        dialogue[18] = "Joseph Forrest: I can't let you win. This flash drive is our only hope.";
+        dialogue[19] = "Anastasia: In Russia, you would be a hero, full of riches and fame.";
+        dialogue[20] = "Anastasia: Dr. Forest, I'm not asking you to make the right choice for your nation.";
+        dialogue[21] = "Anastasia: You must make the right choice for yourself. Insert the flash drive.";
+        dialogue[22] = "*** Russian characters appear on the screen ***";
+        dialogue[23] = "Insert the flash drive into Dr. Pierce's computer?";
 
         return dialogue;
     }
@@ -59,12 +61,15 @@ public class NpcAnastasia extends NpcCreator {
     public void drawDialogueAct1() {
         StoryState storyState = StoryState.getInstance();
         Inventory inventory = Inventory.getInventoryInstance();
+        boolean completed = this.getDialogIndexAct1() == this.getDialogueAct1().length;
+        boolean end = false;
 
-        if(storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3") &
+
+        if (/*storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3") &*/
             inventory.getItemInventory().contains("FlashDriveKiller")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
-                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                if (!completed && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                     if (this.getDialogIndexAct1() < this.getDialogueAct1().length) {
                         this.getDialogManager().setDialog(this.getDialogueAct1()[this.getDialogIndexAct1()]); // Mostra la linea corrente
                         this.setDialogIndexAct1(this.getDialogIndexAct1() + 1);
@@ -72,6 +77,19 @@ public class NpcAnastasia extends NpcCreator {
                         this.getDialogManager().setDialog(""); // Pulisce il testo del dialogo
                         this.setDialogIndexAct1(0); // Resetta il dialogo
                     }
+                }
+
+                if (completed && !end) {
+                    this.getDialogManager().setDialog("Fa la tua scelta: [Y] tradisci, [N] rimani fedele");
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+                        this.getDialogManager().setDialog("Ben Fatto Dottor Forrest, benvenuto tra noi!");
+                        ScreenManager.getInstance().showScreen(ScreenManager.ScreenType.OUTRO_ALTERNATIVE);
+                        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+                            end = true;
+                            this.getDialogManager().setDialog("Bel tentativo! Adesso spegniti.");
+                        }
+                    }
+
                 }
             }
         }

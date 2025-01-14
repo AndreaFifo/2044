@@ -20,33 +20,32 @@ public class NpcKiller extends NpcCreator {
     private int dialogIndexAct2 =0;
 
     public NpcKiller(float spawn_x, float spawn_y) {
-        super(spawn_x, spawn_y, 14);
+        super(spawn_x, spawn_y, 13);
         // Setto il nome del Npc
         this.setNpcName("Nome_Killer");
         // Setto la texture del Npc
         this.setTexture(new Texture("NPC/ryan.png"));
         // Setto il dialogo del Npc
         this.setDialogueAct1(InitDialogAct1(this.getDialogueAct1())); // ATTO I
-        this.dialogueAct2 = InitDialogAct2(new String[4]); // ATTO II
+        this.dialogueAct2 = InitDialogAct2(new String[10]); // ATTO II
     }
 
     // Inizializza il dialogo del killer
     @Override
     public String[] InitDialogAct1(String[] dialogue) {
-        dialogue[0] = "Joseph:\nRyan, posso parlarti un momento?";
-        dialogue[1] = "Ryan:\nCerto, Joseph. Di cosa si tratta?";
-        dialogue[2] = "Joseph:\nSto indagando sull'omicidio di Caleb e vorrei sapere dove ti trovavi e cosa stavi facendo la notte in cui è successo.";
-        dialogue[3] = "Ryan:\nEro nel mio ufficio, ho passato tutta la notte lavorando al computer su alcuni compiti arretrati. Non sono uscito da lì fino alla mattina.";
-        dialogue[4] = "Joseph:\nCapisco. Quindi non hai visto nulla di sospetto o sentito rumori strani durante la notte?";
-        dialogue[5] = "Ryan:\nNo, niente di tutto ciò. Era tutto tranquillo. Ho lavorato fino a tardi, poi mi sono anche addormentato sopra la scrivania, ahahahah";
-        dialogue[6] = "Ryan:\n..........";
-        dialogue[7] = "Joseph:\nGrazie, Ryan. Questo mi aiuta a capire meglio cosa è successo.";
-        dialogue[8] = "Ryan:\nSpero che tu riesca a risolvere tutto. Se hai bisogno di qualsiasi cosa, fammelo sapere.";
-        dialogue[9] = "Joseph\nAH!! Un ultima cosa....potresti darmi la tua chiavetta?";
-        dialogue[10] = "Ryan:\n E nel mio ufficio, ma a cosa ti dovrebbe servire...? ";
-        dialogue[11] = "Joseph:\n Devo solo controllare una cosa, non ti preoccupare non cancello nulla";
-        dialogue[12] = "Ryan:\n Buona fortuna allora";
-        dialogue[13] = "";
+        dialogue[0] = "Joseph Forrest: Ryan, can I talk to you for a moment?";
+        dialogue[1] = "Ryan Pierce: Sure, Joseph. What is it about?";
+        dialogue[2] = "Joseph Forrest: I'm investigating Caleb's murder and I would like to know where you were and what you were doing the night it happened.";
+        dialogue[3] = "Ryan Pierce: I was in my office, I spent the whole night working on the computer on some overdue tasks. I didn't leave until the morning.";
+        dialogue[4] = "Joseph Forrest: I see. So you didn't see anything suspicious or hear any strange noises during the night?";
+        dialogue[5] = "Ryan Pierce: No, nothing like that. It was all quiet. I worked late, then I even fell asleep at my desk, hahahaha.";
+        dialogue[6] = "Ryan Pierce: ...";
+        dialogue[7] = "Joseph Forrest: Thank you, Ryan. This helps me understand better what happened.";
+        dialogue[8] = "Ryan Pierce: I hope you can figure it all out. If you need anything, let me know.";
+        dialogue[9] = "Joseph Forrest: AH!! One last thing... could you give me your flash drive?";
+        dialogue[10] = "Ryan Pierce: It's in my office, but what do you need it for...? ";
+        dialogue[11] = "Joseph Forrest: I just need to check something, don't worry, I won't delete anything.";
+        dialogue[12] = "Ryan Pierce: Good luck then.";
 
         return dialogue;
     }
@@ -62,11 +61,18 @@ public class NpcKiller extends NpcCreator {
     }
 
     private String[] InitDialogAct2(String[] dialogue){
-        dialogue[0] = "Si sono stato io";
-        dialogue[1] = "Come hai potuto farlo....";
-        dialogue[2] = "........";
-        dialogue[3] = "...";
-        return  dialogue;
+        dialogue[0] = "Joseph Forrest: It's you, Ryan. You were the one who killed Caleb.";
+        dialogue[1] = "Ryan Pierce: Finally, you figured it out, Joseph. I must say, it took you longer than I expected.";
+        dialogue[2] = "Joseph Forrest: How could you do this? Caleb considered you a friend. We were a team!";
+        dialogue[3] = "Ryan Pierce: A team? Don't make me laugh. I was never on your side, Joseph. My mission was to stop Caleb at all costs.";
+        dialogue[4] = "Joseph Forrest: A spy... You're a traitor! You've destroyed everything we've worked for. For what? For a war that doesn't belong to you?";
+        dialogue[5] = "Ryan Pierce: You don't understand, do you? Your nation is no different from mine. Everyone seeks power, and I chose to side with the winning side.";
+        dialogue[6] = "Joseph Forrest: The winning side? You sacrificed an innocent life! Caleb had found the key. We could have stopped all of this.";
+        dialogue[7] = "Ryan Pierce: And that's why he had to die. If that key fell into the hands of the Americans, the war would have been lost for us. I couldn't allow that.";
+        dialogue[8] = "Joseph Forrest: And now? Do you really think you'll get away with it? I have the evidence that incriminates you. You can't hide.";
+        dialogue[9] = "Ryan Pierce: I don't need to hide, Joseph. My mission is over.";
+
+        return dialogue;
     }
 
 

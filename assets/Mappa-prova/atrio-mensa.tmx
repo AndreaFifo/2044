@@ -512,7 +512,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="39" name="collisioni">
+ <objectgroup id="39" name="collisioni" visible="0">
   <object id="2" x="213.25" y="135.75" width="436.5" height="2.125"/>
   <object id="5" x="0.25" y="53" width="224" height="4.25"/>
   <object id="7" x="0.5" y="282.75" width="229" height="28.75"/>
@@ -596,7 +596,7 @@
   <object id="157" x="161.14" y="94.664" width="14.9701" height="14.9212"/>
   <object id="158" x="176.969" y="222.812" width="14.9701" height="14.9212"/>
  </objectgroup>
- <objectgroup id="40" name="ascensori">
+ <objectgroup id="40" name="ascensori" visible="0">
   <object id="88" x="402.045" y="118.5" width="27.9091" height="31.9091">
    <properties>
     <property name="lato" value="sinistra"/>

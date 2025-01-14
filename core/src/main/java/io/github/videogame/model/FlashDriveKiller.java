@@ -11,7 +11,7 @@ public class FlashDriveKiller extends Item {
         this.setTexture("Oggetti/FlashDriveKiller.png");
         this.setPickUpSound("Oggetti/flashDrivePickUpSound.mp3");
         this.setName("FlashDriveKiller");
-        this.setDescription("Hai raccolto la chiavetta USB del killer");
+        this.setDescription("You have picked up Ryan's flash drive.");
         this.getDialogManager().setDialog(getDescription());
         this.owner = "Killer";
     }

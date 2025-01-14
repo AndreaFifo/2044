@@ -20,13 +20,20 @@ public class MapManager {
     private OrthographicCamera camera;
     private List<Rectangle> rectangleCollisions;
     private List<RectangleMapObject> elevatorCollisions;
+    private List<RectangleMapObject> doorCollisions;
     private List<TiledMapTile> elevatorClosedTiles;
     private List<TiledMapTile> elevatorOpenedTiles;
-    private List<StaticTiledMapTile> frontDoorTiles;
-    private List<StaticTiledMapTile> backDoorTiles;
+    private List<TiledMapTile> frontDoorClosedTiles;
+    private List<TiledMapTile> backDoorClosedTiles;
+    private List<TiledMapTile> frontDoorOpenedTiles;
+    private List<TiledMapTile> backDoorOpenedTiles;
 
     private List<Vector2> coordinateAscensore;
     private List<Vector2> coordinateAscensoreDestra;
+
+    private List<Vector2> coordinatePortaCaleeb;
+    private List<Vector2> coordinatePortaBryan;
+    private List<Vector2> coordinatePortaRyan;
 
     private String currentMap;
 
@@ -34,10 +41,13 @@ public class MapManager {
         this.currentMap = GameState.getInstance().getCurrentMap();
         this.renderer = new OrthogonalTiledMapRenderer(null);
         this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 960, 540);
+        this.camera.setToOrtho(false, 720, 405);
         this.elevatorOpenedTiles = new ArrayList<>();
         this.elevatorClosedTiles = new ArrayList<>();
         coordinateAscensore = new ArrayList<>();
+        coordinatePortaBryan = new ArrayList<>();
+        coordinatePortaRyan = new ArrayList<>();
+        coordinatePortaCaleeb = new ArrayList<>();
 
         loadMap();
     }
@@ -62,8 +72,39 @@ public class MapManager {
         fetchCollision();
         fetchElevators();
 
-
+        if(currentMap.equals("Mappa-prova/uffici.tmx")) {
+            fetchDoorTiles();
+            fetchDoorCollision();
+            setCaleebDoorCoordinates();
+            setBryanDoorCoordinates();
+            setRyanDoorCoordinates();
+        }
     }
+
+    private void setRyanDoorCoordinates() {
+        coordinatePortaRyan.clear();
+        coordinatePortaRyan.add(new Vector2(36, 22));
+        coordinatePortaRyan.add(new Vector2(37, 22));
+        coordinatePortaRyan.add(new Vector2(36, 21));
+        coordinatePortaRyan.add(new Vector2(37, 21));
+    }
+
+    private void setBryanDoorCoordinates() {
+        coordinatePortaBryan.clear();
+        coordinatePortaBryan.add(new Vector2(18, 22));
+        coordinatePortaBryan.add(new Vector2(19, 22));
+        coordinatePortaBryan.add(new Vector2(18, 21));
+        coordinatePortaBryan.add(new Vector2(19, 21));
+    }
+
+    private void setCaleebDoorCoordinates() {
+        coordinatePortaCaleeb.clear();
+        coordinatePortaCaleeb.add(new Vector2(27, 16));
+        coordinatePortaCaleeb.add(new Vector2(28, 16));
+        coordinatePortaCaleeb.add(new Vector2(27, 15));
+        coordinatePortaCaleeb.add(new Vector2(28, 15));
+    }
+
 
     private void fetchCollision(){
         rectangleCollisions = new ArrayList<>();
@@ -93,15 +134,40 @@ public class MapManager {
     }
 
     private void fetchDoorTiles(){
-        frontDoorTiles = new ArrayList<>(8);
-        backDoorTiles = new ArrayList<>(8);
+        frontDoorClosedTiles = new ArrayList<>(4);
+        backDoorClosedTiles = new ArrayList<>(4);
+        frontDoorOpenedTiles = new ArrayList<>(4);
+        backDoorOpenedTiles = new ArrayList<>(4);
 
-        for (TiledMapTile tile : map.getTileSets().getTileSet("tileset-principale")) {
-            if (tile.getProperties().containsKey("animation")) {
-                if (tile.getProperties().get("animation", String.class).equals("front"))
-                    frontDoorTiles.add((StaticTiledMapTile) tile);
-                if (tile.getProperties().get("animation", String.class).equals("back"))
-                    backDoorTiles.add((StaticTiledMapTile) tile);
+        TiledMapTileSet tileset = map.getTileSets().getTileSet("tileset-principale");
+
+        frontDoorClosedTiles.add(tileset.getTile(214));
+        frontDoorClosedTiles.add(tileset.getTile(215));
+        frontDoorClosedTiles.add(tileset.getTile(254));
+        frontDoorClosedTiles.add(tileset.getTile(255));
+
+        backDoorClosedTiles.add(tileset.getTile(216));
+        backDoorClosedTiles.add(tileset.getTile(217));
+        backDoorClosedTiles.add(tileset.getTile(256));
+        backDoorClosedTiles.add(tileset.getTile(257));
+
+        backDoorOpenedTiles.add(tileset.getTile(706));
+        backDoorOpenedTiles.add(tileset.getTile(707));
+        backDoorOpenedTiles.add(tileset.getTile(746));
+        backDoorOpenedTiles.add(tileset.getTile(747));
+
+        frontDoorOpenedTiles.add(tileset.getTile(704));
+        frontDoorOpenedTiles.add(tileset.getTile(705));
+        frontDoorOpenedTiles.add(tileset.getTile(744));
+        frontDoorOpenedTiles.add(tileset.getTile(745));
+
+    }
+
+    private void fetchDoorCollision() {
+        doorCollisions = new ArrayList<>();
+        for(MapObject object : map.getLayers().get("porte").getObjects()) {
+            if(object instanceof RectangleMapObject) {
+                doorCollisions.add((RectangleMapObject) object);
             }
         }
     }
@@ -139,6 +205,45 @@ public class MapManager {
         }
     }
 
+    public void isNearDoors(float x, float y){
+        Rectangle playerRect = new Rectangle(x + 3.5f, y + 4.5f, 14, 9);
+
+        for(RectangleMapObject rectangle : doorCollisions) {
+            String rectangleProp = rectangle.getProperties().get("owner", String.class);
+            Rectangle newRectangle = rectangle.getRectangle();
+            if (rectangleProp.equals("bryan")){
+                if(newRectangle.overlaps(playerRect))
+                    changeDoorTiles(coordinatePortaBryan, frontDoorOpenedTiles);
+                else
+                    changeDoorTiles(coordinatePortaBryan, frontDoorClosedTiles);
+            }
+            else if(rectangleProp.equals("ryan")){
+                if(newRectangle.overlaps(playerRect))
+                    changeDoorTiles(coordinatePortaRyan, frontDoorOpenedTiles);
+                else
+                    changeDoorTiles(coordinatePortaRyan, frontDoorClosedTiles);
+            }
+            else if(rectangleProp.equals("caleeb"))
+                if(newRectangle.overlaps(playerRect))
+                    changeDoorTiles(coordinatePortaCaleeb, backDoorOpenedTiles);
+                else
+                    changeDoorTiles(coordinatePortaCaleeb, backDoorClosedTiles);
+        }
+    }
+
+    public void changeDoorTiles(List<Vector2> coordinatePorta, List<TiledMapTile> tiles){
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Mura");
+
+        for(int i = 0; i < coordinatePorta.size(); i++){
+            TiledMapTile tile = tiles.get(i);
+            Vector2 pos = coordinatePorta.get(i);
+            TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
+            cell.setTile(tile);
+            layer.setCell((int) pos.x, (int) pos.y, cell);
+        }
+    }
+
+
     private void setCoordinateAscensore(String lato){
         coordinateAscensore.clear();
 
@@ -158,7 +263,7 @@ public class MapManager {
     }
 
     public void printMapCells() {
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Mura"); // Sostituisci "Mura" con il nome del tuo layer
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("muraprova"); // Sostituisci "Mura" con il nome del tuo layer
 
         // Ottieni le dimensioni del layer
         int width = layer.getWidth();
@@ -171,7 +276,7 @@ public class MapManager {
                 if (cell != null) {
                     // Se la cella esiste, stampa informazioni
                     TiledMapTile tile = cell.getTile();
-                    if (tile != null && (tile.getId() == 290 || tile.getId() == 291 || tile.getId() == 330 || tile.getId() == 331)) {
+                    if (tile != null && (tile.getId() == 214 || tile.getId() == 215 || tile.getId() == 254 || tile.getId() == 255)) {
                         System.out.println("Cella (" + x + ", " + y + ") contiene il tile: " + tile.getId());
                     }
                 }
