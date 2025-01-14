@@ -44,7 +44,7 @@ public class Inventory {
         for (String itemName : itemList) {
             switch (itemName) {
                 case "MagneticKey":
-                    this.itemList.put(itemName, new Texture("Oggetti/Chiave.png"));
+                    this.itemList.put(itemName, new Texture("Oggetti/MagneticCard.png"));
                     break;
                 case "FlashDriveInnocente":
                     this.itemList.put(itemName, new Texture("Oggetti/FlashDrive.png"));
@@ -77,7 +77,7 @@ public class Inventory {
             int i = 0;
             for (Map.Entry<String, Texture> entry : itemList.entrySet()) {
                 int column = i % columns; // Colonna corrente
-                int row = i % columns; // Riga corrente
+                int row = i / columns; // Riga corrente
 
                 batch.draw(entry.getValue(),
                     baseX + offsetX + column * spacing, // Posizione X
