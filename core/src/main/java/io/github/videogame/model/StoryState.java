@@ -63,4 +63,9 @@ public class StoryState {
     public void saveStoryState(){
 
     }
+
+    public HashMap<String, Boolean> getInitialDialogueStates() {
+        init();
+        return dialogueStates;
+    }
 }

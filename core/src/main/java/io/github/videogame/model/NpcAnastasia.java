@@ -65,7 +65,7 @@ public class NpcAnastasia extends NpcCreator {
         boolean end = false;
 
 
-        if (/*storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3") &*/
+        if (storyState.getDialogueState("NPC_CHIEF_OF_POLICE_ACT3") &
             inventory.getItemInventory().contains("FlashDriveKiller")) {
             if (canBeInteracted()) {
                 this.getDialogManager().draw();
@@ -80,14 +80,10 @@ public class NpcAnastasia extends NpcCreator {
                 }
 
                 if (completed && !end) {
-                    this.getDialogManager().setDialog("Make your choice: [Y] betray, [N] stay loyal");
+                    this.getDialogManager().setDialog("Make your choice: [Y] betray or go away");
                     if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
                         this.getDialogManager().setDialog("Well done, Dr. Forrest! Welcome to our side!");
                         ScreenManager.getInstance().showScreen(ScreenManager.ScreenType.OUTRO_ALTERNATIVE);
-                        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
-                            end = true;
-                            this.getDialogManager().setDialog("Nice try! Now shut yourself down.");
-                        }
                     }
                 }
             }

@@ -38,7 +38,8 @@ public class VideoOutroScreen implements Screen {
 
         // Avvio del video
         try {
-            videoPlayer.play(Gdx.files.internal("video/videoutro.webm"));
+            videoPlayer.load(Gdx.files.internal("Video/videoutro.webm"));
+            videoPlayer.play();
         } catch (FileNotFoundException e) {
             Gdx.app.error("VideoScreen", "Video file not found: " + e.getMessage());
             goToMenuScreen(); // Se il video non è trovato, ritorna alla schermata principale

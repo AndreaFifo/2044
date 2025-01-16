@@ -264,7 +264,7 @@ public class MainGameScreen implements Screen {
         //OGGETTI DEL PRIMO PIANO
         if(mapManager.getCurrentMap().equals("Mappa-prova/uffici.tmx")){
             //OGGETTO CHIAVETTA DEL KILLER
-            if(!player.getInventory().getItemInventory().contains("FlashDriveKiller") && StoryState.getInstance().getDialogueState("NPC_KILLER_ACT1")){
+            if(!player.getInventory().getItemInventory().contains("FlashDriveKiller") && StoryState.getInstance().getDialogueState("NPC_KILLER_ACT1") && !StoryState.getInstance().getDialogueState("NPC_KILLER_ACT2")){
                 batch.draw(flashDriveKiller.getTexture(), flashDriveKiller.getX(), flashDriveKiller.getY(), 6, 6);
                 flashDriveKiller.pickUp();
             }

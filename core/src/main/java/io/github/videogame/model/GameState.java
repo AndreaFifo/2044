@@ -23,7 +23,7 @@ public class GameState {
         currentMap = "Mappa-prova/atrio-mensa.tmx";
         inventory = new ArrayList<>();
         idCurrentTask = 1;
-        storyState = StoryState.getInstance().getDialogueStates();
+        storyState = StoryState.getInstance().getInitialDialogueStates();
     }
 
     public static GameState getInstance() {

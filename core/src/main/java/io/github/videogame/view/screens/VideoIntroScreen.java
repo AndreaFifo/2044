@@ -32,14 +32,15 @@ public class VideoIntroScreen implements Screen {
         videoPlayer.setOnCompletionListener(new VideoPlayer.CompletionListener() {
             @Override
             public void onCompletionListener(FileHandle file) {
-                game.setScreen(new MainGameScreen(game));
+                ScreenManager.getInstance().showScreen(ScreenManager.ScreenType.GAME);
             }
         });
 
         try {
-            videoPlayer.play(Gdx.files.internal("video/videointro.webm"));
+            videoPlayer.load(Gdx.files.internal("Video/videointro.webm"));
+            videoPlayer.play();
         } catch (FileNotFoundException e) {
-            Gdx.app.error("gdx-video", "Oh no!");
+            throw new RuntimeException(e);
         }
     }
 
